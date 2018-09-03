@@ -15,14 +15,15 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("/connections")
-public class ConnectionController {
+public class ConnectionsController {
 
     private final ConnectionService connectionService;
 
     @Autowired
-    public ConnectionController(ConnectionService connectionService) {
+    public ConnectionsController(ConnectionService connectionService) {
         this.connectionService = connectionService;
     }
 

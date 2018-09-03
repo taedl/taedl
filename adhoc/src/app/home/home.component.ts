@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConnectionsApiService } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  vendors: string[];
+
+  constructor(private connectionsApiService: ConnectionsApiService) { }
 
   ngOnInit() {
+    this.connectionsApiService.getVendors()
+      .subscribe(vendors => this.vendors = vendors);
   }
-
 }
