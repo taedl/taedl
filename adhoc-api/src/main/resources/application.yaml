@@ -2,11 +2,23 @@ spring:
   profiles:
     active: dev
 
+packaged.jdbc.driver.classes: postgresql|org.postgresql.Driver,mysql|com.mysql.jdbc.Driver,sqlserver|com.microsoft.sqlserver.jdbc.SQLServerDriver
+
 ---
+
+#--create user appuser with password '70ucan';
+#--create database adhocclick;
+#--grant all privileges on database adhocclick to appuser;
+#--grant usage on schema public to appuser;
+#--grant select on all tables in schema public to appuser;
 
 spring:
   profiles: dev
-
+  datasource:
+      username: appuser
+      password: 70ucan
+      url: jdbc:postgresql://localhost/adhocclick
+      driver_class_name: org.postgresql.Driver
 
 ---
 
