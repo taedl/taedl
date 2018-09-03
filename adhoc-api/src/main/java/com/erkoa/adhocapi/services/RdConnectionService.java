@@ -3,6 +3,7 @@ package com.erkoa.adhocapi.services;
 import com.erkoa.adhocapi.dto.Column;
 import com.erkoa.adhocapi.dto.Connection;
 import com.erkoa.adhocapi.dto.Table;
+import com.google.common.collect.ImmutableMap;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,51 +89,67 @@ public class RdConnectionService implements ConnectionService {
         }
     }
 
-    // TODO: messy, needs refactoring
     private Table generateSchema(DatabaseMetaData metaData, String tableName) throws SQLException {
         Table table = new Table();
         table.setName(tableName);
 
+        table.setPrimaryKey(primaryKey(metaData, tableName));
+        table.setExportedKeys(foreignKeys(metaData, tableName, "exported"));
+        table.setImportedKeys(foreignKeys(metaData, tableName, "imported"));
+        table.setColumns(columns(metaData, tableName));
+        return table;
+    }
+
+    private Column primaryKey(DatabaseMetaData metaData, String tableName) throws SQLException {
         // TODO: catalogue and schema must be configurable - they will not always be default
         ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
+        Column key = null;
         if (primaryKeys != null) {
             primaryKeys.next();
             try {
-                Column key = new Column(primaryKeys.getString(4), tableName, null, null);
-                table.setPrimaryKey(key);
+                key = new Column(primaryKeys.getString(4), tableName, null, null);
             } catch (Exception ignoring) {
                 log.warn("Could not extract primary key for table {}", tableName);
             }
             primaryKeys.close();
         }
+        return key;
+    }
 
-        ResultSet importedForeignKeys = metaData.getImportedKeys(null, null, tableName);
-        table.setForeignKeys(new ArrayList<>());
-        while (importedForeignKeys.next()) {
+    private List<Map<String, Column>> foreignKeys(DatabaseMetaData metaData, String tableName, String exportImport) throws SQLException {
+        ResultSet foreignKeys = exportImport.equals("exported") ? metaData.getExportedKeys(null, null, tableName) :
+                metaData.getImportedKeys(null, null, tableName);
+        List<Map<String, Column>> keys = new ArrayList<>();
+
+        while (foreignKeys.next()) {
             try {
-                String fkTableName = importedForeignKeys.getString("FKTABLE_NAME");
-                String fkColumnName = importedForeignKeys.getString("FKCOLUMN_NAME");
+                String fkTableName = foreignKeys.getString("FKTABLE_NAME");
+                String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");
 
-                String pkTableName = importedForeignKeys.getString("PKTABLE_NAME");
-                String pkColumnName = importedForeignKeys.getString("PKCOLUMN_NAME");
+                String pkTableName = foreignKeys.getString("PKTABLE_NAME");
+                String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");
 
-                Column key = new Column(fkColumnName, fkTableName, null, null);
-                table.getForeignKeys().add(key);
+                Column foreignKey = new Column(fkColumnName, fkTableName, null, null);
+                Column primaryKey = new Column(pkColumnName, pkTableName, null, null);
+                keys.add(ImmutableMap.of("primary", primaryKey, "foreign", foreignKey));
             } catch (Exception ignoring) {
                 log.warn("Could not extract foreign keys for table {}", tableName);
             }
         }
-        importedForeignKeys.close();
+        foreignKeys.close();
+        return keys;
+    }
 
-        ResultSet columns = metaData.getColumns(null, null, tableName, null);
-        table.setColumns(new ArrayList<>());
+    private List<Column> columns(DatabaseMetaData metaData, String tableName) throws SQLException {
+        ResultSet resultColumns = metaData.getColumns(null, null, tableName, null);
+        List<Column> columns = new ArrayList<>();
 
-        while (columns.next()) {
-            table.getColumns().add(
-                    new Column(columns.getString("COLUMN_NAME"), tableName, columns.getString("TYPE_NAME"),
-                            columns.getString("COLUMN_SIZE")));
+        while (resultColumns.next()) {
+            columns.add(
+                    new Column(resultColumns.getString("COLUMN_NAME"), tableName, resultColumns.getString("TYPE_NAME"),
+                            resultColumns.getString("COLUMN_SIZE")));
         }
-        columns.close();
-        return table;
+        resultColumns.close();
+        return columns;
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -12,6 +13,7 @@ import java.util.List;
 public class Table {
     private String name;
     private Column primaryKey;
-    private List<Column> foreignKeys;
+    private List<Map<String, Column>> importedKeys;
+    private List<Map<String, Column>> exportedKeys;
     private List<Column> columns;
 }
