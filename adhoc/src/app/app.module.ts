@@ -44,6 +44,9 @@ import {
   MatTreeModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConnectionsApiService } from './services/connections-api.service';
+import { StateService } from './services/state.service';
+import { DomainComponent } from './domain/domain.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -53,7 +56,8 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     HomeComponent,
-    ConnectionComponent
+    ConnectionComponent,
+    DomainComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +101,10 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: ConnectionsApiService, useClass: ConnectionsApiService },
+    { provide: StateService, useClass: StateService }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

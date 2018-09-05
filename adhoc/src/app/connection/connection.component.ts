@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StateService } from '../services/state.service';
 
 @Component({
   selector: 'app-connection',
@@ -14,7 +15,8 @@ export class ConnectionComponent implements OnInit {
   isFormSubmitAttempt: boolean;
   isConnected: boolean;
 
-  constructor(private connectionsApiService: ConnectionsApiService, private formBuilder: FormBuilder) { }
+  constructor(private connectionsApiService: ConnectionsApiService,
+              private formBuilder: FormBuilder, private stateService: StateService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -31,10 +33,19 @@ export class ConnectionComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.connectionsApiService.testConnection(this.form.value)
-        .subscribe(result => this.isConnected = true,
-            error => this.isConnected = false);
+        .subscribe(result => this.connect(), error => this.disconnect());
     }
     this.isFormSubmitAttempt = true;
+  }
+
+  connect() {
+    this.isConnected = true;
+    this.stateService.connect(this.form.value);
+  }
+
+  disconnect() {
+    this.isConnected = false;
+    this.stateService.disconnect();
   }
 
   isFieldInvalid(field: string) {
