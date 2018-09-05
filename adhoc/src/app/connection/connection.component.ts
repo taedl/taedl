@@ -26,7 +26,7 @@ export class ConnectionComponent implements OnInit {
       vendor: ['', Validators.required]
     });
 
-    this.connectionsApiService.getVendors()
+    this.connectionsApiService.vendors()
       .subscribe(vendors => this.vendors = vendors);
   }
 

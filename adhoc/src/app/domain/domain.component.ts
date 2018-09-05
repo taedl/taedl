@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { StateService } from '../services/state.service';
+import { ConnectionsApiService } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-domain',
@@ -8,17 +9,19 @@ import { StateService } from '../services/state.service';
 })
 export class DomainComponent implements OnInit {
 
-  constructor(private stateService: StateService) { }
+  tables;
+  constructor(private stateService: StateService, private connectionApiSerice: ConnectionsApiService) { }
 
   ngOnInit() {
   }
 
-  dummy1() {
+  isConnected() {
     return this.stateService.isConnected();
   }
 
-  dummy2() {
-    return this.stateService.getConnection();
+  getTables() {
+    this.connectionApiSerice.tables(this.stateService.getConnection())
+      .subscribe(result => this.tables = result,
+          error => console.error('failed to get tables', error));
   }
-
 }

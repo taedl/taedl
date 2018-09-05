@@ -1,6 +1,7 @@
 <p>
-  {{dummy1() | json}}
+  {{isConnected() | json}}
 </p>
-<p>
-  {{dummy2() | json}}
+<p *ngIf="isConnected()">
+  <button mat-raised-button type="submit" (click)="getTables()">get tables</button>
+  {{tables | json}}
 </p>

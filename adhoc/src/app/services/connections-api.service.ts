@@ -14,14 +14,19 @@ export class ConnectionsApiService {
     this.endpoint = environment.connections;
   }
 
-  public getVendors(): Observable<string[]> {
+  vendors(): Observable<string[]> {
     const url = `${this.endpoint}/vendors`;
     return this.http.get<string[]>(url);
   }
 
-  public testConnection(connection: JdbcConnection): Observable<boolean> {
+  testConnection(connection: JdbcConnection): Observable<boolean> {
     const url = this.endpoint;
     return this.http.post<boolean>(url, connection);
+  }
+
+  tables(connection: JdbcConnection): Observable<any> {
+    const url = `${this.endpoint}/tables`;
+    return this.http.post(url, connection);
   }
 }
 
