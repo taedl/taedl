@@ -15,7 +15,18 @@ export class ConnectionsApiService {
   }
 
   public getVendors(): Observable<string[]> {
-    const url  = `${this.endpoint}/vendors`;
+    const url = `${this.endpoint}/vendors`;
     return this.http.get<string[]>(url);
+  }
+
+  public testConnection(connection: JdbcConnection): Observable<boolean> {
+    const url = this.endpoint;
+    return this.http.post<boolean>(url, connection);
+  }
+}
+
+export class JdbcConnection {
+  constructor(public endpoint: string, public user: string,
+              public password: string, public vendor: string) {
   }
 }

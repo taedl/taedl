@@ -8,12 +8,9 @@ import { ConnectionsApiService } from '../services/connections-api.service';
 })
 export class HomeComponent implements OnInit {
 
-  vendors: string[];
-
-  constructor(private connectionsApiService: ConnectionsApiService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.connectionsApiService.getVendors()
-      .subscribe(vendors => this.vendors = vendors);
+
   }
 }

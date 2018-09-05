@@ -1,0 +1,35 @@
+<mat-card>
+  <mat-card-header>
+    Database connection
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput placeholder="endpoint URL" formControlName="endpoint" required>
+        <mat-error *ngIf="isFieldInvalid('endpoint')">Please enter endpoint URL</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="user" formControlName="user" required>
+        <mat-error *ngIf="isFieldInvalid('user')">Please enter DB user name</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="password" placeholder="password" formControlName="password" required>
+        <mat-error *ngIf="isFieldInvalid('password')">Please enter DB password</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="DB vendor" formControlName="vendor" required>
+          <mat-option *ngFor="let v of vendors" [value]="v">{{v}}</mat-option>
+          <mat-error *ngIf="isFieldInvalid('vendor')">Please DB vendor</mat-error>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit">Connect</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<div *ngIf="isConnected">CONNECTED!</div>
+<div *ngIf="!isConnected && isFormSubmitAttempt">ERROR!</div>

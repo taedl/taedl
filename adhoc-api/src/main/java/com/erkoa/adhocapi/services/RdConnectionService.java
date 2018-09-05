@@ -30,7 +30,7 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public boolean testConnection(Connection connection) throws ClassNotFoundException {
-        Class.forName(vendors().get(connection.getVendor()));
+        Class.forName(driver(connection.getVendor()));
         boolean flag = false;
         try (java.sql.Connection conn = DriverManager.getConnection(connection.getEndpoint(), connection.getUser(), connection.getPassword())) {
             if (conn != null) {
@@ -43,22 +43,26 @@ public class RdConnectionService implements ConnectionService {
     }
 
     @Override
-    public Map<String, String> vendors() {
+    public List<String> vendors() {
         List<String> pairs = Arrays.asList(supportedDrivers.split(","));
-        Map<String, String> vendors = new HashMap<>();
-        pairs.forEach(item -> {
-            String key = item.split("\\|")[0];
-            String val = item.split("\\|")[1];
-            vendors.put(key, val);
-        });
-        return vendors;
+        return pairs.stream().map(item -> item.split("\\|")[0]).collect(Collectors.toList());
+    }
+
+    private String driver(String vendor) {
+        String[] pairs = supportedDrivers.split(",");
+        for (String pair: pairs) {
+            if (pair.split("\\|")[0].equals(vendor)) {
+                return pair.split("\\|")[1];
+            }
+        }
+        return null;
     }
 
     @Override
     public List<Table> tables(Connection connection) throws SQLException, ClassNotFoundException {
         java.sql.Connection conn = null;
         try {
-            Class.forName(vendors().get(connection.getVendor()));
+            Class.forName(driver(connection.getVendor()));
             conn = DriverManager.getConnection(connection.getEndpoint(), connection.getUser(), connection.getPassword());
             DatabaseMetaData metaData = conn.getMetaData();
 

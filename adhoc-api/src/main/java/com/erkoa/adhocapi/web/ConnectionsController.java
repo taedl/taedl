@@ -28,7 +28,7 @@ public class ConnectionsController {
     }
 
     @GetMapping(value = "/vendors", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> getSupportedVendors() {
+    public ResponseEntity<List<String>> getSupportedVendors() {
         return new ResponseEntity<>(connectionService.vendors(), HttpStatus.OK);
     }
 
