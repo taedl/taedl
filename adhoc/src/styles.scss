@@ -1,1 +1,47 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/* Draggable*/
+
+.drag-border {
+  border: #3F51B5 dashed 2px;
+}
+
+.drag-drop-border {
+  border: #3F51B5 dashed 1px;
+}
+
+.drag-color {
+  background: #FFEB3B;
+}
+
+.drop-border {
+  border: #3F51B5 dashed 4px;
+}
+
+.drag-handle {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+/* Droppable */
+
+.drag-hint-border {
+  border: #3F51B5 dashed 2px;
+}
+
+.drag-over-border {
+  border: #4CAF50 dashed 2px;
+}
+
+.drag-transit {
+  border: #FFC107 dashed 2px;
+}
