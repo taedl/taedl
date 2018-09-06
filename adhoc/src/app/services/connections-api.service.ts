@@ -24,9 +24,9 @@ export class ConnectionsApiService {
     return this.http.post<boolean>(url, connection);
   }
 
-  tables(connection: JdbcConnection): Observable<any> {
+  tables(connection: JdbcConnection): Observable<string[]> {
     const url = `${this.endpoint}/tables`;
-    return this.http.post(url, connection);
+    return this.http.post<string[]>(url, connection);
   }
 }
 

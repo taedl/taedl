@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @CrossOrigin
@@ -41,8 +42,13 @@ public class ConnectionsController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping(value = "/tables", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Table>> getTables(@RequestBody Connection connection) throws SQLException, ClassNotFoundException {
+    @PostMapping(value = "/tables-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Table>> tablesMetaData(@RequestBody Connection connection) throws SQLException, ClassNotFoundException {
         return new ResponseEntity<>(connectionService.tables(connection), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/tables", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> tables(@RequestBody Connection connection) throws SQLException, ClassNotFoundException {
+        return new ResponseEntity<>(connectionService.tables(connection).stream().map(Table::getName).collect(Collectors.toList()), HttpStatus.OK);
     }
 }

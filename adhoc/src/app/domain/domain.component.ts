@@ -9,7 +9,7 @@ import { ConnectionsApiService } from '../services/connections-api.service';
 })
 export class DomainComponent implements OnInit {
 
-  tables;
+  tables: string[];
   constructor(private stateService: StateService, private connectionApiSerice: ConnectionsApiService) { }
 
   ngOnInit() {
@@ -23,5 +23,9 @@ export class DomainComponent implements OnInit {
     this.connectionApiSerice.tables(this.stateService.getConnection())
       .subscribe(result => this.tables = result,
           error => console.error('failed to get tables', error));
+  }
+
+  onTableDrop(event: any) {
+    console.log('dropped', event.dragData);
   }
 }

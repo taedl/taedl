@@ -1,7 +1,14 @@
-<p>
-  {{isConnected() | json}}
-</p>
 <p *ngIf="isConnected()">
   <button mat-raised-button type="submit" (click)="getTables()">get tables</button>
-  {{tables | json}}
 </p>
+<div>
+  <mat-list>
+    <mat-list-item *ngFor="let t of tables" draggable [dragData]="t">{{t}}</mat-list-item>
+  </mat-list>
+</div>
+
+<div droppable (onDrop)="onTableDrop($event)" style="height: 100px">
+  drop here
+</div>
+
+
