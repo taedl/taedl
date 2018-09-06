@@ -3,10 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { ConnectionComponent } from '../connection/connection.component';
 import { DomainComponent } from '../domain/domain.component';
-import { MatCardModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule } from '@angular/material';
+import { MatCardModule, MatFormFieldModule, MatInputModule, MatListModule, MatOptionModule, MatSelectModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -24,7 +25,9 @@ describe('HomeComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatListModule,
+        NgDragDropModule.forRoot()
       ]
     })
     .compileComponents();
