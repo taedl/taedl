@@ -1,2 +1,15 @@
-<app-connection></app-connection>
-<app-domain></app-domain>
+<div>
+  <mat-tab-group [selectedIndex]="selectedTab">
+    <mat-tab label="Connection">
+      <app-connection (notifyConnected)="handleConnected($event)"></app-connection>
+    </mat-tab>
+    <mat-tab label="Domain" [disabled]="!connection">
+      <app-domain [connection]="connection"></app-domain>
+    </mat-tab>
+    <mat-tab label="Report" [disabled]="!connection">
+      ...report
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+

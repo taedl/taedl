@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConnectionsApiService } from '../services/connections-api.service';
+import { JdbcConnection } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +8,16 @@ import { ConnectionsApiService } from '../services/connections-api.service';
 })
 export class HomeComponent implements OnInit {
 
+  connection: JdbcConnection;
+  selectedTab = 0;
   constructor() { }
 
   ngOnInit() {
 
+  }
+
+  handleConnected(connection: JdbcConnection) {
+    this.connection = connection;
+    this.selectedTab = connection ? 1 : 0;
   }
 }

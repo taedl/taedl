@@ -1,28 +1,32 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { StateService } from '../services/state.service';
-import { ConnectionsApiService } from '../services/connections-api.service';
+import { ConnectionsApiService, JdbcConnection } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-domain',
   templateUrl: './domain.component.html',
   styleUrls: ['./domain.component.scss']
 })
-export class DomainComponent implements OnInit {
+export class DomainComponent implements OnInit, OnChanges {
+
+  @Input()
+  connection: JdbcConnection;
 
   tables: string[];
-  constructor(private stateService: StateService, private connectionApiSerice: ConnectionsApiService) { }
+  constructor(private stateService: StateService,
+              private connectionApiSerice: ConnectionsApiService) { }
 
   ngOnInit() {
   }
 
-  isConnected() {
-    return this.stateService.isConnected();
-  }
-
-  getTables() {
-    this.connectionApiSerice.tables(this.stateService.getConnection())
-      .subscribe(result => this.tables = result,
-          error => console.error('failed to get tables', error));
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.connection.currentValue) {
+      this.connectionApiSerice.tables(changes.connection.currentValue)
+          .subscribe(result => this.tables = result,
+              error => console.error('failed to get tables', error));
+    } else {
+      this.tables = [];
+    }
   }
 
   onTableDrop(event: any) {

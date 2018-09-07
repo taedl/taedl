@@ -1,14 +1,14 @@
-<p *ngIf="isConnected()">
-  <button mat-raised-button type="submit" (click)="getTables()">get tables</button>
-</p>
-<div>
-  <mat-list>
-    <mat-list-item *ngFor="let t of tables" draggable [dragData]="t">{{t}}</mat-list-item>
-  </mat-list>
+<mat-toolbar>Please select tables for your Domain</mat-toolbar>
+<mat-list>
+  <mat-list-item *ngFor="let t of tables" draggable [dragData]="t">{{t}}</mat-list-item>
+</mat-list>
+
+<div *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)" style="height: 100px">
+  drop here
 </div>
 
-<div droppable (onDrop)="onTableDrop($event)" style="height: 100px">
-  drop here
+<div *ngIf="tables.length === 0">
+  Please set up database connection
 </div>
 
 

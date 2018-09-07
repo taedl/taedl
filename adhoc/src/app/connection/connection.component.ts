@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ConnectionsApiService } from '../services/connections-api.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ConnectionsApiService, JdbcConnection } from '../services/connections-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StateService } from '../services/state.service';
 
@@ -10,10 +10,14 @@ import { StateService } from '../services/state.service';
 })
 export class ConnectionComponent implements OnInit {
 
+  @Output()
+  notifyConnected: EventEmitter<JdbcConnection> = new EventEmitter<JdbcConnection>();
+
   vendors: string[];
   form: FormGroup;
   isFormSubmitAttempt: boolean;
   isConnected: boolean;
+  hide = true;
 
   constructor(private connectionsApiService: ConnectionsApiService,
               private formBuilder: FormBuilder, private stateService: StateService) { }
@@ -41,11 +45,13 @@ export class ConnectionComponent implements OnInit {
   connect() {
     this.isConnected = true;
     this.stateService.connect(this.form.value);
+    this.notifyConnected.emit(this.form.value);
   }
 
   disconnect() {
     this.isConnected = false;
     this.stateService.disconnect();
+    this.notifyConnected.emit(null);
   }
 
   isFieldInvalid(field: string) {
@@ -53,6 +59,11 @@ export class ConnectionComponent implements OnInit {
       (!this.form.get(field).valid && this.form.get(field).touched) ||
       (this.form.get(field).untouched && this.isFormSubmitAttempt)
     );
+  }
+
+  isFieldsSet() {
+    const fields: JdbcConnection = this.form.value;
+    return fields.endpoint && fields.password && fields.user && fields.vendor;
   }
 
 }
