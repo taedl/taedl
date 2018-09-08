@@ -1,3 +1,31 @@
-.tables-list-container {
-  max-width: 300px;
+.domain-container {
+  display: grid;
+
+  .drag-container {
+
+    grid-column: 1;
+
+    .stretched-button {
+      display: block;
+      width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+      border: 1px solid black;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+
+  .drop-container {
+    grid-column: 2/10;
+  }
+}
+
+.description {
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center;
 }

@@ -13,6 +13,7 @@ export class DomainComponent implements OnInit, OnChanges {
   connection: JdbcConnection;
 
   tables: string[];
+  selectedTables: string[] = [];
   constructor(private stateService: StateService,
               private connectionApiSerice: ConnectionsApiService) { }
 
@@ -30,6 +31,10 @@ export class DomainComponent implements OnInit, OnChanges {
   }
 
   onTableDrop(event: any) {
-    console.log('dropped', event.dragData);
+    const ind = this.tables.indexOf(event.dragData);
+    if (ind > -1) {
+      this.tables.splice(ind, 1);
+      this.selectedTables.push(event.dragData);
+    }
   }
 }

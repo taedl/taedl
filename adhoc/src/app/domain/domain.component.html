@@ -1,14 +1,16 @@
 <mat-toolbar>Please select tables for your Domain</mat-toolbar>
-<mat-list>
-  <mat-list-item *ngFor="let t of tables" draggable [dragData]="t">{{t}}</mat-list-item>
-</mat-list>
 
-<div *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)" style="height: 100px">
-  drop here
+<div class="domain-container">
+  <div class="drag-container">
+    <button *ngFor="let t of tables"mat-raised-button  draggable [dragData]="t" class="stretched-button">{{t}}</button>
+  </div>
+
+  <div *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)" class="drop-container description">
+    Drop your tables here
+  </div>
 </div>
-
-<div *ngIf="tables.length === 0">
-  Please set up database connection
+<div class="data">
+  <div *ngFor="let s of selectedTables">{{s}}</div>
 </div>
 
 
