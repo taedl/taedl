@@ -37,4 +37,8 @@ export class DomainComponent implements OnInit, OnChanges {
       this.selectedTables.push(event.dragData);
     }
   }
+
+  isSelected(): boolean {
+    return this.selectedTables.length > 0;
+  }
 }

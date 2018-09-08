@@ -5,12 +5,15 @@
     <button *ngFor="let t of tables"mat-raised-button  draggable [dragData]="t" class="stretched-button">{{t}}</button>
   </div>
 
-  <div *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)" class="drop-container description">
-    Drop your tables here
+  <div *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)" class="drop-container" [ngClass]="{'description': !isSelected()}">
+    <span *ngIf="!isSelected()">Drop your tables here</span>
+
+    <div *ngFor="let s of selectedTables">{{s}}</div>
+
   </div>
 </div>
 <div class="data">
-  <div *ngFor="let s of selectedTables">{{s}}</div>
+  ...tables to be here
 </div>
 
 
