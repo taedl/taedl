@@ -5,15 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Table {
-    private String name;
-    private Column primaryKey;
-    private List<Map<String, Column>> importedKeys;
-    private List<Map<String, Column>> exportedKeys;
-    private List<Column> columns;
+    private List<String> headers;
+    private List<List<Object>> data;
 }

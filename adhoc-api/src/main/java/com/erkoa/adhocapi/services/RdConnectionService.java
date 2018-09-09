@@ -3,6 +3,7 @@ package com.erkoa.adhocapi.services;
 import com.erkoa.adhocapi.dto.Column;
 import com.erkoa.adhocapi.dto.Connection;
 import com.erkoa.adhocapi.dto.Table;
+import com.erkoa.adhocapi.dto.TableMetaData;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class RdConnectionService implements ConnectionService {
     }
 
     @Override
-    public List<Table> tables(Connection connection) throws SQLException, ClassNotFoundException {
+    public List<TableMetaData> tables(Connection connection) throws SQLException, ClassNotFoundException {
         java.sql.Connection conn = null;
         try {
             Class.forName(driver(connection.getVendor()));
@@ -80,7 +81,7 @@ public class RdConnectionService implements ConnectionService {
                 tableList.add(result.getString(3));
             }
             result.close();
-            List<Table> tables = new ArrayList<>();
+            List<TableMetaData> tables = new ArrayList<>();
             for (String table : tableList) {
                 tables.add(generateSchema(metaData, table));
             }
@@ -93,8 +94,13 @@ public class RdConnectionService implements ConnectionService {
         }
     }
 
-    private Table generateSchema(DatabaseMetaData metaData, String tableName) throws SQLException {
-        Table table = new Table();
+    @Override
+    public Table preview(Connection connection, List<String> tables) {
+        return null;
+    }
+
+    private TableMetaData generateSchema(DatabaseMetaData metaData, String tableName) throws SQLException {
+        TableMetaData table = new TableMetaData();
         table.setName(tableName);
 
         table.setPrimaryKey(primaryKey(metaData, tableName));

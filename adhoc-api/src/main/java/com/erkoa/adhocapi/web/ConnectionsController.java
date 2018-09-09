@@ -1,7 +1,7 @@
 package com.erkoa.adhocapi.web;
 
 import com.erkoa.adhocapi.dto.Connection;
-import com.erkoa.adhocapi.dto.Table;
+import com.erkoa.adhocapi.dto.TableMetaData;
 import com.erkoa.adhocapi.services.ConnectionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,12 +42,12 @@ public class ConnectionsController {
     }
 
     @PostMapping(value = "/tables-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Table>> tablesMetaData(@RequestBody Connection connection) throws SQLException, ClassNotFoundException {
+    public ResponseEntity<List<TableMetaData>> tablesMetaData(@RequestBody Connection connection) throws SQLException, ClassNotFoundException {
         return new ResponseEntity<>(connectionService.tables(connection), HttpStatus.OK);
     }
 
     @PostMapping(value = "/tables", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> tables(@RequestBody Connection connection) throws SQLException, ClassNotFoundException {
-        return new ResponseEntity<>(connectionService.tables(connection).stream().map(Table::getName).collect(Collectors.toList()), HttpStatus.OK);
+        return new ResponseEntity<>(connectionService.tables(connection).stream().map(TableMetaData::getName).collect(Collectors.toList()), HttpStatus.OK);
     }
 }

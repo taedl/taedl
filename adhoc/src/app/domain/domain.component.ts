@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { StateService } from '../services/state.service';
-import { ConnectionsApiService, JdbcConnection } from '../services/connections-api.service';
+import { ConnectionsApiService, ITableMetaData, JdbcConnection } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-domain',
@@ -12,8 +12,8 @@ export class DomainComponent implements OnInit, OnChanges {
   @Input()
   connection: JdbcConnection;
 
-  tables: string[];
-  selectedTables: string[] = [];
+  tables: ITable[];
+  selectedTables: ITableMetaData[] = [];
   constructor(private stateService: StateService,
               private connectionApiSerice: ConnectionsApiService) { }
 
@@ -22,8 +22,8 @@ export class DomainComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.connection.currentValue) {
-      this.connectionApiSerice.tables(changes.connection.currentValue)
-          .subscribe(result => this.tables = result,
+      this.connectionApiSerice.tablesMetadata(changes.connection.currentValue)
+          .subscribe(result => this.tables = result.map(t => ({table: t, selected: false})),
               error => console.error('failed to get tables', error));
     } else {
       this.tables = [];
@@ -33,12 +33,17 @@ export class DomainComponent implements OnInit, OnChanges {
   onTableDrop(event: any) {
     const ind = this.tables.indexOf(event.dragData);
     if (ind > -1) {
-      this.tables.splice(ind, 1);
-      this.selectedTables.push(event.dragData);
+      this.tables[ind].selected = true;
+      this.selectedTables.push(event.dragData.table);
     }
   }
 
   isSelected(): boolean {
     return this.selectedTables.length > 0;
   }
+}
+
+interface ITable {
+  table: ITableMetaData;
+  selected: boolean;
 }

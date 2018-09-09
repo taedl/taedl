@@ -28,10 +28,35 @@ export class ConnectionsApiService {
     const url = `${this.endpoint}/tables`;
     return this.http.post<string[]>(url, connection);
   }
+
+  tablesMetadata(connection: JdbcConnection): Observable<ITableMetaData[]> {
+    const url = `${this.endpoint}/tables-metadata`;
+    return this.http.post<ITableMetaData[]>(url, connection);
+  }
 }
 
 export class JdbcConnection {
   constructor(public endpoint: string, public user: string,
               public password: string, public vendor: string) {
   }
+}
+
+export interface IColumn {
+  name: string;
+  tableName: string;
+  type: string;
+  columnSize: string;
+}
+
+export interface IKey {
+  primary: IColumn;
+  foreign: IColumn;
+}
+
+export interface ITableMetaData {
+  name: string;
+  primaryKey: IColumn;
+  importedKeys: IKey[];
+  exportedKeys: IKey[];
+  columns: IColumn[];
 }
