@@ -10,12 +10,12 @@
     background-color: whitesmoke;
 
     .stretched-button {
+      text-align: left;
       display: block;
-      width: 100%;
+      width: 90%;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+      margin: 0.5em auto;
       border: 1px solid black;
       color: black;
       -webkit-box-shadow: none;
@@ -29,12 +29,12 @@
     background-color: whitesmoke;
 
     .stretched-button {
+      text-align: left;
       display: block;
-      width: 100%;
+      width: 90%;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+      margin: 0.5em auto;
       border: 1px solid $primary;
       color: $primary;
       -webkit-box-shadow: none;
