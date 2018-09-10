@@ -1,18 +1,23 @@
+@import '../../variables.scss';
+
 .domain-container {
   display: grid;
+  grid-gap: 1em;
+  margin-top: 1em;
 
   .drag-container {
-
     grid-column: 1;
+    background-color: whitesmoke;
 
     .stretched-button {
       display: block;
-      width: 90%;
+      width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-top: 0.2em;
-      margin-bottom: 0.2em;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
       border: 1px solid black;
+      color: black;
       -webkit-box-shadow: none;
       -moz-box-shadow: none;
       box-shadow: none;
@@ -20,7 +25,26 @@
   }
 
   .drop-container {
-    grid-column: 2/10;
+    grid-column: 2;
+    background-color: whitesmoke;
+
+    .stretched-button {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      border: 1px solid $primary;
+      color: $primary;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+
+  .joins-container {
+    grid-column: 3/10;
   }
 }
 
@@ -28,4 +52,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: whitesmoke;
 }

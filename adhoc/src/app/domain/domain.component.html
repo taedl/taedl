@@ -2,15 +2,18 @@
 
 <div class="domain-container">
   <div class="drag-container">
-    <button *ngFor="let t of tables"mat-raised-button  draggable [dragData]="t" [disabled]="t.selected" class="stretched-button">{{t.table.name}}</button>
+    <button *ngFor="let t of tables" mat-raised-button draggable [dragData]="t" [disabled]="t.selected" disableRipple class="stretched-button">{{t.table.name}}</button>
   </div>
 
-  <div *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)" class="drop-container" [ngClass]="{'description': !isSelected()}">
+  <div class="drop-container" *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)"  [ngClass]="{'description': !isSelected()}">
     <span *ngIf="!isSelected()">Drop your tables here</span>
-
-    <div *ngFor="let s of selectedTables">{{s.name}}</div>
-
+    <button *ngFor="let s of selectedTables" mat-raised-button disableRipple class="stretched-button">{{s.name}}</button>
   </div>
+
+  <div class="joins-container">
+    ...joins go here
+  </div>
+
 </div>
 <div class="data">
   ...tables to be here
