@@ -33,6 +33,17 @@ export class ConnectionsApiService {
     const url = `${this.endpoint}/tables-metadata`;
     return this.http.post<ITableMetaData[]>(url, connection);
   }
+
+  preview(connection: JdbcConnection, tables: ITableMetaData[]): Observable<IResultTable> {
+    const url = `${this.endpoint}/preview`;
+    const request = { connection, tables };
+    return this.http.post<IResultTable>(url, request);
+  }
+}
+
+export interface IResultTable {
+  headers: string[];
+  data: any[][];
 }
 
 export class JdbcConnection {

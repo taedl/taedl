@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Connection {
+public class ConnectionDetails {
     private String endpoint;
     private String user;
     private String password;

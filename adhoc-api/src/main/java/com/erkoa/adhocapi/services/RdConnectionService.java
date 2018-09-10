@@ -1,7 +1,7 @@
 package com.erkoa.adhocapi.services;
 
 import com.erkoa.adhocapi.dto.Column;
-import com.erkoa.adhocapi.dto.Connection;
+import com.erkoa.adhocapi.dto.ConnectionDetails;
 import com.erkoa.adhocapi.dto.Table;
 import com.erkoa.adhocapi.dto.TableMetaData;
 import com.google.common.collect.ImmutableMap;
@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,18 +19,20 @@ import java.util.stream.Collectors;
 public class RdConnectionService implements ConnectionService {
 
     private final String supportedDrivers;
+    private final QueryBuildingService queryBuildingService;
 
     @Autowired
-    public RdConnectionService(@Value("${packaged.jdbc.driver.classes}") String supportedDrivers) {
+    public RdConnectionService(@Value("${packaged.jdbc.driver.classes}") String supportedDrivers, QueryBuildingService queryBuildingService) {
         this.supportedDrivers = supportedDrivers;
+        this.queryBuildingService = queryBuildingService;
     }
 
 
     @Override
-    public boolean testConnection(Connection connection) throws ClassNotFoundException {
-        Class.forName(driver(connection.getVendor()));
+    public boolean testConnection(ConnectionDetails connectionDetails) throws ClassNotFoundException {
+        Class.forName(driver(connectionDetails.getVendor()));
         boolean flag = false;
-        try (java.sql.Connection conn = DriverManager.getConnection(connection.getEndpoint(), connection.getUser(), connection.getPassword())) {
+        try (java.sql.Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             if (conn != null) {
                 flag = true;
             }
@@ -60,11 +59,11 @@ public class RdConnectionService implements ConnectionService {
     }
 
     @Override
-    public List<TableMetaData> tables(Connection connection) throws SQLException, ClassNotFoundException {
-        java.sql.Connection conn = null;
+    public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException, ClassNotFoundException {
+        Connection conn = null;
         try {
-            Class.forName(driver(connection.getVendor()));
-            conn = DriverManager.getConnection(connection.getEndpoint(), connection.getUser(), connection.getPassword());
+            Class.forName(driver(connectionDetails.getVendor()));
+            conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword());
             DatabaseMetaData metaData = conn.getMetaData();
 
             String   catalog          = null;
@@ -95,8 +94,26 @@ public class RdConnectionService implements ConnectionService {
     }
 
     @Override
-    public Table preview(Connection connection, List<String> tables) {
-        return null;
+    public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables) throws ClassNotFoundException, SQLException {
+        String query = queryBuildingService.generatePreviewQuery(connectionDetails, tables);
+
+        Connection conn = null;
+        Table table = null;
+        try {
+            Class.forName(driver(connectionDetails.getVendor()));
+            conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword());
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSetMetaData meta = resultSet.getMetaData();
+            table = new Table(resultSet, meta, tables);
+
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return table;
     }
 
     private TableMetaData generateSchema(DatabaseMetaData metaData, String tableName) throws SQLException {
