@@ -47,6 +47,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConnectionsApiService } from './services/connections-api.service';
 import { StateService } from './services/state.service';
 import { DomainComponent } from './domain/domain.component';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { EchartComponent } from './echart/echart.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -57,7 +59,8 @@ const routes: Routes = [
     AppComponent,
     HomeComponent,
     ConnectionComponent,
-    DomainComponent
+    DomainComponent,
+    EchartComponent
   ],
   imports: [
     BrowserModule,
@@ -100,6 +103,7 @@ const routes: Routes = [
     MatTreeModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxEchartsModule
   ],
   providers: [
     { provide: ConnectionsApiService, useClass: ConnectionsApiService },

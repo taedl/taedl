@@ -23,9 +23,11 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
     "core-js": "^2.5.4",
+    "echarts": "^4.1.0",
     "hammerjs": "^2.0.8",
     "material-design-icons": "^3.0.1",
     "ng-drag-drop": "^5.0.0",
+    "ngx-echarts": "^4.0.0",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },
