@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { StateService } from '../services/state.service';
-import { ConnectionsApiService, IResultTable, ITableMetaData, JdbcConnection } from '../services/connections-api.service';
+import { ConnectionsApiService, IResultTable, ITableMetaData, ITable, JdbcConnection } from '../services/connections-api.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
@@ -79,9 +79,4 @@ export class DomainComponent implements OnInit, OnChanges {
     });
     return rows;
   }
-}
-
-interface ITable {
-  table: ITableMetaData;
-  selected: boolean;
 }

@@ -71,3 +71,7 @@ export interface ITableMetaData {
   exportedKeys: IKey[];
   columns: IColumn[];
 }
+ export interface ITable {
+   table: ITableMetaData;
+   selected: boolean;
+ }
