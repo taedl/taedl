@@ -8,4 +8,5 @@ import java.util.List;
 public class PreviewRequest {
    ConnectionDetails connection;
    List<TableMetaData> tables;
+   List<Join> joins;
 }

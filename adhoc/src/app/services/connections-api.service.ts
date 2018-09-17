@@ -34,9 +34,9 @@ export class ConnectionsApiService {
     return this.http.post<ITableMetaData[]>(url, connection);
   }
 
-  preview(connection: JdbcConnection, tables: ITableMetaData[]): Observable<IResultTable> {
+  preview(connection: JdbcConnection, tables: ITableMetaData[], joins: IJoin[]): Observable<IResultTable> {
     const url = `${this.endpoint}/preview`;
-    const request = { connection, tables };
+    const request = { connection, tables, joins };
     return this.http.post<IResultTable>(url, request);
   }
 }
@@ -74,4 +74,23 @@ export interface ITableMetaData {
  export interface ITable {
    table: ITableMetaData;
    selected: boolean;
- }
+}
+
+export interface IJoin {
+  primaryKey: {
+    tableName: string,
+    name: string
+  };
+  foreignKey: {
+    tableName: string,
+    name: string
+  };
+  type: string;
+}
+
+export const JOIN_TYPES = {
+  INNER: 'inner',
+  LEFT: 'left',
+  RIGHT: 'right',
+  FULL: 'full'
+};

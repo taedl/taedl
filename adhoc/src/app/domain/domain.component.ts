@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { StateService } from '../services/state.service';
-import { ConnectionsApiService, IResultTable, ITableMetaData, ITable, JdbcConnection } from '../services/connections-api.service';
+import { ConnectionsApiService, IResultTable, ITableMetaData, ITable, JdbcConnection, IJoin } from '../services/connections-api.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { JoinsComponent } from '../joins/joins.component';
 
@@ -24,6 +24,7 @@ export class DomainComponent implements OnInit, OnChanges {
   resultTable: IResultTable;
   resultTableHeaders: string[];
   tableDataSource = new MatTableDataSource<any>();
+  joins: IJoin[] = [];
 
   constructor(private stateService: StateService,
               private connectionApiSerice: ConnectionsApiService) { }
@@ -52,8 +53,12 @@ export class DomainComponent implements OnInit, OnChanges {
     }
   }
 
+  onJoinsChanged(joins: IJoin[]) {
+    this.joins = joins;
+  }
+
   preview() {
-    this.connectionApiSerice.preview(this.connection, this.selectedTables)
+    this.connectionApiSerice.preview(this.connection, this.selectedTables, this.joins)
       .subscribe(result => {
         this.resultTable = result;
         this.resultTableHeaders = result.headers;
