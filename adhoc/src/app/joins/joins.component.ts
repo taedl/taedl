@@ -23,7 +23,12 @@ export class JoinsComponent implements OnInit, OnChanges {
       this.option = { ...empty };
       const join = this.join;
       this.tables.forEach(t => {
-        this.option.series[0].data.push({name: t.table.name});
+        this.option.series[0].data.push({
+          name: t.table.name,
+          // itemStyle: {
+          //   color: t.selected ? '#e91e63' : '#3f51b5'
+          // }
+        });
 
         t.table.exportedKeys.forEach(exp =>
           this.option.series[0].links.push({
@@ -37,7 +42,6 @@ export class JoinsComponent implements OnInit, OnChanges {
             }
           }));
       });
-      console.log(JSON.stringify(this.option));
     }
   }
 
@@ -74,6 +78,10 @@ const empty = {
         normal: {
           show: true
         }
+      },
+      itemStyle: {
+        color: '#e91e63',
+        // color: '#3f51b5',
       },
       edgeSymbol: ['circle', 'arrow'],
       edgeSymbolSize: [4, 10],

@@ -15,7 +15,7 @@
   </div>
 
 </div>
-<div class="data" *ngIf="resultTableHeaders && tableDataSource">
+<div class="data mat-elevation-z2" *ngIf="resultTableHeaders && tableDataSource">
   <div *ngIf="tableDataSource && resultTableHeaders">
     <mat-table #table [dataSource]="tableDataSource" matSort>
       <ng-container *ngFor="let h of resultTableHeaders" matColumnDef={{h}}>

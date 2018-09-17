@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { StateService } from '../services/state.service';
 import { ConnectionsApiService, IResultTable, ITableMetaData, ITable, JdbcConnection } from '../services/connections-api.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { JoinsComponent } from '../joins/joins.component';
 
 @Component({
   selector: 'app-domain',
@@ -15,6 +16,8 @@ export class DomainComponent implements OnInit, OnChanges {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  @ViewChild(JoinsComponent) viewJoins: JoinsComponent;
 
   tables: ITable[];
   selectedTables: ITableMetaData[] = [];
