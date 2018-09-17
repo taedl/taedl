@@ -12,7 +12,7 @@ export class JoinsComponent implements OnInit, OnChanges {
   tables: ITable[];
   option = null;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
   }
@@ -21,6 +21,7 @@ export class JoinsComponent implements OnInit, OnChanges {
     if (changes.tables.currentValue) {
       this.tables = changes.tables.currentValue;
       this.option = { ...empty };
+      const join = this.join;
       this.tables.forEach(t => {
         this.option.series[0].data.push({name: t.table.name});
 
@@ -29,15 +30,19 @@ export class JoinsComponent implements OnInit, OnChanges {
             source: exp.primary.tableName,
             target: exp.foreign.tableName,
             label: {
+              show: true,
               formatter: function(params) {
-                console.log(params);
-                return 'label';
+                return `${params.data.source}-${join(params.data)}-${params.data.target}`;
               }
             }
           }));
       });
       console.log(JSON.stringify(this.option));
     }
+  }
+
+  join(data) {
+    return 'inner';
   }
 
   onChartEvent(event: any, type: string) {
