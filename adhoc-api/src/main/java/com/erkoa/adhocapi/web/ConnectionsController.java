@@ -60,6 +60,6 @@ public class ConnectionsController {
         if (connectionDetails == null || CollectionUtils.isEmpty(tables)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(connectionService.preview(connectionDetails, tables), HttpStatus.OK);
+        return new ResponseEntity<>(connectionService.preview(connectionDetails, tables, previewRequest.getJoins()), HttpStatus.OK);
     }
 }

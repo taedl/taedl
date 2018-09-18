@@ -1,11 +1,8 @@
 package com.erkoa.adhocapi.services;
 
-import com.erkoa.adhocapi.dto.Column;
-import com.erkoa.adhocapi.dto.ConnectionDetails;
-import com.erkoa.adhocapi.dto.Table;
-import com.erkoa.adhocapi.dto.TableMetaData;
+import com.erkoa.adhocapi.dto.*;
 import com.google.common.collect.ImmutableMap;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,7 +11,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Log4j2
+@Slf4j
 @Service
 public class RdConnectionService implements ConnectionService {
 
@@ -60,23 +57,19 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException, ClassNotFoundException {
-        Connection conn = null;
-        try {
-            Class.forName(driver(connectionDetails.getVendor()));
-            conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword());
+        Class.forName(driver(connectionDetails.getVendor()));
+        try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             DatabaseMetaData metaData = conn.getMetaData();
 
-            String   catalog          = null;
-            String   schemaPattern    = null;
-            String   tableNamePattern = null;
-
-            // Not using views to have keys
-            String[] types            = {"TABLE"};
-
+            // TODO: catalogue and schema are not always default
+            String catalog = null;
+            String schemaPattern = null;
+            String tableNamePattern = null;
+            String[] types = {"TABLE"};
             ResultSet result = metaData.getTables(catalog, schemaPattern, tableNamePattern, types);
 
             List<String> tableList = new ArrayList<>();
-            while(result.next()) {
+            while (result.next()) {
                 tableList.add(result.getString(3));
             }
             result.close();
@@ -85,34 +78,23 @@ public class RdConnectionService implements ConnectionService {
                 tables.add(generateSchema(metaData, table));
             }
             return tables;
-
-        } finally {
-            if (conn != null) {
-                conn.close();
-            }
         }
     }
 
     @Override
-    public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables) throws ClassNotFoundException, SQLException {
-        String query = queryBuildingService.generatePreviewQuery(connectionDetails, tables);
+    public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws ClassNotFoundException, SQLException {
+        String query = queryBuildingService.generatePreviewQuery(connectionDetails, tables, joins);
+        log.info("Generated query {}", query);
 
-        Connection conn = null;
-        Table table = null;
-        try {
-            Class.forName(driver(connectionDetails.getVendor()));
-            conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword());
+        Table table;
+        Class.forName(driver(connectionDetails.getVendor()));
+        try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             ResultSetMetaData meta = resultSet.getMetaData();
             table = new Table(resultSet, meta, tables);
 
-        } finally {
-            if (conn != null) {
-                conn.close();
-            }
         }
-
         return table;
     }
 
