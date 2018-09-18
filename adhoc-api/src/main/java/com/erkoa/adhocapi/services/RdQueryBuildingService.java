@@ -58,10 +58,11 @@ public class RdQueryBuildingService implements QueryBuildingService {
 
     private Edge findEdge(Join join) {
 
-        Vertex start = new Vertex(join.getPrimaryKey().getName(), join.getPrimaryKey().getTableName());
-        Vertex dest = new Vertex(join.getForeignKey().getName(), join.getForeignKey().getTableName());
+        Vertex start = new Vertex(join.getPrimaryKey().getTableName());
+        Vertex dest = new Vertex(join.getForeignKey().getTableName());
 
-        Join joinEdge = new Join(new Column(start.getName(), start.getTableName()), new Column(dest.getName(), dest.getTableName()), join.getType());
+        Join joinEdge = new Join(new Column(join.getPrimaryKey().getName(), join.getPrimaryKey().getTableName()),
+                new Column(join.getForeignKey().getName(), join.getForeignKey().getTableName()), join.getType());
         return new Edge(start, dest, joinEdge);
     }
 
@@ -74,8 +75,14 @@ public class RdQueryBuildingService implements QueryBuildingService {
             return query.append(columns.get(0).getTableName()).toString();
         }
 
-        List<Vertex> vertices = joins.stream().map(item -> new Vertex(item.getPrimaryKey().getName(), item.getPrimaryKey().getTableName())).collect(Collectors.toList());
-        vertices.addAll(joins.stream().map(item -> new Vertex(item.getForeignKey().getName(), item.getForeignKey().getTableName())).collect(Collectors.toList()));
+        List<Vertex> vertices = joins.stream().map(item ->
+                new Vertex(item.getPrimaryKey().getTableName())).collect(Collectors.toList());
+
+        vertices.addAll(joins.stream().map(item ->
+                new Vertex(item.getForeignKey().getTableName())).collect(Collectors.toList()));
+
+        vertices = vertices.stream().distinct().collect(Collectors.toList());
+
         List<TableMetaData> tablesToJoin = tables.stream().distinct().collect(Collectors.toList());
         Joiner joiner = createJoiner(vertices, tablesToJoin, joins);
         List<List<ImmutablePair<Vertex, Join>>> joinChains = new ArrayList<>(tablesToJoin.size());

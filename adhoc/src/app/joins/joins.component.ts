@@ -60,11 +60,27 @@ export class JoinsComponent implements OnInit, OnChanges {
     if (this.joins.length) {
       return;
     }
-    this.tables.map(t => t.table.exportedKeys.forEach(exp => this.joins.push({
+
+    const joins = [];
+
+    this.tables.map(t => t.table.exportedKeys.forEach(exp => joins.push({
       primaryKey: {tableName: exp.primary.tableName, name: exp.primary.name},
       foreignKey: {tableName: exp.foreign.tableName, name: exp.foreign.name},
       type: JOIN_TYPES.INNER
     })));
+
+    const combined = [ ...joins];
+    joins.forEach(j => combined.push(
+      { primaryKey: j.foreignKey,
+        foreignKey: j.primaryKey,
+        type: j.type === JOIN_TYPES.INNER || j.type === JOIN_TYPES.FULL ? j.type :
+          j.type === JOIN_TYPES.LEFT ? JOIN_TYPES.RIGHT : JOIN_TYPES.LEFT
+      }
+    ));
+
+    this.joins = combined;
+    console.log('joins', this.joins);
+    console.log('combined: ', combined);
 
     this.notifyJoinsChanged.emit(this.joins);
   }
