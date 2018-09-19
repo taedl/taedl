@@ -11,7 +11,7 @@
   </div>
 
   <div class="joins-container">
-    <app-joins [tables]="tables" (notifyJoinsChanged)="onJoinsChanged($event)"></app-joins>
+    <div echarts [options]="option" (chartClick)="onChartEvent($event, 'chartClick')"></div>
   </div>
 
 </div>
