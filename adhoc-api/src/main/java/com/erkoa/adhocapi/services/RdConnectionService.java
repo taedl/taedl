@@ -83,7 +83,7 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws ClassNotFoundException, SQLException {
-        String query = queryBuildingService.generatePreviewQuery(connectionDetails, tables, joins);
+        String query = queryBuildingService.generatePreviewQuery(tables, joins);
         log.info("Generated query {}", query);
 
         Table table;

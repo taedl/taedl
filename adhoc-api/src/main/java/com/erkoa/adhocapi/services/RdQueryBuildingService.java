@@ -24,12 +24,17 @@ public class RdQueryBuildingService implements QueryBuildingService {
     private final String END = ";";
 
     @Override
-    public String generatePreviewQuery(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) {
+    public String generatePreviewQuery(List<TableMetaData> tables, List<Join> joins) {
         if (CollectionUtils.isEmpty(tables)) {
             throw new QueryBuildingException("Could not generate preview query, no tables provided");
         }
 
         return select(tables.stream().flatMap(table -> table.getColumns().stream()).collect(Collectors.toList())) + from(tables, joins) + finalise();
+    }
+
+    @Override
+    public List<String> joinChain(List<TableMetaData> tables, List<Join> joins) {
+        return null;
     }
 
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way
