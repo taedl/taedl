@@ -9,6 +9,7 @@ import com.erkoa.adhocapi.services.joins.Edge;
 import com.erkoa.adhocapi.services.joins.Graph;
 import com.erkoa.adhocapi.services.joins.Joiner;
 import com.erkoa.adhocapi.services.joins.Vertex;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -33,8 +34,50 @@ public class RdQueryBuildingService implements QueryBuildingService {
     }
 
     @Override
-    public List<String> joinChain(List<TableMetaData> tables, List<Join> joins) {
-        return null;
+    public Set<String> joinChain(List<TableMetaData> tables, List<Join> joins) {
+        Set<String> tablesList = new LinkedHashSet<>();
+        List<Column> columns = tables.stream().map(TableMetaData::getColumns).flatMap(Collection::stream).collect(Collectors.toList());
+
+        if (!isJoined(columns)) {
+            return ImmutableSet.of(columns.get(0).getTableName());
+        }
+
+        List<Vertex> vertices = joins.stream().map(item ->
+                new Vertex(item.getPrimaryKey().getTableName())).collect(Collectors.toList());
+
+        vertices.addAll(joins.stream().map(item ->
+                new Vertex(item.getForeignKey().getTableName())).collect(Collectors.toList()));
+
+        vertices = vertices.stream().distinct().collect(Collectors.toList());
+
+        List<TableMetaData> tablesToJoin = tables.stream().distinct().collect(Collectors.toList());
+        Joiner joiner = createJoiner(vertices, tablesToJoin, joins);
+        List<List<ImmutablePair<Vertex, Join>>> joinChains = new ArrayList<>(tablesToJoin.size());
+
+        for (TableMetaData aTableToJoin : tablesToJoin) {
+            Vertex current = vertices.stream().filter(v -> v.getTableName().equals(aTableToJoin.getName()))
+                    .findAny().orElse(null);
+
+            List<ImmutablePair<Vertex, Join>> chain = joiner.getJoinChain(current);
+            if (chain != null) {
+                joinChains.add(chain);
+            }
+        }
+
+        tablesList.add((tablesToJoin.get(0).getName()));
+
+        // TODO: wasteful, no need for the second loop here, can do above
+        if (!joinChains.isEmpty()) {
+            joinChains.forEach(chain -> chain.forEach(element -> {
+                Join join = element.getValue();
+                if (join != null) {
+                    tablesList.add(join.getPrimaryKey().getTableName());
+                    tablesList.add(join.getForeignKey().getTableName());
+                }
+
+            }));
+        }
+        return tablesList;
     }
 
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way

@@ -1,10 +1,8 @@
 package com.erkoa.adhocapi.web;
 
-import com.erkoa.adhocapi.dto.ConnectionDetails;
-import com.erkoa.adhocapi.dto.PreviewRequest;
-import com.erkoa.adhocapi.dto.Table;
-import com.erkoa.adhocapi.dto.TableMetaData;
+import com.erkoa.adhocapi.dto.*;
 import com.erkoa.adhocapi.services.ConnectionService;
+import com.erkoa.adhocapi.services.QueryBuildingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,10 +22,12 @@ import java.util.stream.Collectors;
 public class ConnectionsController {
 
     private final ConnectionService connectionService;
+    private final QueryBuildingService queryBuildingService;
 
     @Autowired
-    public ConnectionsController(ConnectionService connectionService) {
+    public ConnectionsController(ConnectionService connectionService, QueryBuildingService queryBuildingService) {
         this.connectionService = connectionService;
+        this.queryBuildingService = queryBuildingService;
     }
 
     @GetMapping(value = "/vendors", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,12 +55,15 @@ public class ConnectionsController {
     }
 
     @PostMapping(value = "/preview", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Table> preview(@RequestBody PreviewRequest previewRequest) throws SQLException, ClassNotFoundException {
+    public ResponseEntity<PreviewResponse> preview(@RequestBody PreviewRequest previewRequest) throws SQLException, ClassNotFoundException {
         ConnectionDetails connectionDetails = previewRequest.getConnection();
         List<TableMetaData> tables = previewRequest.getTables();
         if (connectionDetails == null || CollectionUtils.isEmpty(tables)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(connectionService.preview(connectionDetails, tables, previewRequest.getJoins()), HttpStatus.OK);
+
+        PreviewResponse response = new PreviewResponse(connectionService.preview(connectionDetails, tables, previewRequest.getJoins()),
+                queryBuildingService.joinChain(tables, previewRequest.getJoins()));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

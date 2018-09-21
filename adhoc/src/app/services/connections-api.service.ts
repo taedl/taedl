@@ -34,10 +34,10 @@ export class ConnectionsApiService {
     return this.http.post<ITableMetaData[]>(url, connection);
   }
 
-  preview(connection: JdbcConnection, tables: ITableMetaData[], joins: IJoin[]): Observable<IResultTable> {
+  preview(connection: JdbcConnection, tables: ITableMetaData[], joins: IJoin[]): Observable<IPreview> {
     const url = `${this.endpoint}/preview`;
     const request = { connection, tables, joins };
-    return this.http.post<IResultTable>(url, request);
+    return this.http.post<IPreview>(url, request);
   }
 }
 
@@ -94,3 +94,8 @@ export const JOIN_TYPES = {
   RIGHT: 'right',
   FULL: 'full'
 };
+
+export interface IPreview {
+  table: IResultTable;
+  joinChain: string[];
+}

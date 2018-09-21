@@ -30,6 +30,7 @@ export class DomainComponent implements OnInit, OnChanges {
   resultTableHeaders: string[];
   tableDataSource = new MatTableDataSource<any>();
   joins: IJoin[] = [];
+  joinChain: string[] = [];
 
   option = null;
 
@@ -68,9 +69,10 @@ export class DomainComponent implements OnInit, OnChanges {
   preview() {
     this.connectionApiSerice.preview(this.connection, this.selectedTables, this.joins)
       .subscribe(result => {
-        this.resultTable = result;
-        this.resultTableHeaders = result.headers;
-        this.tableDataSource = new MatTableDataSource(this.tableRows(result));
+        this.resultTable = result.table;
+        this.resultTableHeaders = result.table.headers;
+        this.tableDataSource = new MatTableDataSource(this.tableRows(result.table));
+        this.joinChain = result.joinChain;
 
         setTimeout(() => {
           this.tableDataSource.sort = this.sort;
