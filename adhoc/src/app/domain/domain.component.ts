@@ -21,6 +21,12 @@ export class DomainComponent implements OnInit, OnChanges {
   @Input()
   connection: JdbcConnection;
 
+  @Output()
+  notifySelected: EventEmitter<ITableMetaData[]> = new EventEmitter<ITableMetaData[]>();
+
+  @Output()
+  notifyJoins: EventEmitter<IJoin[]> = new EventEmitter<IJoin[]>();
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -61,8 +67,8 @@ export class DomainComponent implements OnInit, OnChanges {
     if (ind > -1) {
       this.tables[ind].selected = true;
       this.selectedTables.push(event.dragData.table);
+      this.notifySelected.emit(this.selectedTables);
       this.preview();
-      this.updateGraph();
     }
   }
 
@@ -73,6 +79,7 @@ export class DomainComponent implements OnInit, OnChanges {
         this.resultTableHeaders = result.table.headers;
         this.tableDataSource = new MatTableDataSource(this.tableRows(result.table));
         this.joinChain = result.joinChain;
+        this.updateGraph();
 
         setTimeout(() => {
           this.tableDataSource.sort = this.sort;
@@ -101,8 +108,11 @@ export class DomainComponent implements OnInit, OnChanges {
   updateGraph() {
     this.tables.forEach(t => {
       const ind = this.option.series[0].data.map(d => d.name).indexOf(t.table.name);
-      if (ind !== -1) {
-        this.option.series[0].data[ind].itemStyle.color = t.selected ? '#e91e63' : '#3f51b5';
+      const chainInd = this.joinChain.indexOf(t.table.name);
+      if (chainInd !== -1 || t.selected) {
+        this.option.series[0].data[ind].itemStyle.color = '#e91e63';
+      } else {
+        this.option.series[0].data[ind].itemStyle.color = '#3f51b5';
       }
     });
 
@@ -157,6 +167,7 @@ export class DomainComponent implements OnInit, OnChanges {
     ));
 
     this.joins = combined;
+    this.notifyJoins.emit(this.joins);
   }
 
   join(data): string {

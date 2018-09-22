@@ -1,0 +1,25 @@
+<mat-toolbar>Please select columns/rows for your Report</mat-toolbar>
+
+<div class="report-container" *ngIf="tables.length > 0">
+  <div class="drag-container">
+    <div *ngFor="let t of tables">
+      {{t.name}}
+      <button *ngFor="let c of t.columns" mat-raised-button draggable [dragData]="c" disableRipple class="stretched-button">{{c.name}}</button>
+    </div>
+  </div>
+  <div class="info-container">
+    <div class="drop-container" droppable (onDrop)="onColumnDrop($event)">
+      <span class="description" *ngIf="columns.length === 0">Drop your columns here...</span>
+      <button *ngFor="let c of columns" mat-raised-button disableRipple class="stretched-button">{{c.tableName  + '.' + c.name}}</button>
+    </div>
+    <div class="drop-container" droppable (onDrop)="onRowDrop($event)">
+      <span class="description" *ngIf="rows.length === 0">Drop your rows here...</span>
+      <button *ngFor="let r of rows" mat-raised-button disableRipple class="stretched-button">{{r.tableName + '.' + r.name}}</button>
+    </div>
+  </div>
+
+  <div class="filters-container">
+    filters here...
+  </div>
+</div>
+

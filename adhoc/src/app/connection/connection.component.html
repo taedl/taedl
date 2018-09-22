@@ -1,4 +1,13 @@
-<mat-toolbar>Please start with connecting to a Database</mat-toolbar>
+<mat-toolbar *ngIf="!isFormSubmitAttempt && !isConnected">Please start with connecting to a Database</mat-toolbar>
+<mat-toolbar *ngIf="isFormSubmitAttempt && !isConnected">
+  <mat-icon *ngIf="isFormSubmitAttempt && !isConnected" color="warn">error</mat-icon>&nbsp;
+  Please check your connection settings
+</mat-toolbar>
+<mat-toolbar *ngIf="isFormSubmitAttempt && isConnected">
+  <mat-icon *ngIf="isFormSubmitAttempt && isConnected" color="primary">check_circle</mat-icon>&nbsp;
+  Successfully connected to a Database
+</mat-toolbar>
+
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="container">
   <mat-form-field class="field connection">
     <input matInput placeholder="endpoint URL" formControlName="endpoint" required>

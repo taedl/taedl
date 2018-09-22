@@ -4,10 +4,10 @@
       <app-connection (notifyConnected)="handleConnected($event)"></app-connection>
     </mat-tab>
     <mat-tab label="Domain" [disabled]="!connection">
-      <app-domain [connection]="connection"></app-domain>
+      <app-domain [connection]="connection" (notifySelected)="handleSelected($event)" (notifyJoins)="handleJoins($event)"></app-domain>
     </mat-tab>
-    <mat-tab label="Report" [disabled]="!connection">
-      ...report
+    <mat-tab label="Report" [disabled]="tables.length === 0">
+      <app-report [connection]="connection" [tables]="tables" [joins]="joins"></app-report>
     </mat-tab>
   </mat-tab-group>
 </div>

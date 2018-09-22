@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JdbcConnection } from '../services/connections-api.service';
+import { IJoin, ITableMetaData, JdbcConnection } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +9,8 @@ import { JdbcConnection } from '../services/connections-api.service';
 export class HomeComponent implements OnInit {
 
   connection: JdbcConnection;
+  tables: ITableMetaData[] = [];
+  joins: IJoin[] = [];
   selectedTab = 0;
   constructor() { }
 
@@ -19,5 +21,13 @@ export class HomeComponent implements OnInit {
   handleConnected(connection: JdbcConnection) {
     this.connection = connection;
     this.selectedTab = connection ? 1 : 0;
+  }
+
+  handleSelected(tables: ITableMetaData[]) {
+    this.tables = tables;
+  }
+
+  handleJoins(joins: IJoin[]) {
+    this.joins = joins;
   }
 }

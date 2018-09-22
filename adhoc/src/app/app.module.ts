@@ -48,6 +48,7 @@ import { ConnectionsApiService } from './services/connections-api.service';
 import { StateService } from './services/state.service';
 import { DomainComponent } from './domain/domain.component';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -58,7 +59,8 @@ const routes: Routes = [
     AppComponent,
     HomeComponent,
     ConnectionComponent,
-    DomainComponent
+    DomainComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
