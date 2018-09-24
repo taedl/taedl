@@ -1,8 +1,18 @@
-.field {
-  margin: 0.5em;
-  min-width: 15em;
+.container {
+
+  text-align: center;
+  .form-box {
+
+    //display: inline-block;
+    margin: 0.5em;
+
+    .field {
+      margin: 0.5em;
+      min-width: 15em;
+    }
+    .connection {
+      min-width: 30em;
+    }
+  }
 }
 
-.connection {
-  min-width: 30em;
-}
