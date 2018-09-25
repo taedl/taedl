@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IJoin, ITableMetaData, JdbcConnection } from '../services/connections-api.service';
+import { IJoin, ITableMetaData, JdbcConnection } from '../services/model';
 
 @Component({
   selector: 'app-home',

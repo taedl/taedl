@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { StateService } from '../services/state.service';
 import {
-  ConnectionsApiService,
   IResultTable,
   ITableMetaData,
   ITable,
   JdbcConnection,
   IJoin,
   JOIN_TYPES
-} from '../services/connections-api.service';
+} from '../services/model';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ConnectionsApiService } from '../services/connections-api.service';
 
 @Component({
   selector: 'app-domain',

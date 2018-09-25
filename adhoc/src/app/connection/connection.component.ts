@@ -1,7 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ConnectionsApiService, JdbcConnection } from '../services/connections-api.service';
+import { ConnectionsApiService } from '../services/connections-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StateService } from '../services/state.service';
+import { JdbcConnection } from '../services/model';
 
 @Component({
   selector: 'app-connection',
@@ -67,8 +68,3 @@ export class ConnectionComponent implements OnInit {
   }
 
 }
-
-// public endpoint: string,
-//   public user: string,
-//   public password: string,
-//   public vendor: string)
