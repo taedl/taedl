@@ -11,7 +11,7 @@ export class ConnectionsApiService {
   private readonly endpoint: string;
 
   constructor(private http: HttpClient) {
-    this.endpoint = environment.connections;
+    this.endpoint = `${environment.endpoint}/connections`;
   }
 
   vendors(): Observable<string[]> {

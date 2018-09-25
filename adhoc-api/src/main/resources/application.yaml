@@ -20,6 +20,15 @@ spring:
       url: jdbc:postgresql://localhost/adhocclick
       driver_class_name: org.postgresql.Driver
 
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-alias: tomcat
+    key-store: classpath:keystore.p12
+    key-store-password: devonly
+    key-store-type: PKCS12
+
 ---
 
 spring:
