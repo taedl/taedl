@@ -1,9 +1,6 @@
 package com.erkoa.adhocapi.services;
 
-import com.erkoa.adhocapi.dto.Column;
-import com.erkoa.adhocapi.dto.ConnectionDetails;
-import com.erkoa.adhocapi.dto.Join;
-import com.erkoa.adhocapi.dto.TableMetaData;
+import com.erkoa.adhocapi.dto.*;
 import com.erkoa.adhocapi.exceptions.QueryBuildingException;
 import com.erkoa.adhocapi.services.joins.Edge;
 import com.erkoa.adhocapi.services.joins.Graph;
@@ -80,6 +77,14 @@ public class RdQueryBuildingService implements QueryBuildingService {
         return tablesList;
     }
 
+    @Override
+    public String generateTableQuery(List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> aggregatedColumns, List<Join> joins) {
+        if (CollectionUtils.isEmpty(columns)) {
+            throw new QueryBuildingException("Could not generate table query, no columns provided");
+        }
+        return select(columns) + from(columns, aggregatedColumns, joins) + finalise();
+    }
+
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way
     private String select(List<Column> columns) {
         return padRight(SELECT) +
@@ -114,6 +119,36 @@ public class RdQueryBuildingService implements QueryBuildingService {
         return new Edge(start, dest, joinEdge);
     }
 
+    private List<Vertex> vertices(List<Join> joins) {
+        List<Vertex> vertices = joins.stream().map(item ->
+                new Vertex(item.getPrimaryKey().getTableName())).collect(Collectors.toList());
+
+        vertices.addAll(joins.stream().map(item ->
+                new Vertex(item.getForeignKey().getTableName())).collect(Collectors.toList()));
+
+        vertices = vertices.stream().distinct().collect(Collectors.toList());
+        return vertices;
+    }
+
+    private String from(List<Column> columns, List<AggregatedColumn> aggregatedColumns, List<Join> joins) {
+        StringBuffer query = new StringBuffer();
+        query.append(pad(FROM));
+        List<Column> fromAggregated = aggregatedColumns.stream().map(aggr -> aggr.getColumn()).collect(Collectors.toList());
+
+        List<Column> allColumns = new ArrayList<>(columns);
+        allColumns.addAll(fromAggregated);
+
+        if (!isJoined(allColumns)) {
+            return query.append(columns.get(0).getTableName()).toString();
+        }
+
+        List<Vertex> vertices = vertices(joins);
+
+        List<String> tablesToJoin = columns.stream().map(Column::getTableName).collect(Collectors.toList());
+
+        return null;
+    }
+
     private String from(List<TableMetaData> tables, List<Join> joins) {
         StringBuffer query = new StringBuffer();
         query.append(pad(FROM));
@@ -123,13 +158,7 @@ public class RdQueryBuildingService implements QueryBuildingService {
             return query.append(columns.get(0).getTableName()).toString();
         }
 
-        List<Vertex> vertices = joins.stream().map(item ->
-                new Vertex(item.getPrimaryKey().getTableName())).collect(Collectors.toList());
-
-        vertices.addAll(joins.stream().map(item ->
-                new Vertex(item.getForeignKey().getTableName())).collect(Collectors.toList()));
-
-        vertices = vertices.stream().distinct().collect(Collectors.toList());
+        List<Vertex> vertices = vertices(joins);
 
         List<TableMetaData> tablesToJoin = tables.stream().distinct().collect(Collectors.toList());
         Joiner joiner = createJoiner(vertices, tablesToJoin, joins);

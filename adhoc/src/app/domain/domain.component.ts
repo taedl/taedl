@@ -27,6 +27,9 @@ export class DomainComponent implements OnInit, OnChanges {
   @Output()
   notifyJoins: EventEmitter<IJoin[]> = new EventEmitter<IJoin[]>();
 
+  @Output()
+  notifyAllTables: EventEmitter<ITableMetaData[]> = new EventEmitter<ITableMetaData[]>();
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -53,6 +56,7 @@ export class DomainComponent implements OnInit, OnChanges {
       this.connectionApiSerice.tablesMetadata(changes.connection.currentValue)
           .subscribe(result => {
             this.tables = result.map(t => ({ table: t, selected: false }));
+            this.notifyAllTables.emit(result);
             this.initGraph();
             this.initJoins();
           },

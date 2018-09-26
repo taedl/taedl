@@ -49,7 +49,7 @@ import { StateService } from './services/state.service';
 import { DomainComponent } from './domain/domain.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ReportComponent } from './report/report.component';
-import { ReportsService } from './services/reports.service';
+import { ReportsApiService } from './services/reports-api.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -109,7 +109,7 @@ const routes: Routes = [
   providers: [
     { provide: ConnectionsApiService, useClass: ConnectionsApiService },
     { provide: StateService, useClass: StateService },
-    { provide: ReportsService, useClass: ReportsService }
+    { provide: ReportsApiService, useClass: ReportsApiService }
     ],
   bootstrap: [AppComponent]
 })

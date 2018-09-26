@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Aggregation, IAggregatedColumn, IColumn, IJoin, ITableMetaData, JdbcConnection } from '../services/model';
 import { MatPaginator, MatSort } from '@angular/material';
-import { ReportsService } from '../services/reports.service';
+import { ReportsApiService } from '../services/reports-api.service';
 
 @Component({
   selector: 'app-report',
@@ -17,6 +17,9 @@ export class ReportComponent implements OnInit {
   tables: ITableMetaData[] = [];
 
   @Input()
+  allTables: ITableMetaData[] = [];
+
+  @Input()
   joins: IJoin[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
@@ -25,7 +28,7 @@ export class ReportComponent implements OnInit {
   columns: IColumn[] = [];
   rows: IAggregatedColumn[] = [];
 
-  constructor(private reportsService: ReportsService) { }
+  constructor(private reportsService: ReportsApiService) { }
 
   ngOnInit() {
 
@@ -35,7 +38,7 @@ export class ReportComponent implements OnInit {
     const ind = this.columns.indexOf(event.dragData);
     if (ind === -1) {
       this.columns.push(event.dragData);
-      this.reportsService.table(this.connection, this.columns, null, this.joins)
+      this.reportsService.table(this.connection, this.allTables, this.columns, null, this.joins)
         .subscribe(result => console.log('result', result), error => console.error(error));
     }
   }

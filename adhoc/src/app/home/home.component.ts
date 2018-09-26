@@ -10,6 +10,7 @@ export class HomeComponent implements OnInit {
 
   connection: JdbcConnection;
   tables: ITableMetaData[] = [];
+  allTables: ITableMetaData[] = [];
   joins: IJoin[] = [];
   selectedTab = 0;
   constructor() { }
@@ -29,5 +30,9 @@ export class HomeComponent implements OnInit {
 
   handleJoins(joins: IJoin[]) {
     this.joins = joins;
+  }
+
+  handleAllTables(tables: ITableMetaData[]) {
+    this.allTables = tables;
   }
 }

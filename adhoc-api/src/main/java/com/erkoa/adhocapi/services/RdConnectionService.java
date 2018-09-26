@@ -84,7 +84,7 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws ClassNotFoundException, SQLException {
         String query = queryBuildingService.generatePreviewQuery(tables, joins);
-        log.info("Generated query {}", query);
+        log.info("Generated preview query {}", query);
 
         Table table;
         Class.forName(driver(connectionDetails.getVendor()));
@@ -96,6 +96,14 @@ public class RdConnectionService implements ConnectionService {
 
         }
         return table;
+    }
+
+    @Override
+    public Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> rows, List<Join> joins) throws ClassNotFoundException, SQLException {
+        String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins);
+        log.info("Generated table query {}", query);
+
+        return null;
     }
 
     private TableMetaData generateSchema(DatabaseMetaData metaData, String tableName) throws SQLException {
