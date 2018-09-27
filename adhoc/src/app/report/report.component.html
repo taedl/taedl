@@ -20,16 +20,16 @@
         {{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}
       </button>
     </div>
-    <div>
-      <!--<mat-table #table [dataSource]="tableDataSource" matSort>-->
-        <!--<ng-container *ngFor="let h of resultTableHeaders" matColumnDef={{h}}>-->
-          <!--<mat-header-cell *matHeaderCellDef mat-sort-header>{{h}}</mat-header-cell>-->
-          <!--<mat-cell *matCellDef="let data" class="left-align">{{data[h]}}-->
-          <!--</mat-cell>-->
-        <!--</ng-container>-->
-        <!--<mat-header-row *matHeaderRowDef="resultTableHeaders"></mat-header-row>-->
-        <!--<mat-row *matRowDef="let data; columns: resultTableHeaders;"></mat-row>-->
-      <!--</mat-table>-->
+    <div class="data mat-elevation-z1">
+      <mat-table #table [dataSource]="tableDataSource" matSort>
+        <ng-container *ngFor="let h of resultTableHeaders" matColumnDef={{h}}>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{h}}</mat-header-cell>
+          <mat-cell *matCellDef="let data" class="left-align">{{data[h]}}
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="resultTableHeaders"></mat-header-row>
+        <mat-row *matRowDef="let data; columns: resultTableHeaders;"></mat-row>
+      </mat-table>
       <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
     </div>
   </div>

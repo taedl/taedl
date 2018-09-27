@@ -84,8 +84,19 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws ClassNotFoundException, SQLException {
         String query = queryBuildingService.generatePreviewQuery(tables, joins);
-        log.info("Generated preview query {}", query);
+        log.info("Generated preview query: {}", query);
+        return createTable(connectionDetails, tables, query);
+    }
 
+    @Override
+    public Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> rows, List<Join> joins) throws ClassNotFoundException, SQLException {
+        String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins);
+        log.info("Generated table query: {}", query);
+        List<TableMetaData> tablesToJoin = tables.stream().filter(t -> !Collections.disjoint(t.getColumns(), columns)).collect(Collectors.toList());
+        return createTable(connectionDetails, tablesToJoin, query);
+    }
+
+    private Table createTable(ConnectionDetails connectionDetails, List<TableMetaData> tables, String query) throws ClassNotFoundException, SQLException {
         Table table;
         Class.forName(driver(connectionDetails.getVendor()));
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
@@ -93,17 +104,8 @@ public class RdConnectionService implements ConnectionService {
             ResultSet resultSet = preparedStatement.executeQuery();
             ResultSetMetaData meta = resultSet.getMetaData();
             table = new Table(resultSet, meta, tables);
-
         }
         return table;
-    }
-
-    @Override
-    public Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> rows, List<Join> joins) throws ClassNotFoundException, SQLException {
-        String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins);
-        log.info("Generated table query {}", query);
-
-        return null;
     }
 
     private TableMetaData generateSchema(DatabaseMetaData metaData, String tableName) throws SQLException {

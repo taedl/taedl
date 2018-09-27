@@ -82,7 +82,9 @@ public class RdQueryBuildingService implements QueryBuildingService {
         if (CollectionUtils.isEmpty(columns)) {
             throw new QueryBuildingException("Could not generate table query, no columns provided");
         }
-        return select(columns) + from(columns, aggregatedColumns, joins) + finalise();
+
+        List<TableMetaData> tablesToJoin = tables.stream().filter(t -> !Collections.disjoint(t.getColumns(), columns)).collect(Collectors.toList());
+        return select(columns) + from(tablesToJoin, joins) + finalise();
     }
 
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way
@@ -130,24 +132,26 @@ public class RdQueryBuildingService implements QueryBuildingService {
         return vertices;
     }
 
-    private String from(List<Column> columns, List<AggregatedColumn> aggregatedColumns, List<Join> joins) {
-        StringBuffer query = new StringBuffer();
-        query.append(pad(FROM));
-        List<Column> fromAggregated = aggregatedColumns.stream().map(aggr -> aggr.getColumn()).collect(Collectors.toList());
-
-        List<Column> allColumns = new ArrayList<>(columns);
-        allColumns.addAll(fromAggregated);
-
-        if (!isJoined(allColumns)) {
-            return query.append(columns.get(0).getTableName()).toString();
-        }
-
-        List<Vertex> vertices = vertices(joins);
-
-        List<String> tablesToJoin = columns.stream().map(Column::getTableName).collect(Collectors.toList());
-
-        return null;
-    }
+//    private String from(List<TableMetaData> tables, List<Column> columns, List<Join> joins) {
+//        StringBuffer query = new StringBuffer();
+//        query.append(pad(FROM));
+//        if (!isJoined(columns)) {
+//            return query.append(columns.get(0).getTableName()).toString();
+//        }
+//        List<Vertex> vertices = vertices(joins);
+//        List<TableMetaData> tablesToJoin = tables.stream().filter(t -> !Collections.disjoint(t.getColumns(), columns)).collect(Collectors.toList());
+//        Joiner joiner = createJoiner(vertices, tablesToJoin, joins);
+//        for (TableMetaData aTableToJoin : tablesToJoin) {
+//            Vertex current = vertices.stream().filter(v -> v.getTableName().equals(aTableToJoin.getName()))
+//                    .findAny().orElse(null);
+//
+//            List<ImmutablePair<Vertex, Join>> chain = joiner.getJoinChain(current);
+//            if (chain != null) {
+//                joinChains.add(chain);
+//            }
+//        }
+//
+//    }
 
     private String from(List<TableMetaData> tables, List<Join> joins) {
         StringBuffer query = new StringBuffer();
