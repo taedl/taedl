@@ -57,4 +57,17 @@
 
 .data {
   margin: 1em 0.05em;
+  overflow-x: scroll;
+}
+
+//.mat-table.mat-table {
+//  min-width: 450px;
+//}
+
+.mat-cell {
+  min-width: 6em;
+}
+
+.mat-header-cell{
+  min-width: 6em;
 }
