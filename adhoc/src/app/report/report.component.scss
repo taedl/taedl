@@ -26,6 +26,12 @@
   .info-container {
     background-color: whitesmoke;
 
+    .data {
+      margin-left: 0.5em !important;
+      margin-right: 0.5em !important;
+      margin-bottom: 0.5em !important;
+    }
+
     .drop-container {
       background-color: #fff;
       border-radius: 2px;

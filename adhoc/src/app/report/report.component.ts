@@ -43,15 +43,13 @@ export class ReportComponent implements OnInit {
       this.columns.push(event.dragData);
       this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
         .subscribe(result => {
-          console.log('result', result);
-
+          console.log('table result', result);
+          this.resultTableHeaders = result.headers;
+          this.tableDataSource = new MatTableDataSource(this.tableRows(result));
           setTimeout(() => {
             this.tableDataSource.sort = this.sort;
             this.tableDataSource.paginator = this.paginator;
           });
-
-          this.resultTableHeaders = result.headers;
-          this.tableDataSource = new MatTableDataSource(this.tableRows(result));
         }, error => console.error(error));
     }
   }
@@ -72,8 +70,17 @@ export class ReportComponent implements OnInit {
   onRowDrop(event) {
     const ind = this.rows.indexOf(event.dragData);
     if (ind === -1) {
-      console.log({aggregation: Aggregation.COUNT, column: event.dragData});
       this.rows.push({aggregation: Aggregation.COUNT, column: event.dragData});
+      this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
+        .subscribe(result => {
+          console.log('adhoc result', result);
+          this.resultTableHeaders = result.headers;
+          this.tableDataSource = new MatTableDataSource(this.tableRows(result));
+          setTimeout(() => {
+            this.tableDataSource.sort = this.sort;
+            this.tableDataSource.paginator = this.paginator;
+          });
+        }, error => console.error(error));
     }
   }
 
