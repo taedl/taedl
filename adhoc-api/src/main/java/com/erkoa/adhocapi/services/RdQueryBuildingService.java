@@ -99,7 +99,7 @@ public class RdQueryBuildingService implements QueryBuildingService {
             });
         }
 
-        return select(columns, aggregatedColumns) + from(tablesToJoin, joins) + groupBy(columns, aggregatedColumns) + finalise();
+        return select(columns, aggregatedColumns) + from(tablesToJoin, joins) + groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise();
     }
 
     private String groupBy(List<Column> columns, List<AggregatedColumn> aggregatedColumns) {
@@ -108,6 +108,21 @@ public class RdQueryBuildingService implements QueryBuildingService {
         }
         return pad("group by") +
                 columns.stream().map(column -> column.getTableName().concat(".").concat(column.getName())).collect(Collectors.joining(", "));
+    }
+
+
+    private String orderBy(List<Column> columns, List<AggregatedColumn> aggregatedColumns) {
+        if (CollectionUtils.isEmpty(aggregatedColumns)) {
+            return "";
+        }
+
+        return pad("order by")
+                .concat(columns.stream().map(column -> column.getTableName().concat(".").concat(column.getName())).collect(Collectors.joining(", ")))
+                .concat(", ")
+                .concat(aggregatedColumns.stream().map(column ->
+                        column.getAggregation().insertable().concat("$$").concat(column.getColumn().getTableName().concat("$$").concat(column.getColumn().getName())))
+                        .collect(Collectors.joining(", ")))
+                .concat(" desc");
     }
 
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way
