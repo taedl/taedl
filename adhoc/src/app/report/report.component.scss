@@ -30,6 +30,15 @@
       margin-left: 0.5em !important;
       margin-right: 0.5em !important;
       margin-bottom: 0.5em !important;
+      overflow-x: scroll;
+
+      .mat-cell {
+        min-width: 6em;
+      }
+
+      .mat-header-cell{
+        min-width: 6em;
+      }
     }
 
     .drop-container {

@@ -2,6 +2,8 @@
 
 .crosstab-table-container {
   background-color: $white;
+  font-size: 14px;
+  overflow-x: scroll;
 
   .crosstab-table {
     width: 100%;
@@ -15,9 +17,11 @@
       .crosstab-header {
         flex: 1;
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 500;
         text-align: left;
         padding: 0 24px;
+        color: $dark-grey;
+        min-width: 8em;
       }
     }
 
@@ -25,7 +29,6 @@
       display: flex;
       align-items: center;
       min-height: 48px;
-      //padding: 0 24px;
 
       .crosstab-cell {
         flex: 1;
@@ -33,6 +36,7 @@
         min-height: 48px;
         line-height: 48px;
         padding: 0 24px;
+        min-width: 8em;
       }
 
       .bordered-top {

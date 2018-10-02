@@ -56,18 +56,18 @@ export class CrosstabComponent implements OnInit, OnChanges {
     }
   }
 
-  getGrouped(key: string): Array<{}> {
+  grouped(key: string): Array<{}> {
     return this.data.data.filter(item => item[0] === key);
   }
 
-  getColour(ind: number): string {
+  colour(ind: number): string {
     return this.colours[ind % this.colours.length];
   }
 
   isNewValue(total, row, ind: number, cind: number, cell: string) {
-    return ind === 0 || cind === row.length - 1 || cell !== this.getGrouped(total.name)[ind - 1][cind] ||
-      (cind > 1 && cell === this.getGrouped(total.name)[ind - 1][cind] &&
-        this.getGrouped(total.name)[ind][cind - 1] !== this.getGrouped(total.name)[ind - 1][cind - 1])
+    return ind === 0 || cind === row.length - 1 || cell !== this.grouped(total.name)[ind - 1][cind] ||
+      (cind > 1 && cell === this.grouped(total.name)[ind - 1][cind] &&
+        this.grouped(total.name)[ind][cind - 1] !== this.grouped(total.name)[ind - 1][cind - 1])
       && cind !== 1;
   }
 }
