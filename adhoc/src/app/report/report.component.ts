@@ -1,5 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { Aggregation, IAggregatedColumn, IColumn, IJoin, IResultTable, ITableMetaData, JdbcConnection } from '../services/model';
+import {
+  AdvancedChartConfig, Aggregation, ComplexChartTypes, IAggregatedColumn, IColumn,
+  IJoin, IResultTable, ITableMetaData, JdbcConnection
+} from '../services/model';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ReportsApiService } from '../services/reports-api.service';
 
@@ -31,6 +34,7 @@ export class ReportComponent implements OnInit {
   resultTable: IResultTable;
   tableDataSource = new MatTableDataSource<any>();
   reportType: string;
+  chartConfig: AdvancedChartConfig = new AdvancedChartConfig(ComplexChartTypes.SUNBURST, []);
 
   constructor(private reportsService: ReportsApiService) { }
 

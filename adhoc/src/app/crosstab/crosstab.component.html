@@ -1,7 +1,7 @@
-<div class="crosstab-table-container" *ngIf="data?.headers">
+<div class="crosstab-table-container" *ngIf="table?.headers">
   <table class="crosstab-table" *ngFor="let total of totalsArray; let ctInd = index">
     <tr class="crosstab-headers-row" *ngIf="ctInd === 0">
-      <th *ngFor="let h of data?.headers" class="crosstab-header">{{h}}</th>
+      <th *ngFor="let h of table?.headers" class="crosstab-header">{{h}}</th>
     </tr>
     <tr *ngFor="let row of grouped(total.name); let ind = index;" class="crosstab-row"
         [ngStyle]="{'background-color': colour(ctInd)}">

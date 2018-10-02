@@ -35,7 +35,10 @@
       <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
     </div>
     <div class="data mat-elevation-z1" *ngIf="resultTable && reportType === 'crosstab'">
-      <app-crosstab [data]="resultTable"></app-crosstab>
+      <app-crosstab [table]="resultTable"></app-crosstab>
+    </div>
+    <div class="data mat-elevation-z1" *ngIf="resultTable && reportType === 'chart'">
+      <app-echart [table]="resultTable" [config]="chartConfig"></app-echart>
     </div>
   </div>
 

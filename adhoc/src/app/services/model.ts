@@ -67,3 +67,13 @@ export interface IAggregatedColumn {
   column: IColumn;
   aggregation: string;
 }
+
+export enum ComplexChartTypes {
+  SUNBURST,
+  DRILLDOWN
+}
+
+export class AdvancedChartConfig {
+  constructor (public selected: ComplexChartTypes, public indexes: number[]) {}
+  // more to come
+}

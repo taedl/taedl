@@ -51,6 +51,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { ReportComponent } from './report/report.component';
 import { ReportsApiService } from './services/reports-api.service';
 import { CrosstabComponent } from './crosstab/crosstab.component';
+import { EchartComponent } from './echart/echart.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -63,7 +64,8 @@ const routes: Routes = [
     ConnectionComponent,
     DomainComponent,
     ReportComponent,
-    CrosstabComponent
+    CrosstabComponent,
+    EchartComponent
   ],
   imports: [
     BrowserModule,

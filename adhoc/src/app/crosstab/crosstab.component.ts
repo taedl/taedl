@@ -9,7 +9,7 @@ import { IResultTable } from '../services/model';
 export class CrosstabComponent implements OnInit, OnChanges {
 
   @Input()
-  data: IResultTable;
+  table: IResultTable;
 
   totalsArray: Array<any> = [];
   totalsTemp: Array<any> = [];
@@ -21,11 +21,11 @@ export class CrosstabComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!this.data || !this.data.data || !this.data.headers) {
+    if (!this.table || !this.table.data || !this.table.headers) {
       return;
     }
 
-    this.totalsArray = this.data.data.map((row, ind) => {
+    this.totalsArray = this.table.data.map((row, ind) => {
       const n = row[0];
       const val = Number(row[row.length - 1 ]);
       return { name: n, value: val, ind: ind};
@@ -39,8 +39,8 @@ export class CrosstabComponent implements OnInit, OnChanges {
       return x;
     }, []);
 
-    if (this.data.data[0].length > 2) {
-      this.totalsTemp = this.data.data.map((row, ind) => {
+    if (this.table.data[0].length > 2) {
+      this.totalsTemp = this.table.data.map((row, ind) => {
         const n = row[1];
         const val = Number(row[row.length - 1 ]);
         return { name: n, value: val, ind: ind};
@@ -57,7 +57,7 @@ export class CrosstabComponent implements OnInit, OnChanges {
   }
 
   grouped(key: string): Array<{}> {
-    return this.data.data.filter(item => item[0] === key);
+    return this.table.data.filter(item => item[0] === key);
   }
 
   colour(ind: number): string {
