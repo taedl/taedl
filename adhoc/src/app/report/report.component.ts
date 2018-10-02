@@ -28,6 +28,7 @@ export class ReportComponent implements OnInit {
   columns: IColumn[] = [];
   rows: IAggregatedColumn[] = [];
   resultTableHeaders: string[];
+  resultTable: IResultTable;
   tableDataSource = new MatTableDataSource<any>();
   reportType: string;
 
@@ -45,7 +46,7 @@ export class ReportComponent implements OnInit {
       this.columns.push(event.dragData);
       this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
         .subscribe(result => {
-          console.log('table result', result);
+          this.resultTable = result;
           this.resultTableHeaders = result.headers;
           this.tableDataSource = new MatTableDataSource(this.tableRows(result));
           setTimeout(() => {

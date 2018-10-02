@@ -22,7 +22,7 @@
         {{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}
       </button>
     </div>
-    <div class="data mat-elevation-z1" *ngIf="tableDataSource && resultTableHeaders">
+    <div class="data mat-elevation-z1" *ngIf="tableDataSource && resultTableHeaders && reportType === 'table'">
       <mat-table #table [dataSource]="tableDataSource" matSort>
         <ng-container *ngFor="let h of resultTableHeaders" matColumnDef={{h}}>
           <mat-header-cell *matHeaderCellDef mat-sort-header>{{h}}</mat-header-cell>
@@ -33,6 +33,9 @@
         <mat-row *matRowDef="let data; columns: resultTableHeaders;"></mat-row>
       </mat-table>
       <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+    <div class="data mat-elevation-z1" *ngIf="resultTable && reportType === 'crosstab'">
+      <app-crosstab [data]="resultTable"></app-crosstab>
     </div>
   </div>
 

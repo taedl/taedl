@@ -50,6 +50,7 @@ import { DomainComponent } from './domain/domain.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ReportComponent } from './report/report.component';
 import { ReportsApiService } from './services/reports-api.service';
+import { CrosstabComponent } from './crosstab/crosstab.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -61,7 +62,8 @@ const routes: Routes = [
     HomeComponent,
     ConnectionComponent,
     DomainComponent,
-    ReportComponent
+    ReportComponent,
+    CrosstabComponent
   ],
   imports: [
     BrowserModule,
