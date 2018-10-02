@@ -29,12 +29,14 @@ export class ReportComponent implements OnInit {
   rows: IAggregatedColumn[] = [];
   resultTableHeaders: string[];
   tableDataSource = new MatTableDataSource<any>();
+  reportType: string;
 
   constructor(private reportsService: ReportsApiService) { }
 
   ngOnInit() {
     this.tableDataSource.sort = this.sort;
     this.tableDataSource.paginator = this.paginator;
+    this.reportType = 'table';
   }
 
   onColumnDrop(event) {
@@ -76,6 +78,7 @@ export class ReportComponent implements OnInit {
           console.log('adhoc result', result);
           this.resultTableHeaders = result.headers;
           this.tableDataSource = new MatTableDataSource(this.tableRows(result));
+
           setTimeout(() => {
             this.tableDataSource.sort = this.sort;
             this.tableDataSource.paginator = this.paginator;
@@ -84,4 +87,12 @@ export class ReportComponent implements OnInit {
     }
   }
 
+
+  isTable() {
+    return this.rows.length === 0;
+  }
+
+  onReportTypeChange() {
+    console.log('repor type', this.reportType);
+  }
 }

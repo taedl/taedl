@@ -1,4 +1,6 @@
-<mat-toolbar>Please select columns/rows for your Report</mat-toolbar>
+<mat-toolbar>
+  Please select columns/rows for your Report
+</mat-toolbar>
 
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
@@ -35,7 +37,17 @@
   </div>
 
   <div class="filters-container">
-    filters here...
+    <mat-button-toggle-group [(ngModel)]="reportType" (change)="onReportTypeChange()" class="type-toggle">
+      <mat-button-toggle value="table" matTooltip="Table">
+        <mat-icon>view_column</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="crosstab" [disabled]="isTable()" matTooltip="Crosstab">
+        <mat-icon>view_quilt</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="chart" [disabled]="isTable()" matTooltip="Chart">
+        <mat-icon>timeline</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
 </div>
 
