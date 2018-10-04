@@ -75,7 +75,7 @@ export class ReportComponent implements OnInit {
   }
 
   onRowDrop(event) {
-    const ind = this.rows.indexOf(event.dragData);
+    const ind = this.rows.map(row => row.column).indexOf(event.dragData);
     if (ind === -1) {
       this.rows.push({aggregation: Aggregation.COUNT, column: event.dragData});
       this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
