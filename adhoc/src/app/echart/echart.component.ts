@@ -117,7 +117,8 @@ export class EchartComponent implements OnInit, OnChanges {
 
   defaultSunburstOption = {
     visualMap: {
-      type: 'continuous',
+      type: 'piecewise',
+      top: 'top',
     },
     series: {
       type: 'sunburst',
