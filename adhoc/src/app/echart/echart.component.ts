@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AdvancedChartConfig } from '../services/model';
+import { ChartConfig } from '../services/model';
 
 @Component({
   selector: 'app-echart',
@@ -12,7 +12,7 @@ export class EchartComponent implements OnInit, OnChanges {
   table;
 
   @Input()
-  config: AdvancedChartConfig;
+  config: ChartConfig;
 
   option = null;
   defaultGroupByTwoColumnsOption = {

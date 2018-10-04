@@ -73,7 +73,7 @@ export enum ComplexChartTypes {
   DRILLDOWN
 }
 
-export class AdvancedChartConfig {
+export class ChartConfig {
   constructor (public selected: ComplexChartTypes, public indexes: number[]) {}
   // more to come
 }

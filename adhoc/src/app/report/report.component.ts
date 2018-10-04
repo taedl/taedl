@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
-  AdvancedChartConfig, Aggregation, ComplexChartTypes, IAggregatedColumn, IColumn,
+  Aggregation, ChartConfig, ComplexChartTypes, IAggregatedColumn, IColumn,
   IJoin, IResultTable, ITableMetaData, JdbcConnection
 } from '../services/model';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -34,7 +34,7 @@ export class ReportComponent implements OnInit {
   resultTable: IResultTable;
   tableDataSource = new MatTableDataSource<any>();
   reportType: string;
-  chartConfig: AdvancedChartConfig = new AdvancedChartConfig(ComplexChartTypes.SUNBURST, []);
+  chartConfig: ChartConfig = new ChartConfig(ComplexChartTypes.SUNBURST, []);
 
   constructor(private reportsService: ReportsApiService) { }
 
@@ -80,7 +80,7 @@ export class ReportComponent implements OnInit {
       this.rows.push({aggregation: Aggregation.COUNT, column: event.dragData});
       this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
         .subscribe(result => {
-          console.log('adhoc result', result);
+          this.resultTable = result;
           this.resultTableHeaders = result.headers;
           this.tableDataSource = new MatTableDataSource(this.tableRows(result));
 

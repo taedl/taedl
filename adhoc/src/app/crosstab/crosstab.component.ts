@@ -21,6 +21,7 @@ export class CrosstabComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('--->', changes);
     if (!this.table || !this.table.data || !this.table.headers) {
       return;
     }
