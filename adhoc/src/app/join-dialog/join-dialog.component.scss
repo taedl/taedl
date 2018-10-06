@@ -1,0 +1,15 @@
+.selected {
+  border: 5px solid #e91e63;
+  border-radius: 5%;
+}
+
+.unselected {
+  border: 5px solid white;
+  border-radius: 5%;
+}
+
+.rb {
+  margin-right: 0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}

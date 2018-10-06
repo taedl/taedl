@@ -52,6 +52,7 @@ import { ReportComponent } from './report/report.component';
 import { ReportsApiService } from './services/reports-api.service';
 import { CrosstabComponent } from './crosstab/crosstab.component';
 import { EchartComponent } from './echart/echart.component';
+import { JoinDialogComponent } from './join-dialog/join-dialog.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -65,7 +66,11 @@ const routes: Routes = [
     DomainComponent,
     ReportComponent,
     CrosstabComponent,
-    EchartComponent
+    EchartComponent,
+    JoinDialogComponent
+  ],
+  entryComponents: [
+    JoinDialogComponent
   ],
   imports: [
     BrowserModule,

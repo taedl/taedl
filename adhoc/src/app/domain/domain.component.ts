@@ -8,8 +8,9 @@ import {
   IJoin,
   JOIN_TYPES
 } from '../services/model';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ConnectionsApiService } from '../services/connections-api.service';
+import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 
 @Component({
   selector: 'app-domain',
@@ -44,7 +45,7 @@ export class DomainComponent implements OnInit, OnChanges {
   option = null;
 
   constructor(private stateService: StateService,
-              private connectionApiSerice: ConnectionsApiService) { }
+              private connectionApiSerice: ConnectionsApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.tableDataSource.sort = this.sort;
@@ -188,12 +189,50 @@ export class DomainComponent implements OnInit, OnChanges {
   onChartEvent(event: any, type: string) {
     switch (type) {
       case 'chartClick':
-        console.log('clicked on chart', event);
+        if (event.dataType === 'edge') {
+          const join: IJoin = this.joins.filter(j =>
+            j.primaryKey.tableName === event.data.source && j.foreignKey.tableName === event.data.target ||
+            j.primaryKey.tableName === event.data.target && j.foreignKey.tableName === event.data.source)[0];
+          console.log('selected: ', join);
+          this.openJoinDialog(join);
+        }
         return;
       default:
-        console.log('other event', event);
         return;
     }
+  }
+
+  openJoinDialog(join: IJoin): void {
+    const dialogRef = this.dialog.open(JoinDialogComponent, { data: join });
+
+    dialogRef.afterClosed().subscribe((result: IJoin) => {
+      if (!result) {
+        return;
+      }
+      let ind1, ind2;
+      this.joins.forEach((j, ind) => {
+        if (j.primaryKey === result.primaryKey && j.foreignKey === result.foreignKey) {
+          ind1 = ind;
+        } else if (j.foreignKey === result.primaryKey && j.primaryKey === result.foreignKey) {
+          ind2 = ind;
+        }
+      });
+
+      if (!ind1 || !ind2 ) {
+        throw new Error('Could not change join type');
+      }
+
+      const oppositeJoin: IJoin = {
+        primaryKey: result.foreignKey,
+        foreignKey: result.primaryKey,
+        type: (result.type === JOIN_TYPES.INNER || result.type === JOIN_TYPES.FULL) ? result.type :
+          result.type === JOIN_TYPES.RIGHT ? JOIN_TYPES.LEFT : JOIN_TYPES.RIGHT
+      };
+      this.joins[ind1] = result;
+      this.joins[ind2] = oppositeJoin;
+      this.updateGraph();
+      this.preview();
+    });
   }
 }
 
