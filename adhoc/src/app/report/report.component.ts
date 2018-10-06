@@ -48,16 +48,7 @@ export class ReportComponent implements OnInit {
     const ind = this.columns.indexOf(event.dragData);
     if (ind === -1) {
       this.columns.push(event.dragData);
-      this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
-        .subscribe(result => {
-          this.resultTable = result;
-          this.resultTableHeaders = result.headers;
-          this.tableDataSource = new MatTableDataSource(this.tableRows(result));
-          setTimeout(() => {
-            this.tableDataSource.sort = this.sort;
-            this.tableDataSource.paginator = this.paginator;
-          });
-        }, error => console.error(error));
+      this.updateTable();
     }
   }
 
@@ -74,24 +65,38 @@ export class ReportComponent implements OnInit {
     return rows;
   }
 
+  updateTable() {
+    this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
+      .subscribe(result => {
+        this.resultTable = result;
+        this.resultTableHeaders = result.headers;
+        this.tableDataSource = new MatTableDataSource(this.tableRows(result));
+        setTimeout(() => {
+          this.tableDataSource.sort = this.sort;
+          this.tableDataSource.paginator = this.paginator;
+        });
+      }, error => console.error(error));
+  }
+
   onRowDrop(event) {
     const ind = this.rows.map(row => row.column).indexOf(event.dragData);
     if (ind === -1) {
       this.rows.push({aggregation: Aggregation.COUNT, column: event.dragData});
-      this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
-        .subscribe(result => {
-          this.resultTable = result;
-          this.resultTableHeaders = result.headers;
-          this.tableDataSource = new MatTableDataSource(this.tableRows(result));
-
-          setTimeout(() => {
-            this.tableDataSource.sort = this.sort;
-            this.tableDataSource.paginator = this.paginator;
-          });
-        }, error => console.error(error));
+      this.updateTable();
     }
   }
 
+  deleteColumn(column) {
+    const ind = this.columns.indexOf(column);
+    this.columns.splice(ind, 1);
+    this.updateTable();
+  }
+
+  deleteRow(row) {
+    const ind = this.rows.indexOf(row);
+    this.rows.splice(ind, 1);
+    this.updateTable();
+  }
 
   isTable() {
     return this.rows.length === 0;
