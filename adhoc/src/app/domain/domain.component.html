@@ -7,7 +7,10 @@
 
   <div class="drop-container" *ngIf="tables.length > 0" droppable (onDrop)="onTableDrop($event)"  [ngClass]="{'description': !isSelected()}">
     <span *ngIf="!isSelected()">Drop your tables here</span>
-    <button *ngFor="let s of selectedTables" mat-raised-button disableRipple class="stretched-button">{{s.name}}</button>
+    <button *ngFor="let s of selectedTables" mat-raised-button disableRipple class="stretched-button">
+      {{s.name}}
+      <mat-icon (click)="cancelTable(s)">cancel</mat-icon>
+    </button>
   </div>
 
   <div class="joins-container">

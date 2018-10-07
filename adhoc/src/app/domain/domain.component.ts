@@ -77,6 +77,16 @@ export class DomainComponent implements OnInit, OnChanges {
     }
   }
 
+
+  cancelTable(t: ITableMetaData) {
+    const indSelected = this.selectedTables.indexOf(t);
+    this.selectedTables.splice(indSelected, 1);
+    const indAll = this.tables.map(table => table.table).indexOf(t);
+    this.tables[indAll].selected = false;
+    this.notifySelected.emit(this.selectedTables);
+    this.preview();
+  }
+
   preview() {
     this.connectionApiSerice.preview(this.connection, this.selectedTables, this.joins)
       .subscribe(result => {
