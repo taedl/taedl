@@ -86,13 +86,13 @@ export class ReportComponent implements OnInit {
     }
   }
 
-  deleteColumn(column) {
+  cancelColumn(column) {
     const ind = this.columns.indexOf(column);
     this.columns.splice(ind, 1);
     this.updateTable();
   }
 
-  deleteRow(row) {
+  cancelRow(row) {
     const ind = this.rows.indexOf(row);
     this.rows.splice(ind, 1);
     this.updateTable();
