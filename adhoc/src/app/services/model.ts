@@ -4,8 +4,10 @@ export interface IResultTable {
 }
 
 export class JdbcConnection {
-  constructor(public endpoint: string, public user: string,
+  endpoint: string;
+  constructor(endpoint: string, database: string, public user: string,
               public password: string, public vendor: string) {
+    this.endpoint = `jdbc:${vendor}://${endpoint}/${database}`;
   }
 }
 

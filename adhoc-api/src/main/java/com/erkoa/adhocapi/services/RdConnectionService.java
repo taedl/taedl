@@ -27,7 +27,6 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public boolean testConnection(ConnectionDetails connectionDetails) throws ClassNotFoundException {
-        Class.forName(driver(connectionDetails.getVendor()));
         boolean flag = false;
         try (java.sql.Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             if (conn != null) {
@@ -56,8 +55,7 @@ public class RdConnectionService implements ConnectionService {
     }
 
     @Override
-    public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException, ClassNotFoundException {
-        Class.forName(driver(connectionDetails.getVendor()));
+    public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException {
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             DatabaseMetaData metaData = conn.getMetaData();
 
@@ -82,7 +80,7 @@ public class RdConnectionService implements ConnectionService {
     }
 
     @Override
-    public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws ClassNotFoundException, SQLException {
+    public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws SQLException {
         String query = queryBuildingService.generatePreviewQuery(tables, joins);
         log.info("Generated preview query: {}", query);
         return createTable(connectionDetails, tables, query);
@@ -96,9 +94,8 @@ public class RdConnectionService implements ConnectionService {
         return createTable(connectionDetails, tablesToJoin, query);
     }
 
-    private Table createTable(ConnectionDetails connectionDetails, List<TableMetaData> tables, String query) throws ClassNotFoundException, SQLException {
+    private Table createTable(ConnectionDetails connectionDetails, List<TableMetaData> tables, String query) throws SQLException {
         Table table;
-        Class.forName(driver(connectionDetails.getVendor()));
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();

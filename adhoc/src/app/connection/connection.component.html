@@ -8,36 +8,45 @@
   Successfully connected to a Database
 </mat-toolbar>
 
-<div class="container">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-box mat-elevation-z1">
-    <mat-form-field class="field connection">
-      <input matInput placeholder="endpoint URL" formControlName="endpoint" required>
-      <mat-error *ngIf="isFieldInvalid('endpoint')">Please enter endpoint URL</mat-error>
-    </mat-form-field>
+<mat-card>
+  <mat-card-content>
+    <div class="container">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-box mat-elevation-z1">
+        <mat-form-field class="field connection">
+          <input matInput placeholder="endpoint URL" formControlName="endpoint" required>
+          <mat-error *ngIf="isFieldInvalid('endpoint')">Please enter endpoint URL</mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="field">
-      <input matInput placeholder="user" formControlName="user" required>
-      <mat-error *ngIf="isFieldInvalid('user')">Please enter DB user name</mat-error>
-    </mat-form-field>
+        <mat-form-field class="field">
+          <input matInput placeholder="database name" formControlName="database" required>
+          <mat-error *ngIf="isFieldInvalid('database')">Please enter DB name</mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="field">
-      <input matInput type="password" placeholder="password" formControlName="password" required [type]="hide ? 'password' : 'text'">
-      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-      <mat-error *ngIf="isFieldInvalid('password')">Please enter DB password</mat-error>
-    </mat-form-field>
+        <mat-form-field class="field">
+          <input matInput placeholder="user" formControlName="user" required>
+          <mat-error *ngIf="isFieldInvalid('user')">Please enter user name</mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="field">
-      <mat-select placeholder="DB vendor" formControlName="vendor" required>
-        <mat-option *ngFor="let v of vendors" [value]="v">{{v}}</mat-option>
-        <mat-error *ngIf="isFieldInvalid('vendor')">Please DB vendor</mat-error>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field class="field">
+          <input matInput type="password" placeholder="password" formControlName="password" required [type]="hide ? 'password' : 'text'">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <mat-error *ngIf="isFieldInvalid('password')">Please enter password</mat-error>
+        </mat-form-field>
 
-    <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
+        <mat-form-field class="field">
+          <mat-select placeholder="vendor" formControlName="vendor" required>
+            <mat-option *ngFor="let v of vendors" [value]="v">{{v}}</mat-option>
+            <mat-error *ngIf="isFieldInvalid('vendor')">Please DB vendor</mat-error>
+          </mat-select>
+        </mat-form-field>
 
-    <button mat-button color="primary" type="submit"
-            *ngIf="isFieldsSet()">Connect</button>
-  </form>
-</div>
+        <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
+
+        <button mat-button color="primary" type="submit"
+                *ngIf="isFieldsSet()">Connect</button>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>
 
 

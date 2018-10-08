@@ -21,11 +21,12 @@ export class ConnectionComponent implements OnInit {
   hide = true;
 
   constructor(private connectionsApiService: ConnectionsApiService,
-              private formBuilder: FormBuilder, private stateService: StateService) { }
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       endpoint: ['', Validators.required],
+      database:  ['', Validators.required],
       user: ['', Validators.required],
       password: ['', Validators.required],
       vendor: ['', Validators.required]
@@ -37,7 +38,10 @@ export class ConnectionComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.connectionsApiService.testConnection(this.form.value)
+      const connection = new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
+        this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value);
+
+      this.connectionsApiService.testConnection(connection)
         .subscribe(result => this.connect(), error => this.disconnect());
     }
     this.isFormSubmitAttempt = true;
@@ -45,13 +49,12 @@ export class ConnectionComponent implements OnInit {
 
   connect() {
     this.isConnected = true;
-    this.stateService.connect(this.form.value);
-    this.notifyConnected.emit(this.form.value);
+    this.notifyConnected.emit(new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
+      this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value));
   }
 
   disconnect() {
     this.isConnected = false;
-    this.stateService.disconnect();
     this.notifyConnected.emit(null);
   }
 
