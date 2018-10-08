@@ -40,8 +40,7 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public List<String> vendors() {
-        List<String> pairs = Arrays.asList(supportedDrivers.split(","));
-        return pairs.stream().map(item -> item.split("\\|")[0]).collect(Collectors.toList());
+        return Arrays.asList(supportedDrivers.split(","));
     }
 
     private String driver(String vendor) {
