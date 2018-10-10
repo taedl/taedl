@@ -79,3 +79,7 @@ export class ChartConfig {
   constructor (public selected: ComplexChartTypes, public indexes: number[]) {}
   // more to come
 }
+
+export class Filter {
+  constructor(public column: IColumn, public condition?: string, public constant?: string | number) {}
+}

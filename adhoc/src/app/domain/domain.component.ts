@@ -191,7 +191,8 @@ export class DomainComponent implements OnInit, OnChanges {
     const matchedForeignToPrimary = this.joins.filter(item => item.foreignKey.tableName === data.source &&
       item.primaryKey.tableName === data.target);
     if (matchedForeignToPrimary.length !== 1 && matchedPrimaryToForeign.length !== 1) {
-      throw new Error('Unknown join');
+      // throw new Error('Unknown join');
+      console.error('unknown join', data);
     }
     return matchedPrimaryToForeign.length === 1 ? matchedPrimaryToForeign[0].type : matchedForeignToPrimary[0].type;
   }

@@ -22,7 +22,7 @@ public class RdQueryBuildingService implements QueryBuildingService {
     private final String END = ";";
 
     @Override
-    public String generatePreviewQuery(List<TableMetaData> tables, List<Join> joins) {
+    public String generatePreviewQuery(List<TableMetaData> tables, List<Join> joins, String vendor) {
         if (CollectionUtils.isEmpty(tables)) {
             throw new QueryBuildingException("Could not generate preview query, no tables provided");
         }

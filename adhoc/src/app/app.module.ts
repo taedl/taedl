@@ -53,6 +53,7 @@ import { ReportsApiService } from './services/reports-api.service';
 import { CrosstabComponent } from './crosstab/crosstab.component';
 import { EchartComponent } from './echart/echart.component';
 import { JoinDialogComponent } from './join-dialog/join-dialog.component';
+import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent}
@@ -67,10 +68,12 @@ const routes: Routes = [
     ReportComponent,
     CrosstabComponent,
     EchartComponent,
-    JoinDialogComponent
+    JoinDialogComponent,
+    FilterDialogComponent
   ],
   entryComponents: [
-    JoinDialogComponent
+    JoinDialogComponent,
+    FilterDialogComponent
   ],
   imports: [
     BrowserModule,

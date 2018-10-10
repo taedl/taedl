@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
-  Aggregation, ChartConfig, ComplexChartTypes, IAggregatedColumn, IColumn,
+  Aggregation, ChartConfig, ComplexChartTypes, Filter, IAggregatedColumn, IColumn,
   IJoin, IResultTable, ITableMetaData, JdbcConnection
 } from '../services/model';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ReportsApiService } from '../services/reports-api.service';
+import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 
 @Component({
   selector: 'app-report',
@@ -35,8 +36,9 @@ export class ReportComponent implements OnInit {
   tableDataSource = new MatTableDataSource<any>();
   reportType: string;
   chartConfig: ChartConfig = new ChartConfig(ComplexChartTypes.SUNBURST, []);
+  filters: Filter[] = [];
 
-  constructor(private reportsService: ReportsApiService) { }
+  constructor(private reportsService: ReportsApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.tableDataSource.sort = this.sort;
@@ -86,6 +88,35 @@ export class ReportComponent implements OnInit {
     }
   }
 
+  onFilterDrop(event) {
+    if (this.filters.filter(f => f.column === event.dragData && !f.condition && !f.constant).length > 0) {
+      return;
+    }
+    this.openFilterDialog(new Filter(event.dragData));
+  }
+
+  onFilterClick(filter: Filter) {
+    this.openFilterDialog(filter);
+  }
+
+  openFilterDialog(filter: Filter) {
+    const dialogRef = this.dialog.open(FilterDialogComponent, {data: filter});
+    dialogRef.afterClosed().subscribe((f: Filter) => {
+      if (!f) {
+        return;
+      }
+      const ind = this.filters.indexOf(filter);
+      if (ind === -1) {
+        this.filters.push(f);
+      } else {
+        this.filters[ind] = f;
+      }
+
+      console.log('filters: ', JSON.stringify(this.filters));
+
+    });
+  }
+
   cancelColumn(column) {
     const ind = this.columns.indexOf(column);
     this.columns.splice(ind, 1);
@@ -103,6 +134,6 @@ export class ReportComponent implements OnInit {
   }
 
   onReportTypeChange() {
-    console.log('repor type', this.reportType);
+    console.log('report type', this.reportType);
   }
 }
