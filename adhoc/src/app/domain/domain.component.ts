@@ -12,6 +12,43 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 
+const empty = {
+  // tooltip: {
+  //   formatter: function(params) {
+  //     return !params.data.source ? null :
+  //       `<div>${params.data.source}<img src="../../assets/inner-join.png" alt="inner join" height="32" />${params.data.target}</div>`;
+  //   }
+  // },
+  series : [
+    {
+      type: 'graph',
+      layout: 'circular',
+      symbolSize: 50,
+      roam: true,
+      label: {
+        normal: {
+          show: true
+        }
+      },
+      itemStyle: {
+        color: '#e91e63',
+        // color: '#3f51b5',
+      },
+      edgeSymbol: ['circle', 'arrow'],
+      edgeSymbolSize: [4, 10],
+      data: [],
+      links: [],
+      lineStyle: {
+        normal: {
+          opacity: 0.9,
+          width: 2,
+          curveness: 0
+        }
+      }
+    }
+  ]
+};
+
 @Component({
   selector: 'app-domain',
   templateUrl: './domain.component.html',
@@ -246,40 +283,3 @@ export class DomainComponent implements OnInit, OnChanges {
     });
   }
 }
-
-const empty = {
-  // tooltip: {
-  //   formatter: function(params) {
-  //     return !params.data.source ? null :
-  //       `<div>${params.data.source}<img src="../../assets/inner-join.png" alt="inner join" height="32" />${params.data.target}</div>`;
-  //   }
-  // },
-  series : [
-    {
-      type: 'graph',
-      layout: 'circular',
-      symbolSize: 50,
-      roam: true,
-      label: {
-        normal: {
-          show: true
-        }
-      },
-      itemStyle: {
-        color: '#e91e63',
-        // color: '#3f51b5',
-      },
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: [4, 10],
-      data: [],
-      links: [],
-      lineStyle: {
-        normal: {
-          opacity: 0.9,
-          width: 2,
-          curveness: 0
-        }
-      }
-    }
-  ]
-};

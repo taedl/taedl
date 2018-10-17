@@ -72,11 +72,11 @@ export class EchartComponent implements OnInit, OnChanges {
       top: 'center',
       feature: {
         mark: {show: true},
-        dataView: {
-          show: true,
-          readOnly: false,
-          title: 'edit'
-        },
+        // dataView: {
+        //   show: true,
+        //   readOnly: false,
+        //   title: 'edit'
+        // },
         magicType: {
           show: true,
           type: ['line', 'bar', 'pie'],

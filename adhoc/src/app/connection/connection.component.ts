@@ -42,9 +42,11 @@ export class ConnectionComponent implements OnInit {
         this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value);
 
       this.connectionsApiService.testConnection(connection)
-        .subscribe(result => this.connect(), error => this.disconnect());
+        .subscribe(result => {
+          this.isFormSubmitAttempt = true;
+          this.connect();
+        }, error => this.disconnect());
     }
-    this.isFormSubmitAttempt = true;
   }
 
   connect() {
@@ -55,6 +57,7 @@ export class ConnectionComponent implements OnInit {
 
   disconnect() {
     this.isConnected = false;
+    this.isFormSubmitAttempt = true;
     this.notifyConnected.emit(null);
   }
 

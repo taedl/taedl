@@ -10,7 +10,7 @@ import { IJoin } from '../services/model';
 })
 export class JoinDialogComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<JoinDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<JoinDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public join: IJoin) {
     console.log('passed data to dialog: ', join);
   }

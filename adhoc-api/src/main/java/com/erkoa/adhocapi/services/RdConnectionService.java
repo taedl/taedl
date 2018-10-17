@@ -80,7 +80,7 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws SQLException {
-        String query = queryBuildingService.generatePreviewQuery(tables, joins);
+        String query = queryBuildingService.generatePreviewQuery(tables, joins, connectionDetails.getVendor());
         log.info("Generated preview query: {}", query);
         return createTable(connectionDetails, tables, query);
     }

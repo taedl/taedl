@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
-  Aggregation, ChartConfig, ComplexChartTypes, Filter, IAggregatedColumn, IColumn,
+  Aggregation, ChartConfig, ComplexChartTypes, Filter, FILTER_TYPES, IAggregatedColumn, IColumn,
   IJoin, IResultTable, ITableMetaData, JdbcConnection
 } from '../services/model';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -135,5 +135,10 @@ export class ReportComponent implements OnInit {
 
   onReportTypeChange() {
     console.log('report type', this.reportType);
+  }
+
+  describeFilter(f: Filter) {
+    return `${f.column.tableName}.${f.column.name} ${FILTER_TYPES
+      .filter(filterType => filterType.name === f.condition)[0].label} ${f.constant}`;
   }
 }

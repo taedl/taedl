@@ -1,9 +1,17 @@
-<h1 matDialogTitle>{{filter | json}}</h1>
+<h1 matDialogTitle>Filter by {{filter.column.tableName + '.' + filter.column.name}}</h1>
 <div mat-dialog-content>
+  <mat-form-field>
+    <mat-select [(ngModel)]="filter.condition" placeholder="Selection condition">
+      <mat-option *ngFor="let f of supportedFilterTypes" [value]="f">{{f}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  &nbsp;&nbsp;
+  <mat-form-field>
+    <input [(ngModel)]="filter.constant" matInput placeholder="constant" required>
+  </mat-form-field>
 </div>
 
-
 <div mat-dialog-actions>
-  <button mat-button [matDialogClose]="filter" tabindex="2">Ok</button>
+  <button mat-button [matDialogClose]="filter" tabindex="2" [disabled]="!filter.constant || !filter.condition">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
 </div>

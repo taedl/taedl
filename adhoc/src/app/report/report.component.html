@@ -62,8 +62,8 @@
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onFilterDrop($event)">
       <span class="description" *ngIf="filters.length === 0">Drop your filters here...</span>
       <span class="title" *ngIf="filters.length > 0">Filters: </span>
-      <button *ngFor="let f of filters" mat-raised-button class="stretched-button" (click)="onFilterClick(f)">
-        {{f.column.tableName}}.{{f.column.name}}
+      <button *ngFor="let f of filters" mat-raised-button class="stretched-button" (click)="onFilterClick(f)" matTooltip="{{describeFilter(f)}}">
+        {{describeFilter(f)}}
       </button>
 
     </div>
