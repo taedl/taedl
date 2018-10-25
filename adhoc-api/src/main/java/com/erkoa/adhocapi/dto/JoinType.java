@@ -17,7 +17,7 @@ public enum JoinType {
             case outer:
                 return "full outer join";
             default:
-                throw new QueryBuildingException("Unrecognised join type");
+                throw new QueryBuildingException("Unrecognised join type" + this);
         }
     }
 }

@@ -11,4 +11,5 @@ public class ReportRequest {
     List<Column> columns;
     List<AggregatedColumn> rows;
     List<Join> joins;
+    List<Filter> filters;
 }

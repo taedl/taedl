@@ -18,7 +18,7 @@ export class FilterDialogComponent implements OnInit {
     const type = this.filter.column.type.toLowerCase();
     // TODO: FIXME
     this.supportedFilterTypes = type.indexOf('int') !== -1 || type.indexOf('float') !== -1 ||
-    type.indexOf('num') !== -1 || type.indexOf('real') !== -1 ?
+    type.indexOf('num') !== -1 || type.indexOf('real') !== -1 || type.indexOf('date') !== -1 ?
       NUMERIC_FILTER_TYPES : STRING_FILTER_TYPES;
   }
 

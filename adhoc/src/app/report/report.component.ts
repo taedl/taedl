@@ -68,7 +68,7 @@ export class ReportComponent implements OnInit {
   }
 
   updateTable() {
-    this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins)
+    this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins, this.filters)
       .subscribe(result => {
         this.resultTable = result;
         this.resultTableHeaders = result.headers;
@@ -111,9 +111,7 @@ export class ReportComponent implements OnInit {
       } else {
         this.filters[ind] = f;
       }
-
-      console.log('filters: ', JSON.stringify(this.filters));
-
+      this.updateTable();
     });
   }
 
@@ -140,5 +138,21 @@ export class ReportComponent implements OnInit {
   describeFilter(f: Filter) {
     return `${f.column.tableName}.${f.column.name} ${FILTER_TYPES
       .filter(filterType => filterType.name === f.condition)[0].label} ${f.constant}`;
+  }
+
+  moveRow(row: IAggregatedColumn, direction: string) {
+    const from = this.rows.indexOf(row);
+    const cutOut = this.rows.splice(from, 1) [0];
+    const to = direction === 'left' ? from - 1 : from + 1;
+    this.rows.splice(to, 0, cutOut);
+    this.updateTable();
+  }
+
+  moveColumn(col: IColumn, direction: string) {
+    const from = this.columns.indexOf(col);
+    const cutOut = this.columns.splice(from, 1) [0];
+    const to = direction === 'left' ? from - 1 : from + 1;
+    this.columns.splice(to, 0, cutOut);
+    this.updateTable();
   }
 }
