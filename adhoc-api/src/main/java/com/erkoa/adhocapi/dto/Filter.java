@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Filter {
-    Column column;
+    private Column column;
+    private FilterCondition condition;
+    private String constant;
 }
-
-//constructor(public column: IColumn, public condition?: string, public constant?: string)

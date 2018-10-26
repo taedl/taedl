@@ -18,6 +18,12 @@ public enum FilterCondition {
                 return ">";
             case EQUALS:
                 return "=";
+            case STARTS_WITH:
+                return "will error";
+            case ENDS_WITH:
+                return "will error";
+            case CONTAINS:
+                return "will error";
             default:
                 throw new QueryBuildingException("Unrecognised filter type" + this);
         }

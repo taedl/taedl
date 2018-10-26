@@ -27,7 +27,7 @@ public class RdQueryBuildingService implements QueryBuildingService {
             throw new QueryBuildingException("Could not generate preview query, no tables provided");
         }
 
-        return select(tables.stream().flatMap(table -> table.getColumns().stream()).collect(Collectors.toList()), null) + from(tables, joins) + finalise();
+        return select(tables.stream().flatMap(table -> table.getColumns().stream()).collect(Collectors.toList()), null) + from(tables, joins, null) + finalise();
     }
 
     @Override
@@ -77,7 +77,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
     }
 
     @Override
-    public String generateTableQuery(List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> aggregatedColumns, List<Join> joins) {
+    public String generateTableQuery(List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> aggregatedColumns,
+                                     List<Join> joins, List<Filter> filters) {
         if (CollectionUtils.isEmpty(columns)) {
             throw new QueryBuildingException("Could not generate table query, no columns provided");
         }
@@ -99,7 +100,38 @@ public class RdQueryBuildingService implements QueryBuildingService {
             });
         }
 
-        return select(columns, aggregatedColumns) + from(tablesToJoin, joins) + groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise();
+        return select(columns, aggregatedColumns) + from(tablesToJoin, joins, filters) + filters(filters) +
+                groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise();
+    }
+
+    private String filters(List<Filter> filters) {
+        String query = "";
+        if (CollectionUtils.isEmpty(filters)) {
+            return query;
+        }
+
+        //TODO: FIXME: constant is a string just for now
+        return pad("where") + filters.stream()
+                .map(filter -> {
+
+                    String condition = "";
+                    if (filter.getCondition().equals(FilterCondition.STARTS_WITH)) {
+                        condition = " like '%" + filter.getConstant() + "'";
+                    } else if (filter.getCondition().equals(FilterCondition.ENDS_WITH)) {
+                        condition = " like '" + filter.getConstant() + "%'";
+                    } else if (filter.getCondition().equals(FilterCondition.CONTAINS)) {
+                        condition = " like '%" + filter.getConstant() + "%'";
+                    } else {
+                        condition = pad(filter.getCondition().toString()) + "'" + filter.getConstant() + "'";
+                    }
+
+                    return filter.getColumn().getTableName().concat(".")
+                                    .concat(filter.getColumn().getName())
+//                                    .concat(pad(filter.getCondition().toString()))
+//                                    .concat("'" + filter.getConstant() + "'");
+                    .concat(condition);
+                })
+                .collect(Collectors.joining("and "));
     }
 
     private String groupBy(List<Column> columns, List<AggregatedColumn> aggregatedColumns) {
@@ -179,10 +211,15 @@ public class RdQueryBuildingService implements QueryBuildingService {
         return vertices;
     }
 
-    private String from(List<TableMetaData> tables, List<Join> joins) {
+    private String from(List<TableMetaData> tables, List<Join> joins, List<Filter> filters) {
         StringBuffer query = new StringBuffer();
         query.append(pad(FROM));
         List<Column> columns = tables.stream().map(TableMetaData::getColumns).flatMap(Collection::stream).collect(Collectors.toList());
+
+        if (!CollectionUtils.isEmpty(filters)) {
+            columns.addAll(filters.stream().map(Filter::getColumn).collect(Collectors.toList()));
+            columns = columns.stream().distinct().collect(Collectors.toList());
+        }
 
         if (!isJoined(columns)) {
             return query.append(columns.get(0).getTableName()).toString();

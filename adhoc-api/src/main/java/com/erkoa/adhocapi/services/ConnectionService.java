@@ -10,5 +10,6 @@ public interface ConnectionService {
     List<String> vendors();
     List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException, ClassNotFoundException;
     Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws ClassNotFoundException, SQLException;
-    Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> rows, List<Join> joins) throws ClassNotFoundException, SQLException;
+    Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns,
+                      List<AggregatedColumn> rows, List<Join> joins, List<Filter> filters) throws ClassNotFoundException, SQLException;
 }
