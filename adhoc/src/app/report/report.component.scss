@@ -24,12 +24,14 @@
 
     .selected-column {
       border: 1px solid $primary;
-      color: $primary;
+      background-color: $primary;
+      color: $white;
     }
 
     .selected-row {
-      border: 1px solid $accent !important;
-      color: $accent !important;
+      border: 1px solid $accent;
+      background-color: $accent;
+      color: $white;
     }
   }
 
