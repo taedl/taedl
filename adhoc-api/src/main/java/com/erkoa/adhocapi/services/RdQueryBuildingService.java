@@ -21,6 +21,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
     private final String SELECT = "select";
     private final String END = ";";
 
+    private final String AGGREGATION_DELIMITER = "$$$";
+
     @Override
     public String generatePreviewQuery(List<TableMetaData> tables, List<Join> joins, String vendor) {
         if (CollectionUtils.isEmpty(tables)) {
@@ -127,8 +129,6 @@ public class RdQueryBuildingService implements QueryBuildingService {
 
                     return filter.getColumn().getTableName().concat(".")
                                     .concat(filter.getColumn().getName())
-//                                    .concat(pad(filter.getCondition().toString()))
-//                                    .concat("'" + filter.getConstant() + "'");
                     .concat(condition);
                 })
                 .collect(Collectors.joining("and "));
@@ -152,7 +152,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
                 .concat(columns.stream().map(column -> column.getTableName().concat(".").concat(column.getName())).collect(Collectors.joining(", ")))
                 .concat(", ")
                 .concat(aggregatedColumns.stream().map(column ->
-                        column.getAggregation().insertable().concat("$$").concat(column.getColumn().getTableName().concat("$$").concat(column.getColumn().getName())))
+                        column.getAggregation().insertable().concat(AGGREGATION_DELIMITER)
+                                .concat(column.getColumn().getTableName().concat(AGGREGATION_DELIMITER).concat(column.getColumn().getName()).concat(AGGREGATION_DELIMITER)))
                         .collect(Collectors.joining(", ")))
                 .concat(" desc");
     }
@@ -168,7 +169,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
 
        return padRight(query.concat(",")) + aggregatedColumns.stream()
                 .map(column -> column.getAggregation().insertable().concat("(").concat(column.getColumn().getTableName().concat(".").concat(column.getColumn().getName()).concat(")")
-                        .concat(" as ").concat(column.getAggregation().insertable()).concat("$$").concat(column.getColumn().getTableName().concat("$$").concat(column.getColumn().getName()))
+                        .concat(" as ").concat(column.getAggregation().insertable()).concat(AGGREGATION_DELIMITER)
+                        .concat(column.getColumn().getTableName().concat(AGGREGATION_DELIMITER).concat(column.getColumn().getName()).concat(AGGREGATION_DELIMITER))
                 )).collect(Collectors.joining(", "));
     }
 

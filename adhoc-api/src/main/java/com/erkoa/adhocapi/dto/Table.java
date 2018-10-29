@@ -3,6 +3,7 @@ package com.erkoa.adhocapi.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -24,7 +25,15 @@ public class Table {
         for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
             String dbColumn = resultSetMetaData.getColumnLabel(i);
             String dbTable = resultSetMetaData.getTableName(i);
-            headers.add(dbTable + "." + dbColumn);
+
+            if (dbColumn.contains("$$$") && StringUtils.isEmpty(dbTable)) {
+                String res = dbColumn.replaceFirst("\\$\\$\\$", "(");
+                res = res.replaceFirst("\\$\\$\\$", ".");
+                res = res.replaceFirst("\\$\\$\\$", ")");
+                headers.add(res);
+            } else {
+                headers.add(dbTable + "." + dbColumn);
+            }
         }
     }
 
@@ -35,7 +44,7 @@ public class Table {
         data = new ArrayList<>();
         while(resultSet.next()) {
             List<Object> row = new ArrayList<>();
-            for (int i = 1; i <=resultSet.getMetaData().getColumnCount(); i++) {
+            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                 // JDBC would return first value if there are equal column names (although from different tables) in result set
                 // so should either have a quiery with "as" or use index (less safe??)
                 //  String columnLabel = meta.getColumnLabel(i);
