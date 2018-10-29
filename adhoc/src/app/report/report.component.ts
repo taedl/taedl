@@ -88,6 +88,10 @@ export class ReportComponent implements OnInit {
     }
   }
 
+  isSelected(item: IColumn, type: string) {
+    return type === 'row' ? this.rows.map(r => r.column).indexOf(item) !== -1 : this.columns.indexOf(item) !== -1;
+  }
+
   onFilterDrop(event) {
     if (this.filters.filter(f => f.column === event.dragData && !f.condition && !f.constant).length > 0) {
       return;
