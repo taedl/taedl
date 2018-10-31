@@ -15,6 +15,7 @@
       <span class="description" *ngIf="columns.length === 0">Drop your columns here...</span>
       <span *ngIf="columns.length > 0" class="title">Columns: </span>
       <button *ngFor="let c of columns; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button">
+        <mat-icon (click)="cancelColumn(c)">cancel</mat-icon>
         <mat-icon (click)="moveColumn(c, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
         <mat-icon (click)="moveColumn(c, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
         {{c.tableName  + '.' + c.name}}

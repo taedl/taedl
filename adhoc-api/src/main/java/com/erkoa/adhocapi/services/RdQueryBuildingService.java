@@ -118,9 +118,9 @@ public class RdQueryBuildingService implements QueryBuildingService {
 
                     String condition = "";
                     if (filter.getCondition().equals(FilterCondition.STARTS_WITH)) {
-                        condition = " like '%" + filter.getConstant() + "'";
-                    } else if (filter.getCondition().equals(FilterCondition.ENDS_WITH)) {
                         condition = " like '" + filter.getConstant() + "%'";
+                    } else if (filter.getCondition().equals(FilterCondition.ENDS_WITH)) {
+                        condition = " like '%" + filter.getConstant() + "'";
                     } else if (filter.getCondition().equals(FilterCondition.CONTAINS)) {
                         condition = " like '%" + filter.getConstant() + "%'";
                     } else {
@@ -219,8 +219,12 @@ public class RdQueryBuildingService implements QueryBuildingService {
         List<Column> columns = tables.stream().map(TableMetaData::getColumns).flatMap(Collection::stream).collect(Collectors.toList());
 
         if (!CollectionUtils.isEmpty(filters)) {
-            columns.addAll(filters.stream().map(Filter::getColumn).collect(Collectors.toList()));
-            columns = columns.stream().distinct().collect(Collectors.toList());
+            List<String> tableNames = tables.stream().map(TableMetaData::getName).collect(Collectors.toList());
+            filters.forEach(f -> {
+                if (!tableNames.contains(f.getColumn().getTableName())) {
+                    tables.add(new TableMetaData(f.getColumn().getTableName()));
+                }
+            });
         }
 
         if (!isJoined(columns)) {
