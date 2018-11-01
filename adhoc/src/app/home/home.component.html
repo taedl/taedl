@@ -6,7 +6,7 @@
     <mat-tab label="Domain" [disabled]="!connection">
       <app-domain [connection]="connection" (notifySelected)="handleSelected($event)" (notifyJoins)="handleJoins($event)" (notifyAllTables)="handleAllTables($event)"></app-domain>
     </mat-tab>
-    <mat-tab label="Report" [disabled]="tables.length === 0">
+    <mat-tab label="Report" [disabled]="!connection || !tables || tables.length === 0">
       <app-report [connection]="connection" [tables]="tables" [joins]="joins" [allTables]="allTables"></app-report>
     </mat-tab>
   </mat-tab-group>

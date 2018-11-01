@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import {
   Aggregation, ChartConfig, ComplexChartTypes, Filter, FILTER_TYPES, IAggregatedColumn, IColumn,
   IJoin, IResultTable, ITableMetaData, JdbcConnection
@@ -12,7 +12,7 @@ import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component'
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.scss']
 })
-export class ReportComponent implements OnInit {
+export class ReportComponent implements OnInit, OnChanges {
 
   @Input()
   connection: JdbcConnection;
@@ -33,7 +33,7 @@ export class ReportComponent implements OnInit {
   rows: IAggregatedColumn[] = [];
   resultTableHeaders: string[];
   resultTable: IResultTable;
-  tableDataSource = new MatTableDataSource<any>();
+  tableDataSource: MatTableDataSource<any>;
   reportType: string;
   chartConfig: ChartConfig = new ChartConfig(ComplexChartTypes.SUNBURST, []);
   filters: Filter[] = [];
@@ -41,9 +41,16 @@ export class ReportComponent implements OnInit {
   constructor(private reportsService: ReportsApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.tableDataSource = new MatTableDataSource<any>();
     this.tableDataSource.sort = this.sort;
     this.tableDataSource.paginator = this.paginator;
     this.reportType = 'table';
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.connection) {
+      this.reset();
+    }
   }
 
   onColumnDrop(event) {
@@ -68,6 +75,18 @@ export class ReportComponent implements OnInit {
   }
 
   updateTable() {
+    if (this.reportsService.isEnoughToRequest(this.connection, this.allTables, this.columns)) {
+      this.fetchTable();
+    } else {
+      if (!this.connection) {
+        this.reset();
+      } else {
+        this.resetTable();
+      }
+    }
+  }
+
+  fetchTable() {
     this.reportsService.table(this.connection, this.allTables, this.columns, this.rows, this.joins, this.filters)
       .subscribe(result => {
         this.resultTable = result;
@@ -78,6 +97,19 @@ export class ReportComponent implements OnInit {
           this.tableDataSource.paginator = this.paginator;
         });
       }, error => console.error(error));
+  }
+
+  reset() {
+    this.resetTable();
+    this.rows = [];
+    this.columns = [];
+    this.filters = [];
+  }
+
+  resetTable() {
+    this.resultTable = null;
+    this.resultTableHeaders = null;
+    this.tableDataSource = null;
   }
 
   onRowDrop(event) {

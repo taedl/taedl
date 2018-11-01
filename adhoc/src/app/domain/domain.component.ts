@@ -11,6 +11,7 @@ import {
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
+import * as _ from 'lodash';
 
 const empty = {
   // tooltip: {
@@ -92,16 +93,29 @@ export class DomainComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.connection.currentValue) {
       this.connectionApiSerice.tablesMetadata(changes.connection.currentValue)
-          .subscribe(result => {
+        .subscribe(result => {
             this.tables = result.map(t => ({ table: t, selected: false }));
             this.notifyAllTables.emit(result);
             this.initGraph();
             this.initJoins();
-          },
-              error => console.error('failed to get tables', error));
+          }, error => console.error('failed to get tables', error));
     } else {
-      this.tables = [];
+      this.reset();
     }
+  }
+
+  reset() {
+    this.resultTable = null;
+    this.tables = [];
+    this.joins = [];
+    this.joinChain = [];
+    this.selectedTables = [];
+    this.resultTableHeaders = [];
+    this.option = {...empty};
+
+    this.notifySelected.emit(this.selectedTables);
+    this.notifyJoins.emit(this.joins);
+    this.notifyAllTables.emit([]);
   }
 
   onTableDrop(event: any) {
@@ -113,7 +127,6 @@ export class DomainComponent implements OnInit, OnChanges {
       this.preview();
     }
   }
-
 
   cancelTable(t: ITableMetaData) {
     const indSelected = this.selectedTables.indexOf(t);
@@ -172,7 +185,7 @@ export class DomainComponent implements OnInit, OnChanges {
   }
 
   initGraph() {
-    this.option = { ...empty };
+    this.option = _.cloneDeep(empty);
     const that = this;
     this.tables.forEach(t => {
       this.option.series[0].data.push({
@@ -241,7 +254,6 @@ export class DomainComponent implements OnInit, OnChanges {
           const join: IJoin = this.joins.filter(j =>
             j.primaryKey.tableName === event.data.source && j.foreignKey.tableName === event.data.target ||
             j.primaryKey.tableName === event.data.target && j.foreignKey.tableName === event.data.source)[0];
-          console.log('selected: ', join);
           this.openJoinDialog(join);
         }
         return;

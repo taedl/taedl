@@ -14,7 +14,7 @@
   </div>
 
   <div class="joins-container">
-    <div echarts [options]="option" (chartClick)="onChartEvent($event, 'chartClick')"></div>
+    <div *ngIf="connection" echarts [options]="option" (chartClick)="onChartEvent($event, 'chartClick')"></div>
   </div>
 
 

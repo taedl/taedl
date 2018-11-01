@@ -24,4 +24,8 @@ export class ReportsApiService {
     return this.http.post<IResultTable>(url, request);
   }
 
+  isEnoughToRequest(connection: JdbcConnection, tables: ITableMetaData[], columns: IColumn[]) {
+    return connection && tables.length > 0 && columns.length > 0;
+  }
+
 }
