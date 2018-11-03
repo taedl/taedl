@@ -1,5 +1,11 @@
 <mat-toolbar color="primary" class="mat-elevation-z10 fixed-header">
-  <img src="../assets/adhoc-logo-w.png" alt="adhoclogo" height="55" [routerLink]="['']">
+  <span><img src="../assets/adhoc-logo-w.png" alt="adhoclogo" height="55" [routerLink]="['']"></span>
+  <span class="spacer"></span>
+  <span>
+    <a href="https://github.com/PavelYaroshchyk/adhoc.click" target="_blank">
+      <img src="../assets/github.svg" alt="repo" height="32">
+    </a>
+  </span>
 </mat-toolbar>
 <div id="context" class="app-content">
   <router-outlet></router-outlet>
