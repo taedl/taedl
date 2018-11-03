@@ -7,7 +7,10 @@ import com.erkoa.adhocapi.services.joins.Graph;
 import com.erkoa.adhocapi.services.joins.Joiner;
 import com.erkoa.adhocapi.services.joins.Vertex;
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -21,7 +24,18 @@ public class RdQueryBuildingService implements QueryBuildingService {
     private final String SELECT = "select";
     private final String END = ";";
 
+    private final String SQL_SERVER = "sqlserver";
+    private final String POSTGRESQL = "postgresql";
+    private final String MYSQL = "mysql";
+
     private final String AGGREGATION_DELIMITER = "$$$";
+
+    private final String previewLimit;
+
+    @Autowired
+    public RdQueryBuildingService(@Value("${preview.limit}") String previewLimit) {
+        this.previewLimit = previewLimit;
+    }
 
     @Override
     public String generatePreviewQuery(List<TableMetaData> tables, List<Join> joins, String vendor) {
@@ -29,7 +43,7 @@ public class RdQueryBuildingService implements QueryBuildingService {
             throw new QueryBuildingException("Could not generate preview query, no tables provided");
         }
 
-        return select(tables.stream().flatMap(table -> table.getColumns().stream()).collect(Collectors.toList()), null) + from(tables, joins, null) + finalise();
+        return select(tables.stream().flatMap(table -> table.getColumns().stream()).collect(Collectors.toList()), null, vendor, true) + from(tables, joins, null) + finalise(vendor, true);
     }
 
     @Override
@@ -102,8 +116,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
             });
         }
 
-        return select(columns, aggregatedColumns) + from(tablesToJoin, joins, filters) + filters(filters) +
-                groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise();
+        return select(columns, aggregatedColumns, null, null) + from(tablesToJoin, joins, filters) + filters(filters) +
+                groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise(null, null);
     }
 
     private String filters(List<Filter> filters) {
@@ -159,8 +173,9 @@ public class RdQueryBuildingService implements QueryBuildingService {
     }
 
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way
-    private String select(List<Column> columns, List<AggregatedColumn> aggregatedColumns) {
-        String query = padRight(SELECT) +
+    private String select(List<Column> columns, List<AggregatedColumn> aggregatedColumns, String vendor, Boolean preview) {
+        String select = BooleanUtils.isTrue(preview) && vendor.equals(SQL_SERVER) ? "select top" + previewLimit : SELECT;
+        String query = padRight(select) +
                 columns.stream().map(column -> column.getTableName().concat(".").concat(column.getName())).collect(Collectors.joining(", "));
 
         if (CollectionUtils.isEmpty(aggregatedColumns)) {
@@ -281,8 +296,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
                 .collect(Collectors.toList()).size() != 1;
     }
 
-    private String finalise() {
-        return END;
+    private String finalise(String vendor, Boolean preview) {
+        return BooleanUtils.isTrue(preview) && (vendor.equals(POSTGRESQL) || vendor.equals(MYSQL)) ? " limit " + previewLimit + END : END;
     }
 
     private String pad() {
