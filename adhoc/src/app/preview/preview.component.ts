@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { IJoin, ITableMetaData, JdbcConnection } from '../services/model';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-preview',
+  templateUrl: './preview.component.html',
+  styleUrls: ['./preview.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class PreviewComponent implements OnInit {
 
   connection: JdbcConnection;
   tables: ITableMetaData[] = [];

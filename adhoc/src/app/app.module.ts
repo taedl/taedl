@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { PreviewComponent } from './preview/preview.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -56,13 +56,13 @@ import { JoinDialogComponent } from './join-dialog/join-dialog.component';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent}
+  { path: '', component: PreviewComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    PreviewComponent,
     ConnectionComponent,
     DomainComponent,
     ReportComponent,

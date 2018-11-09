@@ -24,6 +24,10 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
 
+    <mat-slider></mat-slider>
+
+    <mat-slider></mat-slider>
+
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onColumnDrop($event)">
       <span class="description" *ngIf="columns.length === 0">Drop your columns here...</span>
       <span *ngIf="columns.length > 0" class="title">Columns: </span>

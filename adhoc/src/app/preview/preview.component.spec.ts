@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomeComponent } from './home.component';
+import { PreviewComponent } from './preview.component';
 import { ConnectionComponent } from '../connection/connection.component';
 import { DomainComponent } from '../domain/domain.component';
 import { MatCardModule, MatFormFieldModule, MatInputModule, MatListModule, MatOptionModule, MatSelectModule } from '@angular/material';
@@ -9,13 +9,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgDragDropModule } from 'ng-drag-drop';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('PreviewComponent', () => {
+  let component: PreviewComponent;
+  let fixture: ComponentFixture<PreviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent, ConnectionComponent, DomainComponent ],
+      declarations: [ PreviewComponent, ConnectionComponent, DomainComponent ],
       imports: [
         MatCardModule,
         MatInputModule,
@@ -34,7 +34,7 @@ describe('HomeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(PreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
