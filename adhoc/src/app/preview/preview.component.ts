@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IJoin, ITableMetaData, JdbcConnection } from '../services/model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-preview',
@@ -13,7 +14,12 @@ export class PreviewComponent implements OnInit {
   allTables: ITableMetaData[] = [];
   joins: IJoin[] = [];
   selectedTab = 0;
-  constructor() { }
+  vendors: string[] = [];
+
+  constructor(private route: ActivatedRoute) {
+    this.route.data.subscribe(data => this.vendors = data.vendors,
+        error => console.error('failed to resolve vendors', error));
+  }
 
   ngOnInit() {
 

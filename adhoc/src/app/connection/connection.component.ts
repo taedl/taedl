@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StateService } from '../services/state.service';
@@ -14,7 +14,9 @@ export class ConnectionComponent implements OnInit {
   @Output()
   notifyConnected: EventEmitter<JdbcConnection> = new EventEmitter<JdbcConnection>();
 
+  @Input()
   vendors: string[];
+
   form: FormGroup;
   isFormSubmitAttempt: boolean;
   isConnected: boolean;
@@ -31,9 +33,6 @@ export class ConnectionComponent implements OnInit {
       password: ['', Validators.required],
       vendor: ['', Validators.required]
     });
-
-    this.connectionsApiService.vendors()
-      .subscribe(vendors => this.vendors = vendors);
   }
 
   onSubmit() {

@@ -1,7 +1,7 @@
 <div>
   <mat-tab-group [selectedIndex]="selectedTab">
     <mat-tab label="Connection">
-      <app-connection (notifyConnected)="handleConnected($event)"></app-connection>
+      <app-connection (notifyConnected)="handleConnected($event)" [vendors]="vendors"></app-connection>
     </mat-tab>
     <mat-tab label="Domain" [disabled]="!connection">
       <app-domain [connection]="connection" (notifySelected)="handleSelected($event)" (notifyJoins)="handleJoins($event)" (notifyAllTables)="handleAllTables($event)"></app-domain>

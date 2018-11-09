@@ -54,9 +54,10 @@ import { CrosstabComponent } from './crosstab/crosstab.component';
 import { EchartComponent } from './echart/echart.component';
 import { JoinDialogComponent } from './join-dialog/join-dialog.component';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
+import { PreviewResolverService } from './preview/preview-resolver.service';
 
 const routes: Routes = [
-  { path: '', component: PreviewComponent }
+  { path: '', resolve: { vendors: PreviewResolverService }, component: PreviewComponent }
 ];
 
 @NgModule({
