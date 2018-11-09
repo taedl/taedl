@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { StateService } from '../services/state.service';
 import {
   IResultTable,
   ITableMetaData,
@@ -82,8 +81,7 @@ export class DomainComponent implements OnInit, OnChanges {
 
   option = null;
 
-  constructor(private stateService: StateService,
-              private connectionApiSerice: ConnectionsApiService, public dialog: MatDialog) { }
+  constructor(private connectionApiSerice: ConnectionsApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.tableDataSource.sort = this.sort;
