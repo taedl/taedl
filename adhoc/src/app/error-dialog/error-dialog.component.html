@@ -1,10 +1,11 @@
-<h1 matDialogTitle>error</h1>
+<div matDialogTitle><mat-icon color="error">error</mat-icon>&nbsp;Error</div>
+
 <div mat-dialog-content>
- {{error}}
+ {{error.message}}
 </div>
 
 
 <div mat-dialog-actions>
-  <button mat-button [matDialogClose]="true" tabindex="2">Reset everything</button>
-  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+  <button mat-button [matDialogClose]="true" tabindex="2">{{error.accept}}</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">{{error.decline}}</button>
 </div>

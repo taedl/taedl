@@ -123,3 +123,9 @@ export class ChartConfig {
 export class Filter {
   constructor(public column: IColumn, public condition?: string, public constant?: string) {}
 }
+
+export interface IError {
+  message: string;
+  accept: string;
+  decline: string;
+}

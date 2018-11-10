@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
+import { IError } from '../services/model';
 
 @Component({
   selector: 'app-error-dialog',
@@ -10,7 +11,7 @@ import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 export class ErrorDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<JoinDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public error) { }
+              @Inject(MAT_DIALOG_DATA) public error: IError) { }
 
   ngOnInit() {
   }

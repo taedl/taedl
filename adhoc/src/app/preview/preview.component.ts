@@ -5,6 +5,8 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material';
 import { catchError } from 'rxjs/operators';
 import { Error } from 'tslint/lib/error';
+import { throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-preview',
@@ -21,22 +23,12 @@ export class PreviewComponent implements OnInit {
   vendors: string[] = [];
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog) {
-    // this.route.data.subscribe(data => this.vendors = data.vendors,
-    // this.route.data.subscribe({
-    //   next(x) {
-    //     console.log('data: ', x);
-    //   },
-    //   error(err) {
-    //     this.handleError(err);
-    //   }
-    // });
-    // this.route.data.subscribe(data => this.vendors = data.vendors, err => this.handleError(err));
     this.route.data.subscribe(data => {
       if (!data.vendors.length) {
         this.handleError();
       }
       this.vendors = data.vendors;
-    });
+    }, error => this.handleError());
   }
 
   ngOnInit() {
@@ -61,10 +53,12 @@ export class PreviewComponent implements OnInit {
   }
 
   handleError() {
-
     console.log('handling error');
-
-    const dialogRef = this.dialog.open(ErrorDialogComponent, {data: {error: null, message: 'message here...'}});
+    const dialogRef = this.dialog.open(ErrorDialogComponent, {data: {
+        message: 'Could not get list of supported vendors from the server',
+        accept: 'Retry?',
+        decline: 'Cancel'
+      }});
     dialogRef.afterClosed().subscribe((res: boolean) => {
       if (!res) {
         return;
