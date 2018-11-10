@@ -11,23 +11,6 @@
     </div>
   </div>
   <div class="info-container">
-
-    <mat-button-toggle-group [(ngModel)]="reportType" (change)="onReportTypeChange()" class="type-toggle">
-      <mat-button-toggle value="table" matTooltip="Table">
-        <mat-icon>view_column</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="crosstab" [disabled]="isTable()" matTooltip="Crosstab">
-        <mat-icon>view_quilt</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="chart" [disabled]="isTable()" matTooltip="Chart">
-        <mat-icon>timeline</mat-icon>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-
-    <mat-slider></mat-slider>
-
-    <mat-slider></mat-slider>
-
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onColumnDrop($event)">
       <span class="description" *ngIf="columns.length === 0">Drop your columns here...</span>
       <span *ngIf="columns.length > 0" class="title">Columns: </span>
@@ -69,6 +52,19 @@
   </div>
 
   <div class="filters-container">
+
+    <mat-button-toggle-group [(ngModel)]="reportType" (change)="onReportTypeChange()" class="type-toggle">
+      <mat-button-toggle value="table" matTooltip="Table">
+        <mat-icon>view_column</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="crosstab" [disabled]="isTable()" matTooltip="Crosstab">
+        <mat-icon>view_quilt</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="chart" [disabled]="isTable()" matTooltip="Chart">
+        <mat-icon>timeline</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onFilterDrop($event)">
       <span class="description" *ngIf="filters.length === 0">Drop your filters here...</span>
       <span class="title" *ngIf="filters.length > 0">Filters: </span>

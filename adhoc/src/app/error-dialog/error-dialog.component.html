@@ -1,0 +1,10 @@
+<h1 matDialogTitle>error</h1>
+<div mat-dialog-content>
+ {{error}}
+</div>
+
+
+<div mat-dialog-actions>
+  <button mat-button [matDialogClose]="true" tabindex="2">Reset everything</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>

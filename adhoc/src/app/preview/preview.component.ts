@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { IJoin, ITableMetaData, JdbcConnection } from '../services/model';
 import { ActivatedRoute } from '@angular/router';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { MatDialog } from '@angular/material';
+import { catchError } from 'rxjs/operators';
+import { Error } from 'tslint/lib/error';
 
 @Component({
   selector: 'app-preview',
@@ -16,9 +20,23 @@ export class PreviewComponent implements OnInit {
   selectedTab = 0;
   vendors: string[] = [];
 
-  constructor(private route: ActivatedRoute) {
-    this.route.data.subscribe(data => this.vendors = data.vendors,
-        error => console.error('failed to resolve vendors', error));
+  constructor(private route: ActivatedRoute, public dialog: MatDialog) {
+    // this.route.data.subscribe(data => this.vendors = data.vendors,
+    // this.route.data.subscribe({
+    //   next(x) {
+    //     console.log('data: ', x);
+    //   },
+    //   error(err) {
+    //     this.handleError(err);
+    //   }
+    // });
+    // this.route.data.subscribe(data => this.vendors = data.vendors, err => this.handleError(err));
+    this.route.data.subscribe(data => {
+      if (!data.vendors.length) {
+        this.handleError();
+      }
+      this.vendors = data.vendors;
+    });
   }
 
   ngOnInit() {
@@ -40,5 +58,18 @@ export class PreviewComponent implements OnInit {
 
   handleAllTables(tables: ITableMetaData[]) {
     this.allTables = tables;
+  }
+
+  handleError() {
+
+    console.log('handling error');
+
+    const dialogRef = this.dialog.open(ErrorDialogComponent, {data: {error: null, message: 'message here...'}});
+    dialogRef.afterClosed().subscribe((res: boolean) => {
+      if (!res) {
+        return;
+      }
+      console.log('need to reset all');
+    });
   }
 }
