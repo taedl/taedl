@@ -16,7 +16,7 @@ export class PreviewResolverService implements Resolve<string[]> {
       retry(1),
       map(res => res),
       catchError(() => {
-        return of([]);
+        return of(null);
       })
     );
   }

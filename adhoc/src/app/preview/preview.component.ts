@@ -3,10 +3,9 @@ import { IJoin, ITableMetaData, JdbcConnection } from '../services/model';
 import { ActivatedRoute } from '@angular/router';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material';
-import { catchError } from 'rxjs/operators';
-import { Error } from 'tslint/lib/error';
-import { throwError } from 'rxjs';
+import { ConnectionsApiService } from '../services/connections-api.service';
 import { of } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-preview',
@@ -22,12 +21,14 @@ export class PreviewComponent implements OnInit {
   selectedTab = 0;
   vendors: string[] = [];
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(private route: ActivatedRoute, private dialog: MatDialog, private connectionService: ConnectionsApiService) {
     this.route.data.subscribe(data => {
-      if (!data.vendors.length) {
+      console.log('data1', data);
+      if (!data.vendors) {
         this.handleError();
+      } else {
+        this.vendors = data.vendors;
       }
-      this.vendors = data.vendors;
     }, error => this.handleError());
   }
 
@@ -52,18 +53,37 @@ export class PreviewComponent implements OnInit {
     this.allTables = tables;
   }
 
+  handleData = data => {
+    console.log('data', data);
+    if (!data) {
+      this.handleError();
+    } else {
+      this.vendors = data;
+    }
+  }
+
+  fetchVendors() {
+    this.connectionService.vendors().pipe(
+      retry(1),
+      map(res => res),
+      catchError((err) => {
+        console.log('caught', err);
+        return of(null);
+      })
+    ).subscribe(data => this.handleData(data));
+  }
+
   handleError() {
     console.log('handling error');
     const dialogRef = this.dialog.open(ErrorDialogComponent, {data: {
-        message: 'Could not get list of supported vendors from the server',
+        message: 'Could not get the list of supported vendors from the server',
         accept: 'Retry?',
         decline: 'Cancel'
       }});
     dialogRef.afterClosed().subscribe((res: boolean) => {
-      if (!res) {
-        return;
+      if (res) {
+        this.fetchVendors();
       }
-      console.log('need to reset all');
     });
   }
 }
