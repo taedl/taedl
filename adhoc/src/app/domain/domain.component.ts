@@ -11,6 +11,7 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 import * as _ from 'lodash';
+import { errorHandler } from '../error-dialog/error-handler';
 
 const empty = {
   // tooltip: {
@@ -96,7 +97,10 @@ export class DomainComponent implements OnInit, OnChanges {
             this.notifyAllTables.emit(result);
             this.initGraph();
             this.initJoins();
-          }, error => console.error('failed to get tables', error));
+          }, error => {
+          errorHandler(this.dialog, 'Could not get tables metadata: ' + error.message, 'OK')
+            .subscribe(() => { /* nothing */ });
+        });
     } else {
       this.reset();
     }
@@ -148,7 +152,10 @@ export class DomainComponent implements OnInit, OnChanges {
           this.tableDataSource.sort = this.sort;
           this.tableDataSource.paginator = this.paginator;
         });
-      }, error => console.log('failed to preview', error));
+      }, error => {
+        errorHandler(this.dialog, 'Could not generate preview: ' + error.message, 'OK')
+          .subscribe(() => { /* nothing */ });
+      });
   }
 
   isSelected(): boolean {
@@ -261,8 +268,13 @@ export class DomainComponent implements OnInit, OnChanges {
   }
 
   openJoinDialog(join: IJoin): void {
-    const dialogRef = this.dialog.open(JoinDialogComponent, { data: join });
 
+    if (!this.selectedTables.length) {
+      errorHandler(this.dialog, 'Please select some tables to preview first.', 'OK').subscribe(() => {});
+      return;
+    }
+
+    const dialogRef = this.dialog.open(JoinDialogComponent, { data: join });
     dialogRef.afterClosed().subscribe((result: IJoin) => {
       if (!result) {
         return;

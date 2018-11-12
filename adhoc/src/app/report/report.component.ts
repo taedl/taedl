@@ -6,6 +6,7 @@ import {
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ReportsApiService } from '../services/reports-api.service';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
+import { errorHandler } from '../error-dialog/error-handler';
 
 @Component({
   selector: 'app-report',
@@ -96,7 +97,10 @@ export class ReportComponent implements OnInit, OnChanges {
           this.tableDataSource.sort = this.sort;
           this.tableDataSource.paginator = this.paginator;
         });
-      }, error => console.error(error));
+      }, error => {
+        errorHandler(this.dialog, 'Could not generate table: ' + error.message, 'OK')
+          .subscribe(() => { /* nothing */ });
+      });
   }
 
   reset() {
@@ -168,7 +172,6 @@ export class ReportComponent implements OnInit, OnChanges {
   }
 
   onReportTypeChange() {
-    console.log('report type', this.reportType);
   }
 
   describeFilter(f: Filter) {

@@ -11,7 +11,6 @@ export class JoinDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<JoinDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public join: IJoin) {
-    console.log('passed data to dialog: ', join);
   }
 
 

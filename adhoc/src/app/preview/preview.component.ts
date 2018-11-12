@@ -23,7 +23,6 @@ export class PreviewComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private dialog: MatDialog, private connectionService: ConnectionsApiService) {
     this.route.data.subscribe(data => {
-      console.log('data1', data);
       if (!data.vendors) {
         this.handleError();
       } else {

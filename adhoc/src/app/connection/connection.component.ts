@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { errorHandler } from '../error-dialog/error-handler';
 
 @Component({
   selector: 'app-connection',
@@ -27,7 +28,8 @@ export class ConnectionComponent implements OnInit {
 
   constructor(private connectionsApiService: ConnectionsApiService,
               private dialog: MatDialog,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -49,20 +51,14 @@ export class ConnectionComponent implements OnInit {
     const connection = new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
       this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value);
     this.connectionsApiService.testConnection(connection)
-      .pipe(
-        map(res => res),
-        catchError((err) => {
-          console.log('err', err);
-          return of(null);
-        }))
       .subscribe(result => {
         this.isFormSubmitAttempt = true;
-        if (result) {
-          this.connect();
-        } else {
-          this.handleError();
-        }
-    }, () => this.disconnect());
+        this.connect();
+    }, (error) => {
+        this.disconnect();
+        errorHandler(this.dialog, 'Could not connect to the database: ' + error.message, 'OK')
+          .subscribe(() => { /* nothing */ });
+      });
   }
 
   connect() {
@@ -87,22 +83,5 @@ export class ConnectionComponent implements OnInit {
   isFieldsSet() {
     const fields: JdbcConnection = this.form.value;
     return fields.endpoint && fields.password && fields.user && fields.vendor;
-  }
-
-  handleError(err?) {
-    const message = err && err.message ? err.message : 'Could not connect to the server.';
-    this.disconnect();
-    const dialogRef = this.dialog.open(ErrorDialogComponent, {
-      data: {
-        message,
-        accept: 'Retry?',
-        decline: 'Cancel'
-      }
-    });
-    dialogRef.afterClosed().subscribe((res) => {
-      if (res) {
-        this.testConnection();
-      }
-    });
   }
 }

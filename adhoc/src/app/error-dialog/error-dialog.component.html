@@ -7,5 +7,5 @@
 
 <div mat-dialog-actions>
   <button mat-button [matDialogClose]="true" tabindex="2">{{error.accept}}</button>
-  <button mat-button (click)="onNoClick()" tabindex="-1">{{error.decline}}</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1" *ngIf="error?.decline">{{error.decline}}</button>
 </div>
