@@ -29,7 +29,7 @@ export class PreviewComponent implements OnInit {
       } else {
         this.vendors = data.vendors;
       }
-    }, error => this.handleError());
+    }, err => this.handleError());
   }
 
   ngOnInit() {
@@ -54,7 +54,6 @@ export class PreviewComponent implements OnInit {
   }
 
   handleData = data => {
-    console.log('data', data);
     if (!data) {
       this.handleError();
     } else {
@@ -64,23 +63,20 @@ export class PreviewComponent implements OnInit {
 
   fetchVendors() {
     this.connectionService.vendors().pipe(
-      retry(1),
       map(res => res),
       catchError((err) => {
-        console.log('caught', err);
         return of(null);
       })
     ).subscribe(data => this.handleData(data));
   }
 
   handleError() {
-    console.log('handling error');
     const dialogRef = this.dialog.open(ErrorDialogComponent, {data: {
-        message: 'Could not get the list of supported vendors from the server',
+        message: 'Could not get the list of supported vendors from the server.',
         accept: 'Retry?',
         decline: 'Cancel'
       }});
-    dialogRef.afterClosed().subscribe((res: boolean) => {
+    dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.fetchVendors();
       }
