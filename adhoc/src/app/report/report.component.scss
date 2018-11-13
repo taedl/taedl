@@ -8,10 +8,15 @@
 
   .drag-container {
     background-color: whitesmoke;
+
+    mat-expansion-panel {
+      margin: 0.5em;
+    }
+
     .stretched-button {
       text-align: left;
       display: block;
-      width: 90%;
+      width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       margin: 0.5em auto;
@@ -63,8 +68,8 @@
       background-color: #fff;
       border-radius: 2px;
       color: $primary;
-      min-height: 6em;
       margin: 0.5em;
+      padding: 0.5em;
 
       .stretched-button {
         text-align: left;
@@ -141,7 +146,7 @@
   align-items: center;
   justify-content: center;
   color: $primary;
-  padding: 2.5em;
+  padding: 1.5em;
 }
 
 .row-description {

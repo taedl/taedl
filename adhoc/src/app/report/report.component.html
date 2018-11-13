@@ -4,11 +4,23 @@
 
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
-    <div *ngFor="let t of tables">
-      {{t.name}}
-      <button *ngFor="let c of t.columns" mat-raised-button draggable [dragData]="c" disableRipple class="stretched-button"
-              [ngClass]="{'selected-row': isSelected(c, 'row'), 'selected-column': isSelected(c, 'column')}">{{c.name}}</button>
-    </div>
+    <!--<div *ngFor="let t of tables">-->
+      <!--{{t.name}}-->
+      <!--<button *ngFor="let c of t.columns" mat-raised-button draggable [dragData]="c" disableRipple class="stretched-button"-->
+              <!--[ngClass]="{'selected-row': isSelected(c, 'row'), 'selected-column': isSelected(c, 'column')}">{{c.name}}</button>-->
+    <!--</div>-->
+    <mat-accordion [multi]="true" [displayMode]="'flat'">
+      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{t.name}}</mat-panel-title>
+          <!--<mat-panel-description></mat-panel-description>-->
+        </mat-expansion-panel-header>
+        <button *ngFor="let c of t.columns" mat-raised-button draggable [dragData]="c" disableRipple class="stretched-button"
+                [ngClass]="{'selected-row': isSelected(c, 'row'), 'selected-column': isSelected(c, 'column')}">{{c.name}}</button>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
   </div>
   <div class="info-container">
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onColumnDrop($event)">

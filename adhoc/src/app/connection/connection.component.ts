@@ -2,10 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JdbcConnection } from '../services/model';
-import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { errorHandler } from '../error-dialog/error-handler';
 
 @Component({
@@ -48,6 +45,7 @@ export class ConnectionComponent implements OnInit {
   }
 
   testConnection() {
+    this.disconnect();
     const connection = new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
       this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value);
     this.connectionsApiService.testConnection(connection)

@@ -93,12 +93,12 @@ export class DomainComponent implements OnInit, OnChanges {
     if (changes.connection.currentValue) {
       this.connectionApiSerice.tablesMetadata(changes.connection.currentValue)
         .subscribe(result => {
-            this.tables = result.map(t => ({ table: t, selected: false }));
-            this.notifyAllTables.emit(result);
-            this.initGraph();
-            this.initJoins();
-          }, error => {
-          errorHandler(this.dialog, 'Could not get tables metadata: ' + error.message, 'OK')
+          this.tables = result.map(t => ({ table: t, selected: false }));
+          this.notifyAllTables.emit(result);
+          this.initGraph();
+          this.initJoins();
+        }, error => {
+          errorHandler(this.dialog, 'Could not get tables metadata: ' +  error.error || error.message, 'OK')
             .subscribe(() => { /* nothing */ });
         });
     } else {
@@ -153,7 +153,8 @@ export class DomainComponent implements OnInit, OnChanges {
           this.tableDataSource.paginator = this.paginator;
         });
       }, error => {
-        errorHandler(this.dialog, 'Could not generate preview: ' + error.message, 'OK')
+        console.log('error', error);
+        errorHandler(this.dialog, 'Could not generate preview: ' + error.error || error.message, 'OK')
           .subscribe(() => { /* nothing */ });
       });
   }
@@ -246,8 +247,7 @@ export class DomainComponent implements OnInit, OnChanges {
     const matchedForeignToPrimary = this.joins.filter(item => item.foreignKey.tableName === data.source &&
       item.primaryKey.tableName === data.target);
     if (matchedForeignToPrimary.length !== 1 && matchedPrimaryToForeign.length !== 1) {
-      // throw new Error('Unknown join');
-      console.error('unknown join', data);
+      // unknown join
     }
     return matchedPrimaryToForeign.length === 1 ? matchedPrimaryToForeign[0].type : matchedForeignToPrimary[0].type;
   }
