@@ -4,11 +4,6 @@
 
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
-    <!--<div *ngFor="let t of tables">-->
-      <!--{{t.name}}-->
-      <!--<button *ngFor="let c of t.columns" mat-raised-button draggable [dragData]="c" disableRipple class="stretched-button"-->
-              <!--[ngClass]="{'selected-row': isSelected(c, 'row'), 'selected-column': isSelected(c, 'column')}">{{c.name}}</button>-->
-    <!--</div>-->
     <mat-accordion [multi]="true" [displayMode]="'flat'">
       <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="true">
         <mat-expansion-panel-header>

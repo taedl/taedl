@@ -1,7 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConnectionComponent } from './connection.component';
-import { MatCardModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule } from '@angular/material';
+import {
+  MatCardModule, MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatOptionModule,
+  MatSelectModule,
+  MatToolbarModule
+} from '@angular/material';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -20,6 +28,9 @@ describe('ConnectionComponent', () => {
         MatFormFieldModule,
         MatOptionModule,
         MatSelectModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatDialogModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,

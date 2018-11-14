@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EchartComponent } from './echart.component';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 describe('EchartComponent', () => {
   let component: EchartComponent;
@@ -8,7 +9,8 @@ describe('EchartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EchartComponent ]
+      declarations: [ EchartComponent ],
+      imports: [ NgxEchartsModule ]
     })
     .compileComponents();
   }));

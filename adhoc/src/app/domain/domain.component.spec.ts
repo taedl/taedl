@@ -2,9 +2,18 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DomainComponent } from './domain.component';
 import { ConnectionsApiService } from '../services/connections-api.service';
-import { MatListModule } from '@angular/material';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MatIconModule,
+  MatListModule,
+  MatPaginatorModule,
+  MatTableModule,
+  MatToolbarModule
+} from '@angular/material';
 import { NgDragDropModule } from 'ng-drag-drop';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 describe('DomainComponent', () => {
   let component: DomainComponent;
@@ -13,8 +22,27 @@ describe('DomainComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DomainComponent ],
-      providers: [ ConnectionsApiService ],
-      imports: [ MatListModule, NgDragDropModule.forRoot(), HttpClientTestingModule ]
+      providers: [
+        ConnectionsApiService,
+        {
+          provide: MatDialogRef,
+          useValue: {
+            close: (dialogResult: any) => { }
+          }
+        },
+      ],
+      imports: [
+        MatListModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatDialogModule,
+        NgxEchartsModule,
+        NgDragDropModule.forRoot(),
+        HttpClientTestingModule,
+        MatDialogModule
+      ]
     })
     .compileComponents();
   }));
