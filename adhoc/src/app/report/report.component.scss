@@ -69,14 +69,14 @@
       border-radius: 2px;
       color: $primary;
       margin: 0.5em;
-      padding: 0.5em;
+      //padding: 0.5em;
 
       .stretched-button {
         text-align: left;
         display: inline-block;
         overflow: hidden;
         text-overflow: ellipsis;
-        margin: 0.5em 0.5em 0 0.5em;
+        margin: 1em 0.5em;
         border: 1px solid $primary;
         color: $primary;
         -webkit-box-shadow: none;
@@ -147,6 +147,11 @@
   justify-content: center;
   color: $primary;
   padding: 1.5em;
+}
+
+.padded-lots {
+  padding-top: 6em;
+  padding-bottom: 6em;
 }
 
 .row-description {

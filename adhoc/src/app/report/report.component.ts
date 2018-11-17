@@ -167,6 +167,12 @@ export class ReportComponent implements OnInit, OnChanges {
     this.updateTable();
   }
 
+  cancelFilter(f: Filter) {
+    const ind = this.filters.indexOf(f);
+    this.filters.splice(ind, 1);
+    this.updateTable();
+  }
+
   isTable() {
     return this.rows.length === 0;
   }

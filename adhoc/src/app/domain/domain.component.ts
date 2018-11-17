@@ -79,6 +79,7 @@ export class DomainComponent implements OnInit, OnChanges {
   tableDataSource = new MatTableDataSource<any>();
   joins: IJoin[] = [];
   joinChain: string[] = [];
+  joinCandidateTables: ITableMetaData[] = [];
 
   option = null;
 
@@ -260,11 +261,32 @@ export class DomainComponent implements OnInit, OnChanges {
             j.primaryKey.tableName === event.data.source && j.foreignKey.tableName === event.data.target ||
             j.primaryKey.tableName === event.data.target && j.foreignKey.tableName === event.data.source)[0];
           this.openJoinDialog(join);
+        } else if (event.dataType === 'node') {
+          const table: ITableMetaData = this.tables.map(t => t.table).filter(t => t.name === event.data.name)[0];
+          this.processJoinCandidates(table);
         }
         return;
       default:
         return;
     }
+  }
+
+  processJoinCandidates(table: ITableMetaData) {
+    const ind = this.joinCandidateTables.indexOf(table);
+    if (ind !== -1) {
+      this.joinCandidateTables.splice(ind, 1);
+      return;
+    }
+
+    this.joinCandidateTables.push(table);
+    if (this.joinCandidateTables.length === 2) {
+      this.openJoinCandidatesDialog();
+    }
+
+  }
+
+  openJoinCandidatesDialog(): void {
+
   }
 
   openJoinDialog(join: IJoin): void {

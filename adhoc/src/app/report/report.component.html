@@ -5,7 +5,7 @@
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
     <mat-accordion [multi]="true" [displayMode]="'flat'">
-      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="true">
+      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z0" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>{{t.name}}</mat-panel-title>
           <!--<mat-panel-description></mat-panel-description>-->
@@ -19,7 +19,7 @@
   </div>
   <div class="info-container">
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onColumnDrop($event)">
-      <span class="description" *ngIf="columns.length === 0">Drop your columns here...</span>
+      <span class="description" *ngIf="columns.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your columns here...</span>
       <span *ngIf="columns.length > 0" class="title">Columns: </span>
       <button *ngFor="let c of columns; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button">
         <mat-icon (click)="cancelColumn(c)">cancel</mat-icon>
@@ -29,7 +29,7 @@
       </button>
     </div>
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onRowDrop($event)">
-      <span class="description row-description" *ngIf="rows.length === 0">Drop your rows here...</span>
+      <span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>
       <span *ngIf="rows.length > 0" class="title row-title">Rows: </span>
       <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">
         <mat-icon (click)="cancelRow(r)">cancel</mat-icon>
@@ -75,7 +75,8 @@
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onFilterDrop($event)">
       <span class="description" *ngIf="filters.length === 0">Drop your filters here...</span>
       <span class="title" *ngIf="filters.length > 0">Filters: </span>
-      <button *ngFor="let f of filters" mat-raised-button class="stretched-button" (click)="onFilterClick(f)" matTooltip="{{describeFilter(f)}}">
+      <button *ngFor="let f of filters" mat-raised-button class="stretched-button" disableRipple (click)="onFilterClick(f)" matTooltip="{{describeFilter(f)}}">
+        <mat-icon (click)="cancelFilter(c)">cancel</mat-icon>
         {{describeFilter(f)}}
       </button>
     </div>

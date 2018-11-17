@@ -39,7 +39,7 @@ export class CrosstabComponent implements OnInit, OnChanges {
       return x;
     }, []);
 
-    if (this.table.data[0].length > 2) {
+    if (this.table.data[0] && this.table.data[0].length > 2) {
       this.totalsTemp = this.table.data.map((row, ind) => {
         const n = row[1];
         const val = Number(row[row.length - 1 ]);
