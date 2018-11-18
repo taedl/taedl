@@ -12,6 +12,7 @@ import { ConnectionsApiService } from '../services/connections-api.service';
 import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 import * as _ from 'lodash';
 import { errorHandler } from '../error-dialog/error-handler';
+import { JoinManualDialogComponent } from '../join-manual-dialog/join-manual-dialog.component';
 
 const empty = {
   // tooltip: {
@@ -280,13 +281,17 @@ export class DomainComponent implements OnInit, OnChanges {
 
     this.joinCandidateTables.push(table);
     if (this.joinCandidateTables.length === 2) {
-      this.openJoinCandidatesDialog();
+      this.openManualJoinDialog();
     }
 
   }
 
-  openJoinCandidatesDialog(): void {
+  openManualJoinDialog(): void {
+    const dialogRef = this.dialog.open(JoinManualDialogComponent, {data: this.joinCandidateTables });
+    dialogRef.afterClosed().subscribe((result: IJoin) => {
+      console.log('manual join: ', result);
 
+    });
   }
 
   openJoinDialog(join: IJoin): void {

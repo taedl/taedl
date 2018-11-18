@@ -55,6 +55,7 @@ import { JoinDialogComponent } from './join-dialog/join-dialog.component';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 import { PreviewResolverService } from './preview/preview-resolver.service';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+import { JoinManualDialogComponent } from './join-manual-dialog/join-manual-dialog.component';
 
 const routes: Routes = [
   { path: '', resolve: { vendors: PreviewResolverService }, component: PreviewComponent }
@@ -71,10 +72,12 @@ const routes: Routes = [
     EchartComponent,
     JoinDialogComponent,
     FilterDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    JoinManualDialogComponent
   ],
   entryComponents: [
     JoinDialogComponent,
+    JoinManualDialogComponent,
     FilterDialogComponent,
     ErrorDialogComponent
   ],
