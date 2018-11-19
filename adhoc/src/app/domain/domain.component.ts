@@ -192,6 +192,13 @@ export class DomainComponent implements OnInit, OnChanges {
     this.option = {...this.option};
   }
 
+  vertexColour(table: ITable) {
+    if (this.joinCandidateTables.indexOf(table.table) !== -1) {
+      return 'orange';
+    }
+    return table.selected ? '#e91e63' : '#3f51b5';
+  }
+
   initGraph() {
     this.option = _.cloneDeep(empty);
     const that = this;
@@ -199,7 +206,7 @@ export class DomainComponent implements OnInit, OnChanges {
       this.option.series[0].data.push({
         name: t.table.name,
         itemStyle: {
-          color: t.selected ? '#e91e63' : '#3f51b5'
+          color: this.vertexColour(t)
         }
       });
 
@@ -276,21 +283,26 @@ export class DomainComponent implements OnInit, OnChanges {
     const ind = this.joinCandidateTables.indexOf(table);
     if (ind !== -1) {
       this.joinCandidateTables.splice(ind, 1);
+      this.initGraph();
       return;
     }
 
     this.joinCandidateTables.push(table);
+    this.initGraph();
     if (this.joinCandidateTables.length === 2) {
       this.openManualJoinDialog();
     }
-
   }
 
   openManualJoinDialog(): void {
     const dialogRef = this.dialog.open(JoinManualDialogComponent, {data: this.joinCandidateTables });
     dialogRef.afterClosed().subscribe((result: IJoin) => {
       console.log('manual join: ', result);
-
+      if (!result) {
+        return;
+      }
+      this.joinCandidateTables = [];
+      this.initGraph();
     });
   }
 
