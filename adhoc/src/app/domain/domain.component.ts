@@ -250,6 +250,38 @@ export class DomainComponent implements OnInit, OnChanges {
     this.notifyJoins.emit(this.joins);
   }
 
+  addJoin(j: IJoin) {
+    const reverse = {
+      primaryKey: j.foreignKey,
+      foreignKey: j.primaryKey,
+      type: j.type === JOIN_TYPES.INNER || j.type === JOIN_TYPES.FULL ? j.type :
+        j.type === JOIN_TYPES.LEFT ? JOIN_TYPES.RIGHT : JOIN_TYPES.LEFT
+    };
+    this.joins.push(j);
+    this.joins.push(reverse);
+
+    const ind = this.tables.map(item => item.table.name).indexOf(j.primaryKey.tableName);
+    const added = {
+      primary: {
+        name: j.primaryKey.name,
+        tableName: j.primaryKey.tableName,
+        type: null,
+        columnSize: null
+      },
+      foreign: {
+        name: j.foreignKey.name,
+        tableName: j.foreignKey.tableName,
+        type: null,
+        columnSize: null
+      }
+    };
+    if (this.tables[ind].table.exportedKeys.indexOf(added) === -1) {
+      this.tables[ind].table.exportedKeys.push(added);
+    }
+
+    this.notifyJoins.emit(this.joins);
+  }
+
   join(data): string {
     const matchedPrimaryToForeign = this.joins.filter(item => item.primaryKey.tableName === data.source &&
       item.foreignKey.tableName === data.target);
@@ -301,8 +333,12 @@ export class DomainComponent implements OnInit, OnChanges {
       if (!result) {
         return;
       }
+      this.addJoin(result);
       this.joinCandidateTables = [];
       this.initGraph();
+      if (this.selectedTables.length) {
+        this.preview();
+      }
     });
   }
 

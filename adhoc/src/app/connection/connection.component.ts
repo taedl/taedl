@@ -45,6 +45,7 @@ export class ConnectionComponent implements OnInit {
   }
 
   testConnection() {
+    this.disconnect();
     const connection = new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
       this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value);
     this.connectionsApiService.testConnection(connection)
