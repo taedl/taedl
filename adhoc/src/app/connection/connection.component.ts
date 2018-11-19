@@ -45,12 +45,10 @@ export class ConnectionComponent implements OnInit {
   }
 
   testConnection() {
-    this.disconnect();
     const connection = new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
       this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value);
     this.connectionsApiService.testConnection(connection)
       .subscribe(result => {
-        this.isFormSubmitAttempt = true;
         this.connect();
     }, (error) => {
         this.disconnect();
@@ -61,6 +59,7 @@ export class ConnectionComponent implements OnInit {
 
   connect() {
     this.isConnected = true;
+    this.isFormSubmitAttempt = true;
     this.notifyConnected.emit(new JdbcConnection(this.form.get('endpoint').value, this.form.get('database').value,
       this.form.get('user').value, this.form.get('password').value, this.form.get('vendor').value));
   }
