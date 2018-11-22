@@ -56,6 +56,7 @@ import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 import { PreviewResolverService } from './preview/preview-resolver.service';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { JoinManualDialogComponent } from './join-manual-dialog/join-manual-dialog.component';
+import { AggregationDialogComponent } from './aggregation-dialog/aggregation-dialog.component';
 
 const routes: Routes = [
   { path: '', resolve: { vendors: PreviewResolverService }, component: PreviewComponent }
@@ -73,13 +74,15 @@ const routes: Routes = [
     JoinDialogComponent,
     FilterDialogComponent,
     ErrorDialogComponent,
-    JoinManualDialogComponent
+    JoinManualDialogComponent,
+    AggregationDialogComponent
   ],
   entryComponents: [
     JoinDialogComponent,
     JoinManualDialogComponent,
     FilterDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    AggregationDialogComponent
   ],
   imports: [
     BrowserModule,

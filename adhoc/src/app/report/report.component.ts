@@ -7,6 +7,7 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { ReportsApiService } from '../services/reports-api.service';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { errorHandler } from '../error-dialog/error-handler';
+import { AggregationDialogComponent } from '../aggregation-dialog/aggregation-dialog.component';
 
 @Component({
   selector: 'app-report',
@@ -199,5 +200,19 @@ export class ReportComponent implements OnInit, OnChanges {
     const to = direction === 'left' ? from - 1 : from + 1;
     this.columns.splice(to, 0, cutOut);
     this.updateTable();
+  }
+
+  setAggregation = (row: IAggregatedColumn) => {
+
+    const dialogRef = this.dialog.open(AggregationDialogComponent, {data: row});
+    dialogRef.afterClosed().subscribe((updRow: IAggregatedColumn) => {
+
+      if (!updRow) {
+        return;
+      }
+
+      row = { ...updRow };
+      this.updateTable();
+    });
   }
 }

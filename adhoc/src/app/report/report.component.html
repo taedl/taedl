@@ -31,7 +31,7 @@
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onRowDrop($event)">
       <span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>
       <span *ngIf="rows.length > 0" class="title row-title">Rows: </span>
-      <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">
+      <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button" (click)="setAggregation(r)">
         <mat-icon (click)="cancelRow(r)">cancel</mat-icon>
         <mat-icon (click)="moveRow(r, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
         <mat-icon (click)="moveRow(r, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
