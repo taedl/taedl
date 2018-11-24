@@ -5,6 +5,7 @@ spring:
 packaged.jdbc.driver.classes: postgresql,mysql,sqlserver
 
 preview.limit: 100
+report.limit: 5000
 
 ---
 

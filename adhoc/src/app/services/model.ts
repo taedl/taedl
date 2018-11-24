@@ -62,30 +62,34 @@ export interface IPreview {
 export const Aggregation = {
   COUNT: 'COUNT',
   SUM: 'SUM',
-  AVG: 'AVG'
+  // AVG: 'AVG'
 };
 
 export const STRING_FILTER_TYPES = [
-  'EQUALS', 'STARTS_WITH', 'ENDS_WITH', 'CONTAINS'
+  'STRING_EQUALS', 'STRING_STARTS_WITH', 'STRING_ENDS_WITH', 'STRING_CONTAINS'
 ];
 
 export const NUMERIC_FILTER_TYPES = ['EQUALS', 'LESS', 'LESS_OR_EQUAL', 'GREATER_OR_EQUAL', 'GREATER'];
 
 export const FILTER_TYPES = [
   {
-    name: 'EQUALS',
+    name: 'STRING_EQUALS',
     label: '='
   }, {
-    name: 'STARTS_WITH',
+    name: 'STRING_STARTS_WITH',
     label: 'starts with'
   },
   {
-    name: 'ENDS_WITH',
+    name: 'STRING_ENDS_WITH',
     label: 'ends with'
   },
   {
-    name: 'CONTAINS',
+    name: 'STRING_CONTAINS',
     label: 'contains'
+  },
+  {
+    name: 'EQUALS',
+    label: '='
   },
   {
     name: 'LESS',
@@ -104,6 +108,8 @@ export const FILTER_TYPES = [
     label: '>='
   },
 ];
+
+export const NUMERIC_TYPES = ['int', 'float', 'double', 'num', 'real', 'serial'];
 
 export interface IAggregatedColumn {
   column: IColumn;

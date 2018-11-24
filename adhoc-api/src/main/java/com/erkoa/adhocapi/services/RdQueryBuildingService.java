@@ -31,10 +31,12 @@ public class RdQueryBuildingService implements QueryBuildingService {
     private final String AGGREGATION_DELIMITER = "$$$";
 
     private final String previewLimit;
+    private final String reportLimit;
 
     @Autowired
-    public RdQueryBuildingService(@Value("${preview.limit}") String previewLimit) {
+    public RdQueryBuildingService(@Value("${preview.limit}") String previewLimit, @Value("${report.limit}") String reportLimit) {
         this.previewLimit = previewLimit;
+        this.reportLimit = reportLimit;
     }
 
     @Override
@@ -94,7 +96,7 @@ public class RdQueryBuildingService implements QueryBuildingService {
 
     @Override
     public String generateTableQuery(List<TableMetaData> tables, List<Column> columns, List<AggregatedColumn> aggregatedColumns,
-                                     List<Join> joins, List<Filter> filters) {
+                                     List<Join> joins, List<Filter> filters, String vendor) {
         if (CollectionUtils.isEmpty(columns)) {
             throw new QueryBuildingException("Could not generate table query, no columns provided");
         }
@@ -116,8 +118,8 @@ public class RdQueryBuildingService implements QueryBuildingService {
             });
         }
 
-        return select(columns, aggregatedColumns, null, null) + from(tablesToJoin, joins, filters) + filters(filters) +
-                groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise(null, null);
+        return select(columns, aggregatedColumns, vendor, false) + from(tablesToJoin, joins, filters) + filters(filters) +
+                groupBy(columns, aggregatedColumns) + orderBy(columns, aggregatedColumns) + finalise(vendor, false);
     }
 
     private String filters(List<Filter> filters) {
@@ -131,14 +133,14 @@ public class RdQueryBuildingService implements QueryBuildingService {
                 .map(filter -> {
 
                     String condition = "";
-                    if (filter.getCondition().equals(FilterCondition.STARTS_WITH)) {
+                    if (filter.getCondition().equals(FilterCondition.STRING_STARTS_WITH)) {
                         condition = " like '" + filter.getConstant() + "%'";
-                    } else if (filter.getCondition().equals(FilterCondition.ENDS_WITH)) {
+                    } else if (filter.getCondition().equals(FilterCondition.STRING_ENDS_WITH)) {
                         condition = " like '%" + filter.getConstant() + "'";
-                    } else if (filter.getCondition().equals(FilterCondition.CONTAINS)) {
+                    } else if (filter.getCondition().equals(FilterCondition.STRING_CONTAINS)) {
                         condition = " like '%" + filter.getConstant() + "%'";
                     } else {
-                        condition = pad(filter.getCondition().toString()) + "'" + filter.getConstant() + "'";
+                        condition = pad(filter.getCondition().toString()) + filter.getConstant();
                     }
 
                     return filter.getColumn().getTableName().concat(".")
@@ -174,7 +176,15 @@ public class RdQueryBuildingService implements QueryBuildingService {
 
     //TODO: consider doing "select as" - will be easier extracting data form resultset this way
     private String select(List<Column> columns, List<AggregatedColumn> aggregatedColumns, String vendor, Boolean preview) {
-        String select = BooleanUtils.isTrue(preview) && vendor.equals(SQL_SERVER) ? "select top" + previewLimit : SELECT;
+
+        String select;
+
+        if (vendor.equals(SQL_SERVER)) {
+            select = BooleanUtils.isTrue(preview) ? "select top " + previewLimit : "select top " + reportLimit;
+        } else {
+            select = SELECT;
+        }
+
         String query = padRight(select) +
                 columns.stream().map(column -> column.getTableName().concat(".").concat(column.getName())).collect(Collectors.joining(", "));
 
@@ -297,7 +307,11 @@ public class RdQueryBuildingService implements QueryBuildingService {
     }
 
     private String finalise(String vendor, Boolean preview) {
-        return BooleanUtils.isTrue(preview) && (vendor.equals(POSTGRESQL) || vendor.equals(MYSQL)) ? " limit " + previewLimit + END : END;
+        if (vendor.equals(SQL_SERVER)) {
+            return END;
+        } else {
+            return BooleanUtils.isTrue(preview) ? " limit " + previewLimit + END : " limit " + reportLimit + END;
+        }
     }
 
     private String pad() {
