@@ -71,45 +71,28 @@ export const STRING_FILTER_TYPES = [
 
 export const NUMERIC_FILTER_TYPES = ['EQUALS', 'LESS', 'LESS_OR_EQUAL', 'GREATER_OR_EQUAL', 'GREATER'];
 
-export const FILTER_TYPES = [
-  {
-    name: 'STRING_EQUALS',
-    label: '='
-  }, {
-    name: 'STRING_STARTS_WITH',
-    label: 'starts with'
-  },
-  {
-    name: 'STRING_ENDS_WITH',
-    label: 'ends with'
-  },
-  {
-    name: 'STRING_CONTAINS',
-    label: 'contains'
-  },
-  {
-    name: 'EQUALS',
-    label: '='
-  },
-  {
-    name: 'LESS',
-    label: '<'
-  },
-  {
-    name: 'LESS_OR_EQUAL',
-    label: '<='
-  },
-  {
-    name: 'GREATER',
-    label: '>'
-  },
-  {
-    name: 'GREATER_OR_EQUAL',
-    label: '>='
-  },
-];
+export const DATE_FILTER_TYPES = ['DATE_EQUALS', 'DATE_LESS', 'DATE_LESS_OR_EQUAL', 'DATE_GREATER_OR_EQUAL', 'DATE_GREATER'];
+
+export const FILTER_TYPES = {
+  STRING_EQUALS: 'equals',
+  STRING_STARTS_WITH: 'starts with',
+  STRING_ENDS_WITH: 'ends with',
+  STRING_CONTAINS: 'contains',
+  EQUALS: '=',
+  LESS: '<',
+  LESS_OR_EQUAL: '<=',
+  GREATER: '>',
+  GREATER_OR_EQUAL: '>=',
+  DATE_EQUALS: '=',
+  DATE_LESS: '<',
+  DATE_LESS_OR_EQUAL: '<=',
+  DATE_GREATER: '>',
+  DATE_GREATER_OR_EQUAL: '>='
+};
 
 export const NUMERIC_TYPES = ['int', 'float', 'double', 'num', 'real', 'serial'];
+
+export const DATE_TYPES = ['date'];
 
 export interface IAggregatedColumn {
   column: IColumn;

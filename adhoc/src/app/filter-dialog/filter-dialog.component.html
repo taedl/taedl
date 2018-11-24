@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-select [(ngModel)]="filter.condition" placeholder="Selection condition">
-      <mat-option *ngFor="let f of supportedFilterTypes" [value]="f">{{f}}</mat-option>
+      <mat-option *ngFor="let f of supportedFilterTypes" [value]="f">{{filterNameValues[f]}}</mat-option>
     </mat-select>
   </mat-form-field>
   &nbsp;&nbsp;

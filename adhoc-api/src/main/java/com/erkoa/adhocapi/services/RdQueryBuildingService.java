@@ -140,14 +140,24 @@ public class RdQueryBuildingService implements QueryBuildingService {
                     } else if (filter.getCondition().equals(FilterCondition.STRING_CONTAINS)) {
                         condition = " like '%" + filter.getConstant() + "%'";
                     } else {
-                        condition = pad(filter.getCondition().toString()) + filter.getConstant();
+                        String quote = quote(filter);
+                        condition = pad(filter.getCondition().toString()) + quote + filter.getConstant() + quote;
                     }
 
                     return filter.getColumn().getTableName().concat(".")
                                     .concat(filter.getColumn().getName())
                     .concat(condition);
                 })
-                .collect(Collectors.joining("and "));
+                .collect(Collectors.joining(" and "));
+    }
+
+    private String quote(Filter filter) {
+        return (filter.getCondition().equals(FilterCondition.DATE_EQUALS) ||
+                filter.getCondition().equals(FilterCondition.DATE_LESS) ||
+                filter.getCondition().equals(FilterCondition.DATE_LESS_OR_EQUAL) ||
+                filter.getCondition().equals(FilterCondition.DATE_GREATER) ||
+                filter.getCondition().equals(FilterCondition.DATE_GREATER_OR_EQUAL) ||
+                filter.getCondition().equals(FilterCondition.STRING_EQUALS)) ? "'" : "";
     }
 
     private String groupBy(List<Column> columns, List<AggregatedColumn> aggregatedColumns) {

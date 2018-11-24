@@ -1,6 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { NUMERIC_FILTER_TYPES, STRING_FILTER_TYPES, Filter, NUMERIC_TYPES } from '../services/model';
+import {
+  NUMERIC_FILTER_TYPES,
+  STRING_FILTER_TYPES,
+  Filter,
+  NUMERIC_TYPES,
+  DATE_TYPES,
+  DATE_FILTER_TYPES,
+  FILTER_TYPES
+} from '../services/model';
 
 @Component({
   selector: 'app-filter-dialog',
@@ -10,6 +18,7 @@ import { NUMERIC_FILTER_TYPES, STRING_FILTER_TYPES, Filter, NUMERIC_TYPES } from
 export class FilterDialogComponent implements OnInit {
 
   supportedFilterTypes: string[];
+  filterNameValues = FILTER_TYPES;
 
   constructor(public dialogRef: MatDialogRef<FilterDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public filter: Filter) { }
@@ -17,9 +26,11 @@ export class FilterDialogComponent implements OnInit {
 
   isNumeric = val => NUMERIC_TYPES.map(item => val.indexOf(item)).filter(item => item !== -1).length > 0;
 
+  isDate = val => DATE_TYPES.map(item => val.indexOf(item)).filter(item => item !== -1).length > 0;
+
   ngOnInit() {
     const type = this.filter.column.type.toLowerCase();
-    this.supportedFilterTypes = this.isNumeric(type) ? NUMERIC_FILTER_TYPES : STRING_FILTER_TYPES;
+    this.supportedFilterTypes = this.isNumeric(type) ? NUMERIC_FILTER_TYPES : this.isDate(type) ? DATE_FILTER_TYPES : STRING_FILTER_TYPES;
   }
 
   onNoClick(): void {

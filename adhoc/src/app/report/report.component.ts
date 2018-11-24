@@ -182,8 +182,7 @@ export class ReportComponent implements OnInit, OnChanges {
   }
 
   describeFilter(f: Filter) {
-    return `${f.column.tableName}.${f.column.name} ${FILTER_TYPES
-      .filter(filterType => filterType.name === f.condition)[0].label} ${f.constant}`;
+    return `${f.column.tableName}.${f.column.name} ${FILTER_TYPES[f.condition]} ${f.constant}`;
   }
 
   moveRow(row: IAggregatedColumn, direction: string) {
