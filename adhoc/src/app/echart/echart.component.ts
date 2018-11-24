@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ChartConfig } from '../services/model';
+import { ChartConfig, IResultTable } from '../services/model';
 
 @Component({
   selector: 'app-echart',
@@ -9,7 +9,7 @@ import { ChartConfig } from '../services/model';
 export class EchartComponent implements OnInit, OnChanges {
 
   @Input()
-  table;
+  table: IResultTable;
 
   @Input()
   config: ChartConfig;
@@ -106,17 +106,11 @@ export class EchartComponent implements OnInit, OnChanges {
   };
 
   defaultSunburstOption = {
-    visualMap: {
-      type: 'piecewise',
-      top: 'top',
-    },
     series: {
       type: 'sunburst',
-      data: [],
-      radius: [0, '100%'],
-      label: {
-        rotate: 'radial'
-      }
+      sort: null,
+      highlightPolicy: 'ancestor',
+      data: []
     }
   };
 
@@ -188,7 +182,7 @@ export class EchartComponent implements OnInit, OnChanges {
 
 
   private formatForSunburst(data, allKeys) {
-    if (data[0].length === 1) {
+    if (!data || !data[0] || data[0].length === 1) {
       return;
     }
 
