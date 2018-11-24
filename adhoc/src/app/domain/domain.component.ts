@@ -142,6 +142,9 @@ export class DomainComponent implements OnInit, OnChanges {
   }
 
   preview() {
+    if (this.selectedTables.length === 0) {
+      return;
+    }
     this.connectionApiSerice.preview(this.connection, this.selectedTables, this.joins)
       .subscribe(result => {
         this.resultTable = result.table;
