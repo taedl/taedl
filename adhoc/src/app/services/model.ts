@@ -118,3 +118,8 @@ export interface IError {
   accept: string;
   decline: string;
 }
+
+export const COLOURS = {
+  PRIMARY: '#032965',
+  ACCENT: '#e91e63'
+};

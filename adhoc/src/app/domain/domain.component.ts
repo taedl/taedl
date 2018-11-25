@@ -5,7 +5,7 @@ import {
   ITable,
   JdbcConnection,
   IJoin,
-  JOIN_TYPES
+  JOIN_TYPES, COLOURS
 } from '../services/model';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ConnectionsApiService } from '../services/connections-api.service';
@@ -33,8 +33,7 @@ const empty = {
         }
       },
       itemStyle: {
-        color: '#e91e63',
-        // color: '#3f51b5',
+        color: COLOURS.ACCENT,
       },
       edgeSymbol: ['circle', 'arrow'],
       edgeSymbolSize: [4, 10],
@@ -186,9 +185,9 @@ export class DomainComponent implements OnInit, OnChanges {
       const ind = this.option.series[0].data.map(d => d.name).indexOf(t.table.name);
       const chainInd = this.joinChain.indexOf(t.table.name);
       if (chainInd !== -1 || t.selected) {
-        this.option.series[0].data[ind].itemStyle.color = '#e91e63';
+        this.option.series[0].data[ind].itemStyle.color = COLOURS.ACCENT;
       } else {
-        this.option.series[0].data[ind].itemStyle.color = '#3f51b5';
+        this.option.series[0].data[ind].itemStyle.color = COLOURS.PRIMARY;
       }
     });
 
@@ -199,7 +198,7 @@ export class DomainComponent implements OnInit, OnChanges {
     if (this.joinCandidateTables.indexOf(table.table) !== -1) {
       return 'orange';
     }
-    return table.selected ? '#e91e63' : '#3f51b5';
+    return table.selected ? COLOURS.ACCENT : COLOURS.PRIMARY;
   }
 
   initGraph() {
