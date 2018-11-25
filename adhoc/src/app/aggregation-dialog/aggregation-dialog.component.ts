@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Aggregation, IAggregatedColumn, IJoin } from '../services/model';
+import { Aggregation, IAggregatedColumn, IJoin, NUMERIC_TYPES } from '../services/model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
@@ -10,10 +10,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class AggregationDialogComponent implements OnInit {
 
   aggregationTypes = Object.keys(Aggregation);
+  isNumericType: boolean;
 
   constructor(public dialogRef: MatDialogRef<AggregationDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public row: IAggregatedColumn) {
+    this.isNumericType = this.isNumeric(row.column.type);
   }
+
+  isNumeric = val => NUMERIC_TYPES.map(item => val.indexOf(item)).filter(item => item !== -1).length > 0;
 
   ngOnInit() {
   }

@@ -5,7 +5,7 @@
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
     <mat-accordion [multi]="true" [displayMode]="'flat'">
-      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z0" [expanded]="true">
+      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>{{t.name}}</mat-panel-title>
           <!--<mat-panel-description></mat-panel-description>-->
@@ -31,8 +31,9 @@
     <div class="drop-container mat-elevation-z1" droppable (onDrop)="onRowDrop($event)">
       <span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>
       <span *ngIf="rows.length > 0" class="title row-title">Rows: </span>
-      <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button" (click)="setAggregation(r)">
+      <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">
         <mat-icon (click)="cancelRow(r)">cancel</mat-icon>
+        <mat-icon (click)="setAggregation(r)">functions</mat-icon>
         <mat-icon (click)="moveRow(r, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
         <mat-icon (click)="moveRow(r, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
         {{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}
@@ -69,6 +70,9 @@
       </mat-button-toggle>
       <mat-button-toggle value="chart" [disabled]="isTable()" matTooltip="Chart">
         <mat-icon>timeline</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="map" [disabled]="true" matTooltip="Map is coming soon...">
+        <mat-icon>map</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
 

@@ -107,6 +107,7 @@
       margin-top: 0.5em;
       margin-left: 0.5em;
       background-color: white;
+      width: 92%;
     }
 
     .drop-container {
@@ -115,6 +116,7 @@
       color: $primary;
       margin: 0.5em;
       padding-bottom: 0.5em;
+      min-height: 22.8em !important;
 
       .stretched-button {
         text-align: left;

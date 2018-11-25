@@ -109,6 +109,7 @@ export class ReportComponent implements OnInit, OnChanges {
     this.rows = [];
     this.columns = [];
     this.filters = [];
+    this.reportType = 'table';
   }
 
   resetTable() {
