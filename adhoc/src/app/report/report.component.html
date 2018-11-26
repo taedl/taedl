@@ -5,7 +5,7 @@
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
     <mat-accordion [multi]="true" [displayMode]="'flat'">
-      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="true">
+      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="false">
         <mat-expansion-panel-header>
           <mat-panel-title>{{t.name}}</mat-panel-title>
           <!--<mat-panel-description></mat-panel-description>-->
