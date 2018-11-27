@@ -40,6 +40,21 @@
       width: 100%;
     }
   }
+
+  .grey-wave {
+    height: 200px;
+    overflow: hidden;
+
+    .svg {
+      height: 100%;
+      width: 100%;
+
+      .path {
+        stroke: none;
+        fill: $light-grey;
+      }
+    }
+  }
 }
 
 svg path {
