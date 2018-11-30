@@ -1,8 +1,6 @@
 package com.erkoa.adhocapi.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
