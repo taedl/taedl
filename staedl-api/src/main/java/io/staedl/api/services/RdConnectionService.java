@@ -81,7 +81,7 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws SQLException {
         String query = queryBuildingService.generatePreviewQuery(tables, joins, connectionDetails.getVendor());
-        log.info("Generated preview query: {}", query);
+        log.debug("Generated preview query: {}", query);
         return createTable(connectionDetails, tables, query);
     }
 
@@ -89,7 +89,7 @@ public class RdConnectionService implements ConnectionService {
     public Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns,
                              List<AggregatedColumn> rows, List<Join> joins, List<Filter> filters) throws ClassNotFoundException, SQLException {
         String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins, filters, connectionDetails.getVendor());
-        log.info("Generated table query: {}", query);
+        log.debug("Generated table query: {}", query);
         List<TableMetaData> tablesToJoin = tables.stream().filter(t -> !Collections.disjoint(t.getColumns(), columns)).collect(Collectors.toList());
         return createTable(connectionDetails, tablesToJoin, query);
     }
