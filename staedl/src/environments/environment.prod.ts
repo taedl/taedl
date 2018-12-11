@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  endpoint: 'remember to set'
+  endpoint: 'https://api.staedl.io'
 };
