@@ -1,0 +1,70 @@
+@import '../../variables.scss';
+
+.domain-container {
+  display: grid;
+  grid-gap: 1em;
+  margin: 1em 0.05em;
+  grid-template-columns: 1fr 1fr 4fr;
+
+  .drag-container {
+    background-color: whitesmoke;
+
+    .stretched-button {
+      text-align: left;
+      display: block;
+      width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0.5em auto;
+      border: 1px solid black;
+      color: black;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+
+  .drop-container {
+    background-color: whitesmoke;
+
+    .stretched-button {
+      text-align: left;
+      display: block;
+      width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0.5em auto;
+      border: 1px solid $primary;
+      color: $primary;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+
+  .joins-container {
+    background-color: whitesmoke;
+  }
+}
+
+.description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: whitesmoke;
+  color: $primary
+}
+
+.data {
+  margin: 1em 0.5em;
+  overflow-x: scroll;
+
+  .mat-cell {
+    min-width: 6em;
+  }
+
+  .mat-header-cell{
+    min-width: 6em;
+  }
+}
+

@@ -1,0 +1,35 @@
+@import '../../variables.scss';
+
+.container {
+  margin-left: 2em;
+  margin-right: 2em;
+
+  .form-box {
+
+    .field {
+      margin: 1em;
+      min-width: 10em;
+    }
+    .connection {
+      min-width: 30em;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin-left: 1em;
+    margin-right: 1em;
+
+    .form-box {
+
+      .field {
+        margin: 1em;
+        min-width: 5em;
+      }
+      .connection {
+        min-width: 20em;
+      }
+    }
+  }
+}

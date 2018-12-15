@@ -1,0 +1,69 @@
+@import '../variables.scss';
+
+.fixed-header {
+  top: 0;
+  position: fixed;
+  z-index:999;
+  height: 55px;
+}
+
+.app-content {
+  margin-top: 55px;
+}
+
+.images {
+  margin-top: 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+.gradient-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: -1;
+
+  .bottom-gradient {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    background: -webkit-linear-gradient(270deg,$lighter-blue 10%,$primary-light-blue 85%);
+    background: linear-gradient(-180deg,$lighter-blue 10%,$primary-light-blue 85%);
+
+    .wave {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  .grey-wave {
+    height: 200px;
+    overflow: hidden;
+
+    .svg {
+      height: 100%;
+      width: 100%;
+
+      .path {
+        stroke: none;
+        fill: $medium-grey;
+      }
+    }
+  }
+}
+
+svg path {
+  fill: $white;
+}
+
+@media screen and (min-width: 1024px) {
+  svg {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+}

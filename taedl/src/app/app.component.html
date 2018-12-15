@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" class="mat-elevation-z10 fixed-header">
+  <span class="images"><img src="../assets/taedl-logo-chart.png" alt="adhoclogo" height="55" [routerLink]="['']"></span>
+  <span class="spacer"></span>
+  <span class="images">
+    <a href="https://github.com/PavelYaroshchyk/taedl" target="_blank">
+      <img src="../assets/github.svg" alt="repo" height="32">
+    </a>
+  </span>
+</mat-toolbar>
+<div id="context" class="app-content">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="gradient-container">
+  <div class="grey-wave">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" preserveAspectRatio="none" class="svg">
+      <path d="M-3.64,50.81 C250.72,37.98 202.62,115.95 501.45,56.73 L500.00,150.00 L0.00,150.00 Z" class="path"></path>
+    </svg>
+  </div>
+</div>

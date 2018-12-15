@@ -1,0 +1,40 @@
+<div matDialogTitle>Join {{candidates[0].name}} and {{candidates[1].name}}</div>
+<div mat-dialog-content>
+
+  <mat-form-field class="inline-control">
+    <mat-select placeholder="Column to join on">
+      <mat-option *ngFor="let column of candidates[0].columns" (onSelectionChange)="join.primaryKey.name=column.name" [value]="column.name">
+        {{column.tableName}}.{{column.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <div class="inline-control">
+    <mat-radio-group class="example-radio-group" [(ngModel)]="join.type">
+      <mat-radio-button value="left"><img src="../../assets/left-join.png" alt="left join" height="32px" class="rb"
+                                          matTooltip="left outer join"></mat-radio-button>
+      <mat-radio-button value="inner"><img src="../../assets/inner-join.png" alt="inner join" height="32px" class="rb"
+                                           matTooltip="inner join"></mat-radio-button>
+      <mat-radio-button value="right"><img src="../../assets/right-join.png" alt="right join" height="32px" class="rb"
+                                           matTooltip="right outer join"></mat-radio-button>
+      <mat-radio-button value="full"><img src="../../assets/full-join.png" alt="full join" height="32px" class="rb"
+                                          matTooltip="full outer join"></mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <mat-form-field class="inline-control">
+    <mat-select placeholder="Column to join on">
+      <mat-option *ngFor="let column of candidates[1].columns" (onSelectionChange)="join.foreignKey.name=column.name" [value]="column.name">
+        {{column.tableName}}.{{column.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+
+
+<div mat-dialog-actions>
+  <button *ngIf="join.primaryKey.name && join.foreignKey.name" mat-button [matDialogClose]="join" tabindex="2">Ok</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>

@@ -1,0 +1,23 @@
+@import '~@angular/material/theming';
+@import './styles.scss';
+
+//$app-primary: mat-palette($mat-indigo);
+$app-primary: $my-app-primary;
+$app-accent:  mat-palette($mat-pink);
+$app-warn:    mat-palette($mat-red);
+
+$primary: mat-color($app-primary);
+$accent: mat-color($app-accent);
+$warn: mat-color($app-warn);
+
+$white: #fff;
+$black: #000;
+$light-grey: whitesmoke;
+$medium-grey: #aaa;
+$dark-grey: #7b7b7b;
+$primary-light-blue: #1a8bfb;
+$lighter-blue: #d9eafc;
+$primary-lighter-blue: #5faefc;
+$primary-light-lighter-blue: #3c9cfc;
+$darker-than-primary: #0752df;
+$lighter-accent: #f06292
