@@ -8,7 +8,8 @@ import {
   MatInputModule,
   MatOptionModule,
   MatSelectModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatCheckboxModule
 } from '@angular/material';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ describe('ConnectionComponent', () => {
         MatToolbarModule,
         MatIconModule,
         MatDialogModule,
+        MatCheckboxModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientTestingModule,

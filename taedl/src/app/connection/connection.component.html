@@ -31,6 +31,9 @@
           </mat-select>
         </mat-form-field>
 
+
+        <mat-checkbox formControlName="agreed" class="field">Agree to T&Cs </mat-checkbox>
+
         <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
 
         <button mat-button color="primary" type="submit"

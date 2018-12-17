@@ -21,7 +21,10 @@ describe('AggregationDialogComponent', () => {
         },
         {
           provide: MAT_DIALOG_DATA, useValue: {
-            aggregation: 'COUNT'
+            aggregation: 'COUNT',
+            column: {
+              type: 'int'
+            }
           }
         }
       ]

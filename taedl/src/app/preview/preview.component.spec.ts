@@ -5,7 +5,7 @@ import { ConnectionComponent } from '../connection/connection.component';
 import { DomainComponent } from '../domain/domain.component';
 import {
   MatButtonToggleModule,
-  MatCardModule, MatDialogModule, MatExpansionModule,
+  MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule,
   MatFormFieldModule, MatIconModule,
   MatInputModule,
   MatListModule,
@@ -26,6 +26,7 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ConnectionsApiService } from '../services/connections-api.service';
+import { TermsAndConditionsComponent } from '../terms-and-conditions/terms-and-conditions.component';
 
 describe('PreviewComponent', () => {
   let component: PreviewComponent;
@@ -47,7 +48,8 @@ describe('PreviewComponent', () => {
         ReportComponent,
         CrosstabComponent,
         EchartComponent,
-        ErrorDialogComponent
+        ErrorDialogComponent,
+        TermsAndConditionsComponent
       ],
       imports: [
         MatCardModule,
@@ -71,7 +73,8 @@ describe('PreviewComponent', () => {
         MatButtonToggleModule,
         MatTooltipModule,
         RouterTestingModule,
-        MatDialogModule
+        MatDialogModule,
+        MatCheckboxModule
       ],
       providers: [
         { provide: ActivatedRoute, useValue: routeStub },

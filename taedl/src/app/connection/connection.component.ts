@@ -34,7 +34,8 @@ export class ConnectionComponent implements OnInit {
       database:  ['', Validators.required],
       user: ['', Validators.required],
       password: ['', Validators.required],
-      vendor: ['', Validators.required]
+      vendor: ['', Validators.required],
+      agreed: false
     });
   }
 
@@ -80,6 +81,6 @@ export class ConnectionComponent implements OnInit {
 
   isFieldsSet() {
     const fields: JdbcConnection = this.form.value;
-    return fields.endpoint && fields.password && fields.user && fields.vendor;
+    return this.form.value.agreed && fields.endpoint && fields.password && fields.user && fields.vendor;
   }
 }

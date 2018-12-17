@@ -57,6 +57,7 @@ import { PreviewResolverService } from './preview/preview-resolver.service';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { JoinManualDialogComponent } from './join-manual-dialog/join-manual-dialog.component';
 import { AggregationDialogComponent } from './aggregation-dialog/aggregation-dialog.component';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 
 const routes: Routes = [
   { path: '', resolve: { vendors: PreviewResolverService }, component: PreviewComponent }
@@ -75,7 +76,8 @@ const routes: Routes = [
     FilterDialogComponent,
     ErrorDialogComponent,
     JoinManualDialogComponent,
-    AggregationDialogComponent
+    AggregationDialogComponent,
+    TermsAndConditionsComponent
   ],
   entryComponents: [
     JoinDialogComponent,

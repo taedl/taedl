@@ -9,6 +9,9 @@
     <mat-tab label="Report" [disabled]="!connection || !tables || tables.length === 0">
       <app-report [connection]="connection" [tables]="tables" [joins]="joins" [allTables]="allTables"></app-report>
     </mat-tab>
+    <mat-tab label="T&Cs">
+      <app-terms-and-conditions></app-terms-and-conditions>
+    </mat-tab>
   </mat-tab-group>
 </div>
 
