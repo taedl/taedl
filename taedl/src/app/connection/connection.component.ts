@@ -76,7 +76,7 @@ export class ConnectionComponent implements OnInit {
   }
 
   openTermsTab() {
-    this.notifyTermsAndConditions.emit(null);
+    this.notifyTermsAndConditions.emit(true);
   }
 
   isFieldInvalid(field: string) {

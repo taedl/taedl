@@ -1,5 +1,5 @@
 <div *ngIf="vendors?.length">
-  <mat-tab-group [selectedIndex]="selectedTab">
+  <mat-tab-group [(selectedIndex)]="selectedTab">
     <mat-tab label="Connection">
       <app-connection (notifyConnected)="handleConnected($event)" (notifyTermsAndConditions)="handleTermsAndConditions()" [vendors]="vendors"></app-connection>
     </mat-tab>
