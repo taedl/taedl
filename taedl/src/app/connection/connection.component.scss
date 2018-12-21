@@ -10,6 +10,14 @@
       margin: 1em;
       min-width: 10em;
     }
+    .narrow-field {
+      margin-right: 0.2em !important;
+    }
+    .as-link {
+      text-decoration: underline;
+      cursor: pointer;
+      vertical-align: middle;
+    }
     .connection {
       min-width: 30em;
     }
@@ -31,6 +39,14 @@
       .field {
         margin: 1em;
         min-width: 5em;
+      }
+      .narrow-field {
+        margin-right: 0.2em !important;
+      }
+      .as-link {
+        text-decoration: underline;
+        cursor: pointer;
+        vertical-align: middle;
       }
       .connection {
         min-width: 20em;

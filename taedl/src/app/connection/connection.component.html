@@ -32,7 +32,8 @@
         </mat-form-field>
 
 
-        <mat-checkbox formControlName="agreed" class="field">Agree to T&Cs </mat-checkbox>
+        <mat-checkbox formControlName="agreed" class="field narrow-field">Agree to </mat-checkbox>
+        <span class="as-link" (click)="openTermsTab()">Terms & Conditions</span>
 
         <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
 

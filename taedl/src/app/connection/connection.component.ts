@@ -15,6 +15,9 @@ export class ConnectionComponent implements OnInit {
   @Output()
   notifyConnected: EventEmitter<JdbcConnection> = new EventEmitter<JdbcConnection>();
 
+  @Output()
+  notifyTermsAndConditions: EventEmitter<any> = new EventEmitter<any>();
+
   @Input()
   vendors: string[];
 
@@ -70,6 +73,10 @@ export class ConnectionComponent implements OnInit {
     this.isConnected = false;
     this.isFormSubmitAttempt = true;
     this.notifyConnected.emit(null);
+  }
+
+  openTermsTab() {
+    this.notifyTermsAndConditions.emit(null);
   }
 
   isFieldInvalid(field: string) {

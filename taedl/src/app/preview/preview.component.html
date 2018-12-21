@@ -1,7 +1,7 @@
 <div *ngIf="vendors?.length">
   <mat-tab-group [selectedIndex]="selectedTab">
     <mat-tab label="Connection">
-      <app-connection (notifyConnected)="handleConnected($event)" [vendors]="vendors"></app-connection>
+      <app-connection (notifyConnected)="handleConnected($event)" (notifyTermsAndConditions)="handleTermsAndConditions()" [vendors]="vendors"></app-connection>
     </mat-tab>
     <mat-tab label="Domain" [disabled]="!connection">
       <app-domain [connection]="connection" (notifySelected)="handleSelected($event)" (notifyJoins)="handleJoins($event)" (notifyAllTables)="handleAllTables($event)"></app-domain>
@@ -9,7 +9,7 @@
     <mat-tab label="Report" [disabled]="!connection || !tables || tables.length === 0">
       <app-report [connection]="connection" [tables]="tables" [joins]="joins" [allTables]="allTables"></app-report>
     </mat-tab>
-    <mat-tab label="T&Cs">
+    <mat-tab label="Terms & Conditions">
       <app-terms-and-conditions></app-terms-and-conditions>
     </mat-tab>
   </mat-tab-group>

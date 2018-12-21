@@ -58,7 +58,9 @@ export class PreviewComponent implements OnInit {
     } else {
       this.vendors = data;
     }
-  }
+  };
+
+  handleTermsAndConditions = () => this.selectedTab = 3;
 
   fetchVendors() {
     this.connectionService.vendors().pipe(
