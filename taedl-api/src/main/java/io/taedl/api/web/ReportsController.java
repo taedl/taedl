@@ -29,6 +29,7 @@ public class ReportsController {
 
     @PostMapping(value = "/table", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Table> table(@RequestBody ReportRequest reportRequest) throws SQLException, ClassNotFoundException {
+        log.info("request: table report.");
         Table table = this.connectionService.tableReport(reportRequest.getConnection(), reportRequest.getTables(),
                 reportRequest.getColumns(), reportRequest.getRows(), reportRequest.getJoins(), reportRequest.getFilters());
         return new ResponseEntity<>(table, HttpStatus.OK);

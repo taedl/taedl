@@ -40,6 +40,7 @@ public class ConnectionsController {
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConnectionDetails> connect(@RequestBody ConnectionDetails connectionDetails) throws ClassNotFoundException {
+        log.info("request: test database connection.");
         if (connectionService.testConnection(connectionDetails)) {
             return new ResponseEntity<>(connectionDetails, HttpStatus.OK);
         }
@@ -48,16 +49,19 @@ public class ConnectionsController {
 
     @PostMapping(value = "/tables-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TableMetaData>> tablesMetaData(@RequestBody ConnectionDetails connectionDetails) throws SQLException, ClassNotFoundException {
+        log.info("request: tables metadata.");
         return new ResponseEntity<>(connectionService.tables(connectionDetails), HttpStatus.OK);
     }
 
     @PostMapping(value = "/tables", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> tables(@RequestBody ConnectionDetails connectionDetails) throws SQLException, ClassNotFoundException {
+        log.info("request: tables.");
         return new ResponseEntity<>(connectionService.tables(connectionDetails).stream().map(TableMetaData::getName).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/preview", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PreviewResponse> preview(@RequestBody PreviewRequest previewRequest) throws SQLException, ClassNotFoundException {
+        log.info("request: preview.");
         ConnectionDetails connectionDetails = previewRequest.getConnection();
         List<TableMetaData> tables = previewRequest.getTables();
         if (connectionDetails == null || CollectionUtils.isEmpty(tables)) {

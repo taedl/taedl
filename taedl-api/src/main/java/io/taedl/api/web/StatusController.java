@@ -16,6 +16,7 @@ public class StatusController {
 
     @GetMapping(value = "",  produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> pulse() {
+        log.info("request: pulse.");
         return ImmutableMap.of("pulse", "ok");
     }
 }
