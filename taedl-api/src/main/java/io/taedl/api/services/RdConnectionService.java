@@ -61,7 +61,7 @@ public class RdConnectionService implements ConnectionService {
             // TODO: catalogue and schema are not always default
             String catalog = null;
             String schemaPattern = null;
-            String tableNamePattern = null;
+            String tableNamePattern = connectionDetails.getVendor().equals("mysql") ? "%" : null;
             String[] types = {"TABLE"};
             ResultSet result = metaData.getTables(catalog, schemaPattern, tableNamePattern, types);
 
