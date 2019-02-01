@@ -24,7 +24,7 @@
           <mat-error *ngIf="isFieldInvalid('password')">Please enter password</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="field">
+        <mat-form-field class="field breaking-field">
           <mat-select placeholder="vendor" formControlName="vendor" required>
             <mat-option *ngFor="let v of vendors" [value]="v">{{v}}</mat-option>
             <mat-error *ngIf="isFieldInvalid('vendor')">Please DB vendor</mat-error>
@@ -32,8 +32,8 @@
         </mat-form-field>
 
 
-        <mat-checkbox formControlName="agreed" class="field narrow-field">Agree to </mat-checkbox>
-        <span class="as-link" (click)="openTermsTab()">Terms & Conditions</span>
+        <mat-checkbox formControlName="agreed" class="field">Agree to </mat-checkbox>
+        <span class="as-link field" (click)="openTermsTab()">Terms & Conditions</span>
 
         <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
 

@@ -6,12 +6,14 @@
 
   .form-box {
 
+    padding-bottom: 1em;
+
     .field {
       margin: 1em;
       min-width: 10em;
     }
-    .narrow-field {
-      margin-right: 0.2em !important;
+    .breaking-field {
+      display: inline-block;
     }
     .as-link {
       text-decoration: underline;
@@ -36,12 +38,14 @@
 
     .form-box {
 
+      padding-bottom: 1em;
+
       .field {
         margin: 1em;
-        min-width: 5em;
+        min-width: 10em;
       }
-      .narrow-field {
-        margin-right: 0.2em !important;
+      .breaking-field {
+        display: block;
       }
       .as-link {
         text-decoration: underline;
