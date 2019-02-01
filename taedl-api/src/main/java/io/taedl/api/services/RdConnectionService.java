@@ -17,6 +17,7 @@ public class RdConnectionService implements ConnectionService {
 
     private final String supportedDrivers;
     private final QueryBuildingService queryBuildingService;
+    private final String MYSQL_UTC_TIMEZONE = "?useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     @Autowired
     public RdConnectionService(@Value("${packaged.jdbc.driver.classes}") String supportedDrivers, QueryBuildingService queryBuildingService) {
@@ -28,6 +29,8 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public boolean testConnection(ConnectionDetails connectionDetails) throws ClassNotFoundException {
         boolean flag = false;
+        mySQLTimeZoneSetUTC(connectionDetails);
+
         try (java.sql.Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             if (conn != null) {
                 flag = true;
@@ -55,6 +58,8 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException {
+        mySQLTimeZoneSetUTC(connectionDetails);
+
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             DatabaseMetaData metaData = conn.getMetaData();
 
@@ -80,6 +85,8 @@ public class RdConnectionService implements ConnectionService {
 
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws SQLException {
+        mySQLTimeZoneSetUTC(connectionDetails);
+
         String query = queryBuildingService.generatePreviewQuery(tables, joins, connectionDetails.getVendor());
         log.debug("Generated preview query: {}", query);
         return createTable(connectionDetails, tables, query);
@@ -88,6 +95,9 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public Table tableReport(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Column> columns,
                              List<AggregatedColumn> rows, List<Join> joins, List<Filter> filters) throws ClassNotFoundException, SQLException {
+
+        mySQLTimeZoneSetUTC(connectionDetails);
+
         String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins, filters, connectionDetails.getVendor());
         log.debug("Generated table query: {}", query);
         List<TableMetaData> tablesToJoin = tables.stream().filter(t -> !Collections.disjoint(t.getColumns(), columns)).collect(Collectors.toList());
@@ -95,6 +105,9 @@ public class RdConnectionService implements ConnectionService {
     }
 
     private Table createTable(ConnectionDetails connectionDetails, List<TableMetaData> tables, String query) throws SQLException {
+
+        mySQLTimeZoneSetUTC(connectionDetails);
+
         Table table;
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -167,5 +180,12 @@ public class RdConnectionService implements ConnectionService {
         }
         resultColumns.close();
         return columns;
+    }
+
+    private void mySQLTimeZoneSetUTC(ConnectionDetails connectionDetails) {
+        if (connectionDetails.getVendor().equals("mysql") && !connectionDetails.getEndpoint().endsWith(MYSQL_UTC_TIMEZONE)) {
+            String ep = connectionDetails.getEndpoint();
+            connectionDetails.setEndpoint(ep.concat(MYSQL_UTC_TIMEZONE));
+        }
     }
 }
