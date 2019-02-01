@@ -90,9 +90,10 @@ export const FILTER_TYPES = {
   DATE_GREATER_OR_EQUAL: '>='
 };
 
-export const NUMERIC_TYPES = ['int', 'float', 'double', 'num', 'real', 'serial'];
+export const NUMERIC_TYPES = ['int', 'integer', 'float', 'double', 'num', 'numeric', 'real', 'serial', 'decimal',
+  'smallint', 'smallint unsigned', 'tinyint', 'tinyint unsigned', 'mediumint', 'mediumint unsigned', 'bigint', 'bigint unsigned'];
 
-export const DATE_TYPES = ['date'];
+export const DATE_TYPES = ['date', 'datetime'];
 
 export interface IAggregatedColumn {
   column: IColumn;

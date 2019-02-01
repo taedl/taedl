@@ -17,7 +17,10 @@ export class AggregationDialogComponent implements OnInit {
     this.isNumericType = this.isNumeric(row.column.type);
   }
 
-  isNumeric = val => NUMERIC_TYPES.map(item => val.indexOf(item)).filter(item => item !== -1).length > 0;
+  isNumeric = (val: string) => {
+    const lowVal = val.toLowerCase();
+    return NUMERIC_TYPES.map(item => lowVal.indexOf(item)).filter(item => item !== -1).length > 0;
+  }
 
   ngOnInit() {
   }

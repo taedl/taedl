@@ -3,7 +3,7 @@ package io.taedl.api.dto;
 import io.taedl.api.exceptions.QueryBuildingException;
 
 public enum JoinType {
-    inner, left, right, outer;
+    inner, left, right, outer, full;
 
     @Override
     public String toString() {
@@ -15,6 +15,8 @@ public enum JoinType {
             case right:
                 return "right join";
             case outer:
+                return "full outer join";
+            case full:
                 return "full outer join";
             default:
                 throw new QueryBuildingException("Unrecognised join type" + this);
