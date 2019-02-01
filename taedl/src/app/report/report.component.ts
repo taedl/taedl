@@ -180,6 +180,9 @@ export class ReportComponent implements OnInit, OnChanges {
   }
 
   onReportTypeChange() {
+    if (this.reportType === 'table') {
+      this.updateTable();
+    }
   }
 
   describeFilter(f: Filter) {
