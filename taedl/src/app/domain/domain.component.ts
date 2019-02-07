@@ -84,22 +84,6 @@ export class DomainComponent implements OnInit, OnChanges {
 
   option = null;
 
-
-  todo = [
-    'Get to work',
-    'Pick up groceries',
-    'Go home',
-    'Fall asleep'
-  ];
-
-  done = [
-    'Get up',
-    'Brush teeth',
-    'Take a shower',
-    'Check e-mail',
-    'Walk dog'
-  ];
-
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -109,6 +93,18 @@ export class DomainComponent implements OnInit, OnChanges {
         event.previousIndex,
         event.currentIndex);
     }
+
+    // this.selectedTables = this.selectedTables.map(sel => ({
+    //   selected: true,
+    //   table: sel.table
+    // }));
+
+    this.notifySelected.emit(this.selectedTables);
+
+    console.log(this.selectedTables);
+    console.log('--->', event);
+
+    this.preview();
   }
 
   constructor(private connectionApiSerice: ConnectionsApiService, public dialog: MatDialog) { }
@@ -151,7 +147,7 @@ export class DomainComponent implements OnInit, OnChanges {
 
   onTableDrop(event: any) {
 
-    console.log('dropped', event)
+    console.log('dropped', event);
 
     const ind = this.tables.indexOf(event.dragData);
     if (ind > -1) {

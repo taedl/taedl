@@ -2,16 +2,19 @@
 
 <div class="domain-container">
 
-  <div class="drag-container"
-       cdkDropList
-       [cdkDropListData]="tables"
-       [cdkDropListConnectedTo]="[setsList]"
-       #tablesList>
+  <!--<div class="drag-container"-->
+       <!--cdkDropList-->
+       <!--[cdkDropListData]="tables"-->
+       <!--[cdkDropListConnectedTo]="[setsList]"-->
+       <!--#tablesList>-->
 
-    <button *ngFor="let t of tables" [disabled]="t.selected" disableRipple class="stretched-button" mat-raised-button cdkDrag>
-      {{t.table.name}}
-    </button>
-  </div>
+    <!--<button *ngFor="let t of tables" [disabled]="t.selected" disableRipple class="stretched-button" mat-raised-button cdkDrag>-->
+      <!--{{t.table.name}}-->
+    <!--</button>-->
+  <!--</div>-->
+  <!---->
+  <!---->
+  <!---->
 
   <!--<div class="drop-container" *ngIf="tables?.length > 0" droppable (onDrop)="onTableDrop($event)"  [ngClass]="{'description': !isSelected()}">-->
     <!--<span *ngIf="!isSelected()">Drop your tables here</span>-->
@@ -21,19 +24,27 @@
     <!--</button>-->
   <!--</div>-->
 
-  <div class="drop-container" *ngIf="tables?.length > 0"
-       cdkDropList (cdkDropListDropped)="onTableDrop($event)"
-       [cdkDropListConnectedTo]="[tablesList]"
-       [cdkDropListData]="selectedTables"
-       [ngClass]="{'description': !isSelected()}"
-       #setsList>
 
-    <span *ngIf="!isSelected()">Drop your tables here</span>
-    <button *ngFor="let s of selectedTables" mat-raised-button disableRipple class="stretched-button">
-      <mat-icon (click)="cancelTable(s)">cancel</mat-icon>
-      {{s.name}}
-    </button>
+  <div
+    cdkDropList
+    #availableTables="cdkDropList"
+    [cdkDropListData]="tables"
+    [cdkDropListConnectedTo]="[domainTables]"
+    class="drag-container"
+    (cdkDropListDropped)="drop($event)">
+    <button class="stretched-button" mat-raised-button disableRipple *ngFor="let item of tables" cdkDrag>{{item.table.name}}</button>
   </div>
+
+  <div
+    cdkDropList
+    #domainTables="cdkDropList"
+    [cdkDropListData]="selectedTables"
+    [cdkDropListConnectedTo]="[availableTables]"
+    class="drop-container"
+    (cdkDropListDropped)="drop($event)">
+    <button class="stretched-button" mat-raised-button disableRipple *ngFor="let item of selectedTables" cdkDrag>{{item.table.name}}</button>
+  </div>
+
 
   <div class="joins-container">
     <div *ngIf="connection" echarts [options]="option" (chartClick)="onChartEvent($event, 'chartClick')"></div>
@@ -52,34 +63,5 @@
     <mat-row *matRowDef="let data; columns: resultTableHeaders;"></mat-row>
   </mat-table>
   <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
-</div>
-
-
-<div class="example-container">
-  <h2>To do</h2>
-
-  <div
-    cdkDropList
-    #todoList="cdkDropList"
-    [cdkDropListData]="todo"
-    [cdkDropListConnectedTo]="[doneList]"
-    class="example-list"
-    (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
-  </div>
-</div>
-
-<div class="example-container">
-  <h2>Done</h2>
-
-  <div
-    cdkDropList
-    #doneList="cdkDropList"
-    [cdkDropListData]="done"
-    [cdkDropListConnectedTo]="[todoList]"
-    class="example-list"
-    (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
-  </div>
 </div>
 
