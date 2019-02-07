@@ -75,6 +75,7 @@ export class DomainComponent implements OnInit, OnChanges {
 
   tables: ITable[];
   selectedTables: ITableMetaData[] = [];
+  dropContainer: any[] = [];
   resultTable: IResultTable;
   resultTableHeaders: string[];
   tableDataSource = new MatTableDataSource<any>();
@@ -94,16 +95,8 @@ export class DomainComponent implements OnInit, OnChanges {
         event.currentIndex);
     }
 
-    // this.selectedTables = this.selectedTables.map(sel => ({
-    //   selected: true,
-    //   table: sel.table
-    // }));
-
+    this.selectedTables = this.dropContainer.map(item => ({...item.table}));
     this.notifySelected.emit(this.selectedTables);
-
-    console.log(this.selectedTables);
-    console.log('--->', event);
-
     this.preview();
   }
 
@@ -146,9 +139,6 @@ export class DomainComponent implements OnInit, OnChanges {
   }
 
   onTableDrop(event: any) {
-
-    console.log('dropped', event);
-
     const ind = this.tables.indexOf(event.dragData);
     if (ind > -1) {
       this.tables[ind].selected = true;

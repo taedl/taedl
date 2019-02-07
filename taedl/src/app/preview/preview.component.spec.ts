@@ -27,6 +27,7 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ConnectionsApiService } from '../services/connections-api.service';
 import { TermsAndConditionsComponent } from '../terms-and-conditions/terms-and-conditions.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 describe('PreviewComponent', () => {
   let component: PreviewComponent;
@@ -74,7 +75,8 @@ describe('PreviewComponent', () => {
         MatTooltipModule,
         RouterTestingModule,
         MatDialogModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        DragDropModule
       ],
       providers: [
         { provide: ActivatedRoute, useValue: routeStub },

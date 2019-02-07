@@ -14,6 +14,7 @@ import {
 import { NgDragDropModule } from 'ng-drag-drop';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 describe('DomainComponent', () => {
   let component: DomainComponent;
@@ -41,7 +42,8 @@ describe('DomainComponent', () => {
         NgxEchartsModule,
         NgDragDropModule.forRoot(),
         HttpClientTestingModule,
-        MatDialogModule
+        MatDialogModule,
+        DragDropModule
       ]
     })
     .compileComponents();

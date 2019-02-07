@@ -38,11 +38,11 @@
   <div
     cdkDropList
     #domainTables="cdkDropList"
-    [cdkDropListData]="selectedTables"
+    [cdkDropListData]="dropContainer"
     [cdkDropListConnectedTo]="[availableTables]"
     class="drop-container"
     (cdkDropListDropped)="drop($event)">
-    <button class="stretched-button" mat-raised-button disableRipple *ngFor="let item of selectedTables" cdkDrag>{{item.table.name}}</button>
+    <button class="stretched-button" mat-raised-button disableRipple *ngFor="let item of dropContainer" cdkDrag>{{item.table.name}}</button>
   </div>
 
 
