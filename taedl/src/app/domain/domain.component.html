@@ -1,11 +1,33 @@
 <mat-toolbar>Please select tables for your Domain</mat-toolbar>
 
 <div class="domain-container">
-  <div class="drag-container">
-    <button *ngFor="let t of tables" mat-raised-button draggable [dragData]="t" [disabled]="t.selected" disableRipple class="stretched-button">{{t.table.name}}</button>
+
+  <div class="drag-container"
+       cdkDropList
+       [cdkDropListData]="tables"
+       [cdkDropListConnectedTo]="[setsList]"
+       #tablesList>
+
+    <button *ngFor="let t of tables" [disabled]="t.selected" disableRipple class="stretched-button" mat-raised-button cdkDrag>
+      {{t.table.name}}
+    </button>
   </div>
 
-  <div class="drop-container" *ngIf="tables?.length > 0" droppable (onDrop)="onTableDrop($event)"  [ngClass]="{'description': !isSelected()}">
+  <!--<div class="drop-container" *ngIf="tables?.length > 0" droppable (onDrop)="onTableDrop($event)"  [ngClass]="{'description': !isSelected()}">-->
+    <!--<span *ngIf="!isSelected()">Drop your tables here</span>-->
+    <!--<button *ngFor="let s of selectedTables" mat-raised-button disableRipple class="stretched-button">-->
+      <!--<mat-icon (click)="cancelTable(s)">cancel</mat-icon>-->
+      <!--{{s.name}}-->
+    <!--</button>-->
+  <!--</div>-->
+
+  <div class="drop-container" *ngIf="tables?.length > 0"
+       cdkDropList (cdkDropListDropped)="onTableDrop($event)"
+       [cdkDropListConnectedTo]="[tablesList]"
+       [cdkDropListData]="selectedTables"
+       [ngClass]="{'description': !isSelected()}"
+       #setsList>
+
     <span *ngIf="!isSelected()">Drop your tables here</span>
     <button *ngFor="let s of selectedTables" mat-raised-button disableRipple class="stretched-button">
       <mat-icon (click)="cancelTable(s)">cancel</mat-icon>
@@ -32,4 +54,32 @@
   <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
 </div>
 
+
+<div class="example-container">
+  <h2>To do</h2>
+
+  <div
+    cdkDropList
+    #todoList="cdkDropList"
+    [cdkDropListData]="todo"
+    [cdkDropListConnectedTo]="[doneList]"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+  </div>
+</div>
+
+<div class="example-container">
+  <h2>Done</h2>
+
+  <div
+    cdkDropList
+    #doneList="cdkDropList"
+    [cdkDropListData]="done"
+    [cdkDropListConnectedTo]="[todoList]"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
+  </div>
+</div>
 

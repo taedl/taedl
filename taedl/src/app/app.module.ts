@@ -58,6 +58,7 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { JoinManualDialogComponent } from './join-manual-dialog/join-manual-dialog.component';
 import { AggregationDialogComponent } from './aggregation-dialog/aggregation-dialog.component';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [
   { path: '', resolve: { vendors: PreviewResolverService }, component: PreviewComponent }
@@ -127,6 +128,7 @@ const routes: Routes = [
     MatTreeModule,
     FormsModule,
     ReactiveFormsModule,
+    DragDropModule,
     NgxEchartsModule
   ],
   providers: [

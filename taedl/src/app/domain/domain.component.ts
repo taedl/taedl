@@ -13,6 +13,7 @@ import { JoinDialogComponent } from '../join-dialog/join-dialog.component';
 import * as _ from 'lodash';
 import { errorHandler } from '../error-dialog/error-handler';
 import { JoinManualDialogComponent } from '../join-manual-dialog/join-manual-dialog.component';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 const empty = {
   // tooltip: {
@@ -83,6 +84,33 @@ export class DomainComponent implements OnInit, OnChanges {
 
   option = null;
 
+
+  todo = [
+    'Get to work',
+    'Pick up groceries',
+    'Go home',
+    'Fall asleep'
+  ];
+
+  done = [
+    'Get up',
+    'Brush teeth',
+    'Take a shower',
+    'Check e-mail',
+    'Walk dog'
+  ];
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
   constructor(private connectionApiSerice: ConnectionsApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -122,6 +150,9 @@ export class DomainComponent implements OnInit, OnChanges {
   }
 
   onTableDrop(event: any) {
+
+    console.log('dropped', event)
+
     const ind = this.tables.indexOf(event.dragData);
     if (ind > -1) {
       this.tables[ind].selected = true;
