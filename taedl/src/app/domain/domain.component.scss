@@ -69,6 +69,20 @@
 }
 
 
+.cdk-drag {
+  text-align: left;
+  display: block;
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0.5em auto;
+  border: 1px solid $primary;
+  color: $primary;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 .example-container {
   width: 400px;
   max-width: 100%;

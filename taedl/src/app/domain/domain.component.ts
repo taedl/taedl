@@ -75,7 +75,7 @@ export class DomainComponent implements OnInit, OnChanges {
 
   tables: ITable[];
   selectedTables: ITableMetaData[] = [];
-  dropContainer: any[] = [];
+  dropContainer: ITable[] = [];
   resultTable: IResultTable;
   resultTableHeaders: string[];
   tableDataSource = new MatTableDataSource<any>();
