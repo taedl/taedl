@@ -8,6 +8,7 @@ import { ReportsApiService } from '../services/reports-api.service';
 import { FilterDialogComponent } from '../filter-dialog/filter-dialog.component';
 import { errorHandler } from '../error-dialog/error-handler';
 import { AggregationDialogComponent } from '../aggregation-dialog/aggregation-dialog.component';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-report',
@@ -40,6 +41,9 @@ export class ReportComponent implements OnInit, OnChanges {
   chartConfig: ChartConfig = new ChartConfig(ComplexChartTypes.SUNBURST, []);
   filters: Filter[] = [];
 
+  droppedColumns: IColumn[] = [];
+  droppedRows: IColumn[] = [];
+
   constructor(private reportsService: ReportsApiService, public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -52,6 +56,20 @@ export class ReportComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes.connection) {
       this.reset();
+    }
+  }
+
+  drop(event: CdkDragDrop<any>) {
+    console.log('------>', event.container.id);
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      if (event.container.id === 'rowsList') {
+        this.droppedRows.push(event.item.data);
+      } else if (event.container.id === 'columnsList') {
+        this.droppedColumns.push(event.item.data);
+      }
     }
   }
 

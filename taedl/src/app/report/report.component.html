@@ -5,40 +5,72 @@
 <div class="report-container" *ngIf="tables.length > 0">
   <div class="drag-container">
     <mat-accordion [multi]="true" [displayMode]="'flat'">
-      <mat-expansion-panel *ngFor="let t of tables" class="mat-elevation-z1" [expanded]="false">
+      <mat-expansion-panel *ngFor="let t of tables; index as ind" class="mat-elevation-z1" [expanded]="false">
         <mat-expansion-panel-header>
           <mat-panel-title>{{t.name}}</mat-panel-title>
-          <!--<mat-panel-description></mat-panel-description>-->
         </mat-expansion-panel-header>
-        <button *ngFor="let c of t.columns" mat-raised-button draggable [dragData]="c" disableRipple class="stretched-button"
-                [ngClass]="{'selected-row': isSelected(c, 'row'), 'selected-column': isSelected(c, 'column')}">{{c.name}}</button>
+
+        <div
+          cdkDropList
+          [cdkDropListData]="t.columns"
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListConnectedTo]="['rowsList','columnsList']"
+          id="{{t.name}}">
+
+          <button *ngFor="let c of t.columns"
+                  mat-raised-button disableRipple
+                  class="stretched-button"
+                  [ngClass]="{'selected-row': isSelected(c, 'row'), 'selected-column': isSelected(c, 'column')}"
+                  cdkDrag
+                  [cdkDragData]="c">
+            {{c.name}}
+          </button>
+
+        </div>
 
       </mat-expansion-panel>
     </mat-accordion>
 
   </div>
   <div class="info-container">
-    <div class="drop-container mat-elevation-z1" droppable (onDrop)="onColumnDrop($event)">
-      <span class="description" *ngIf="columns.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your columns here...</span>
-      <span *ngIf="columns.length > 0" class="title">Columns: </span>
-      <button *ngFor="let c of columns; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button">
-        <mat-icon (click)="cancelColumn(c)">cancel</mat-icon>
-        <mat-icon (click)="moveColumn(c, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
-        <mat-icon (click)="moveColumn(c, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
-        {{c.tableName  + '.' + c.name}}
-      </button>
+
+    <div cdkDropList id="columnsList"
+         (cdkDropListDropped)="drop($event)"
+         class=" mat-elevation-z1" style="height: 200px">
+
+      <div style="height: 50px">columns: </div>
+      <div *ngFor="let c of droppedColumns">{{c.name}}</div>
     </div>
-    <div class="drop-container mat-elevation-z1" droppable (onDrop)="onRowDrop($event)">
-      <span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>
-      <span *ngIf="rows.length > 0" class="title row-title">Rows: </span>
-      <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">
-        <mat-icon (click)="cancelRow(r)">cancel</mat-icon>
-        <mat-icon (click)="setAggregation(r)">functions</mat-icon>
-        <mat-icon (click)="moveRow(r, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
-        <mat-icon (click)="moveRow(r, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
-        {{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}
-      </button>
+
+    <div cdkDropList id="rowsList"
+         (cdkDropListDropped)="drop($event)"
+         class="mat-elevation-z1" style="height: 200px">
+
+      <div style="height: 50px">rows: </div>
+      <div *ngFor="let c of droppedRows">{{c.name}}</div>
     </div>
+
+    <!--<div cdkDropList #columnsList class="drop-container mat-elevation-z1" [cdkDropListData]="[droppedColumns]">-->
+      <!--<span class="description" *ngIf="columns.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your columns here...</span>-->
+      <!--<span *ngIf="columns.length > 0" class="title">Columns: </span>-->
+      <!--<button *ngFor="let c of columns; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button">-->
+        <!--<mat-icon (click)="cancelColumn(c)">cancel</mat-icon>-->
+        <!--<mat-icon (click)="moveColumn(c, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>-->
+        <!--<mat-icon (click)="moveColumn(c, 'right')" *ngIf="!isLast">chevron_right</mat-icon>-->
+        <!--{{c.tableName  + '.' + c.name}}-->
+      <!--</button>-->
+    <!--</div>-->
+    <!--<div cdkDropList #rowsList class="drop-container mat-elevation-z1" [cdkDropListData]="[droppedRows]">-->
+      <!--<span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>-->
+      <!--<span *ngIf="rows.length > 0" class="title row-title">Rows: </span>-->
+      <!--<button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">-->
+        <!--<mat-icon (click)="cancelRow(r)">cancel</mat-icon>-->
+        <!--<mat-icon (click)="setAggregation(r)">functions</mat-icon>-->
+        <!--<mat-icon (click)="moveRow(r, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>-->
+        <!--<mat-icon (click)="moveRow(r, 'right')" *ngIf="!isLast">chevron_right</mat-icon>-->
+        <!--{{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}-->
+      <!--</button>-->
+    <!--</div>-->
     <div class="data mat-elevation-z1" *ngIf="tableDataSource && resultTableHeaders && reportType === 'table'">
       <mat-table #table [dataSource]="tableDataSource" matSort>
         <ng-container *ngFor="let h of resultTableHeaders" matColumnDef={{h}}>
@@ -76,7 +108,7 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <div class="drop-container mat-elevation-z1" droppable (onDrop)="onFilterDrop($event)">
+    <div cdkDropList #filtersList class="drop-container mat-elevation-z1">
       <span class="description" *ngIf="filters.length === 0">Drop your filters here...</span>
       <span class="title" *ngIf="filters.length > 0">Filters: </span>
       <button *ngFor="let f of filters" mat-raised-button class="stretched-button" disableRipple (click)="onFilterClick(f)" matTooltip="{{describeFilter(f)}}">
