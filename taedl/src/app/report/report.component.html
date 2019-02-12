@@ -15,6 +15,7 @@
           [cdkDropListData]="t.columns"
           (cdkDropListDropped)="drop($event)"
           [cdkDropListConnectedTo]="['rowsList','columnsList']"
+          [cdkDropListEnterPredicate]="false"
           id="{{t.name}}">
 
           <button *ngFor="let c of t.columns"
