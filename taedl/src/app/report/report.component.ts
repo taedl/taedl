@@ -60,15 +60,14 @@ export class ReportComponent implements OnInit, OnChanges {
   }
 
   drop(event: CdkDragDrop<any>) {
-    console.log('------>', event.container.id);
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       if (event.container.id === 'rowsList') {
-        this.droppedRows.push(event.item.data);
+        this.onRowDrop({dragData: event.item.data});
       } else if (event.container.id === 'columnsList') {
-        this.droppedColumns.push(event.item.data);
+        this.onColumnDrop({dragData: event.item.data});
       }
     }
   }

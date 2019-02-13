@@ -36,42 +36,42 @@
   <div class="info-container">
 
     <div cdkDropList id="columnsList"
+         [cdkDropListData]="[droppedColumns]"
          (cdkDropListDropped)="drop($event)"
-         class=" mat-elevation-z1" style="height: 200px">
+         class="drop-container mat-elevation-z1">
 
-      <div style="height: 50px">columns: </div>
-      <div *ngFor="let c of droppedColumns">{{c.name}}</div>
+      <span class="description" *ngIf="columns.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your columns here...</span>
+      <span *ngIf="columns.length > 0" class="title">Columns: </span>
+      <button *ngFor="let c of columns; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button">
+        <mat-icon (click)="cancelColumn(c)">cancel</mat-icon>
+        <mat-icon (click)="moveColumn(c, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
+        <mat-icon (click)="moveColumn(c, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
+        {{c.tableName  + '.' + c.name}}
+      </button>
     </div>
+
+    <!--<div cdkDropList id="rowsList"-->
+         <!--(cdkDropListDropped)="drop($event)"-->
+         <!--class="mat-elevation-z1" style="height: 200px">-->
+
+      <!--<div style="height: 50px">rows: </div>-->
+      <!--<div *ngFor="let c of droppedRows">{{c.name}}</div>-->
+    <!--</div>-->
 
     <div cdkDropList id="rowsList"
          (cdkDropListDropped)="drop($event)"
-         class="mat-elevation-z1" style="height: 200px">
+         class="drop-container mat-elevation-z1">
 
-      <div style="height: 50px">rows: </div>
-      <div *ngFor="let c of droppedRows">{{c.name}}</div>
+      <span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>
+      <span *ngIf="rows.length > 0" class="title row-title">Rows: </span>
+      <button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">
+        <mat-icon (click)="cancelRow(r)">cancel</mat-icon>
+        <mat-icon (click)="setAggregation(r)">functions</mat-icon>
+        <mat-icon (click)="moveRow(r, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>
+        <mat-icon (click)="moveRow(r, 'right')" *ngIf="!isLast">chevron_right</mat-icon>
+        {{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}
+      </button>
     </div>
-
-    <!--<div cdkDropList #columnsList class="drop-container mat-elevation-z1" [cdkDropListData]="[droppedColumns]">-->
-      <!--<span class="description" *ngIf="columns.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your columns here...</span>-->
-      <!--<span *ngIf="columns.length > 0" class="title">Columns: </span>-->
-      <!--<button *ngFor="let c of columns; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button">-->
-        <!--<mat-icon (click)="cancelColumn(c)">cancel</mat-icon>-->
-        <!--<mat-icon (click)="moveColumn(c, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>-->
-        <!--<mat-icon (click)="moveColumn(c, 'right')" *ngIf="!isLast">chevron_right</mat-icon>-->
-        <!--{{c.tableName  + '.' + c.name}}-->
-      <!--</button>-->
-    <!--</div>-->
-    <!--<div cdkDropList #rowsList class="drop-container mat-elevation-z1" [cdkDropListData]="[droppedRows]">-->
-      <!--<span class="description row-description" *ngIf="rows.length === 0" [ngClass]="{'padded-lots': rows.length === 0 && columns.length === 0}">Drop your rows here...</span>-->
-      <!--<span *ngIf="rows.length > 0" class="title row-title">Rows: </span>-->
-      <!--<button *ngFor="let r of rows; first as isFirst; last as isLast" mat-raised-button disableRipple class="stretched-button row-button">-->
-        <!--<mat-icon (click)="cancelRow(r)">cancel</mat-icon>-->
-        <!--<mat-icon (click)="setAggregation(r)">functions</mat-icon>-->
-        <!--<mat-icon (click)="moveRow(r, 'left')" *ngIf="!isFirst">chevron_left</mat-icon>-->
-        <!--<mat-icon (click)="moveRow(r, 'right')" *ngIf="!isLast">chevron_right</mat-icon>-->
-        <!--{{r.aggregation + '(' + r.column.tableName + '.' + r.column.name + ')'}}-->
-      <!--</button>-->
-    <!--</div>-->
     <div class="data mat-elevation-z1" *ngIf="tableDataSource && resultTableHeaders && reportType === 'table'">
       <mat-table #table [dataSource]="tableDataSource" matSort>
         <ng-container *ngFor="let h of resultTableHeaders" matColumnDef={{h}}>
