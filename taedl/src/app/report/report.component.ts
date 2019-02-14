@@ -68,6 +68,8 @@ export class ReportComponent implements OnInit, OnChanges {
         this.onRowDrop({dragData: event.item.data});
       } else if (event.container.id === 'columnsList') {
         this.onColumnDrop({dragData: event.item.data});
+      } else if (event.container.id === 'filtersList') {
+        this.onFilterDrop({dragData: event.item.data});
       }
     }
   }

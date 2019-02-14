@@ -14,7 +14,7 @@
           cdkDropList
           [cdkDropListData]="t.columns"
           (cdkDropListDropped)="drop($event)"
-          [cdkDropListConnectedTo]="['rowsList','columnsList']"
+          [cdkDropListConnectedTo]="['rowsList','columnsList', 'filtersList']"
           [cdkDropListEnterPredicate]="false"
           id="{{t.name}}">
 
@@ -49,14 +49,6 @@
         {{c.tableName  + '.' + c.name}}
       </button>
     </div>
-
-    <!--<div cdkDropList id="rowsList"-->
-         <!--(cdkDropListDropped)="drop($event)"-->
-         <!--class="mat-elevation-z1" style="height: 200px">-->
-
-      <!--<div style="height: 50px">rows: </div>-->
-      <!--<div *ngFor="let c of droppedRows">{{c.name}}</div>-->
-    <!--</div>-->
 
     <div cdkDropList id="rowsList"
          (cdkDropListDropped)="drop($event)"
@@ -93,7 +85,6 @@
   </div>
 
   <div class="filters-container">
-
     <mat-button-toggle-group [(ngModel)]="reportType" (change)="onReportTypeChange()" class="type-toggle">
       <mat-button-toggle value="table" matTooltip="Table">
         <mat-icon>view_column</mat-icon>
@@ -109,7 +100,7 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <div cdkDropList #filtersList class="drop-container mat-elevation-z1">
+    <div cdkDropList id="filtersList" (cdkDropListDropped)="drop($event)" class="drop-container mat-elevation-z1">
       <span class="description" *ngIf="filters.length === 0">Drop your filters here...</span>
       <span class="title" *ngIf="filters.length > 0">Filters: </span>
       <button *ngFor="let f of filters" mat-raised-button class="stretched-button" disableRipple (click)="onFilterClick(f)" matTooltip="{{describeFilter(f)}}">
