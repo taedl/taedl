@@ -18,6 +18,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { FormsModule } from '@angular/forms';
 import { CrosstabComponent } from '../crosstab/crosstab.component';
 import { EchartComponent } from '../echart/echart.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 describe('ReportComponent', () => {
   let component: ReportComponent;
@@ -40,6 +41,7 @@ describe('ReportComponent', () => {
         MatDialogModule,
         MatButtonToggleModule,
         MatTooltipModule,
+        DragDropModule,
         FormsModule
       ],
       providers: [
