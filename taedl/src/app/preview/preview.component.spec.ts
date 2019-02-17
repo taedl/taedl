@@ -16,7 +16,6 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgDragDropModule } from 'ng-drag-drop';
 import { ReportComponent } from '../report/report.component';
 import { EchartComponent } from '../echart/echart.component';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -68,7 +67,6 @@ describe('PreviewComponent', () => {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         MatListModule,
-        NgDragDropModule.forRoot(),
         NgxEchartsModule,
         MatExpansionModule,
         MatButtonToggleModule,

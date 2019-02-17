@@ -11,7 +11,6 @@ import {
   MatTableModule,
   MatToolbarModule
 } from '@angular/material';
-import { NgDragDropModule } from 'ng-drag-drop';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -40,7 +39,6 @@ describe('DomainComponent', () => {
         MatPaginatorModule,
         MatDialogModule,
         NgxEchartsModule,
-        NgDragDropModule.forRoot(),
         HttpClientTestingModule,
         MatDialogModule,
         DragDropModule

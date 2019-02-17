@@ -7,7 +7,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConnectionComponent } from './connection/connection.component';
-import { NgDragDropModule } from 'ng-drag-drop';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -92,7 +91,6 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     HttpClientModule,
     BrowserAnimationsModule,
-    NgDragDropModule.forRoot(),
     MatAutocompleteModule,
     MatBadgeModule,
     MatButtonModule,

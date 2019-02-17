@@ -12,7 +12,6 @@ import {
   MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import { ReportsApiService } from '../services/reports-api.service';
-import { NgDragDropModule } from 'ng-drag-drop';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +30,6 @@ describe('ReportComponent', () => {
         MatToolbarModule,
         MatMenuModule,
         MatExpansionModule,
-        NgDragDropModule.forRoot(),
         MatIconModule,
         MatTableModule,
         MatPaginatorModule,
