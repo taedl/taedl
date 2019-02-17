@@ -65,19 +65,19 @@ export class ReportComponent implements OnInit, OnChanges {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       if (event.container.id === 'rowsList') {
-        this.onRowDrop({dragData: event.item.data});
+        this.onRowDrop(event.item.data);
       } else if (event.container.id === 'columnsList') {
-        this.onColumnDrop({dragData: event.item.data});
+        this.onColumnDrop(event.item.data);
       } else if (event.container.id === 'filtersList') {
-        this.onFilterDrop({dragData: event.item.data});
+        this.onFilterDrop(event.item.data);
       }
     }
   }
 
-  onColumnDrop(event) {
-    const ind = this.columns.indexOf(event.dragData);
+  onColumnDrop(dragData) {
+    const ind = this.columns.indexOf(dragData);
     if (ind === -1) {
-      this.columns.push(event.dragData);
+      this.columns.push(dragData);
       this.updateTable();
     }
   }
@@ -137,10 +137,10 @@ export class ReportComponent implements OnInit, OnChanges {
     this.tableDataSource = null;
   }
 
-  onRowDrop(event) {
-    const ind = this.rows.map(row => row.column).indexOf(event.dragData);
+  onRowDrop(dragData) {
+    const ind = this.rows.map(row => row.column).indexOf(dragData);
     if (ind === -1) {
-      this.rows.push({aggregation: Aggregation.COUNT, column: event.dragData});
+      this.rows.push({aggregation: Aggregation.COUNT, column: dragData});
       this.updateTable();
     }
   }
@@ -149,11 +149,11 @@ export class ReportComponent implements OnInit, OnChanges {
     return type === 'row' ? this.rows.map(r => r.column).indexOf(item) !== -1 : this.columns.indexOf(item) !== -1;
   }
 
-  onFilterDrop(event) {
-    if (this.filters.filter(f => f.column === event.dragData && !f.condition && !f.constant).length > 0) {
+  onFilterDrop(dragData) {
+    if (this.filters.filter(f => f.column === dragData && !f.condition && !f.constant).length > 0) {
       return;
     }
-    this.openFilterDialog(new Filter(event.dragData));
+    this.openFilterDialog(new Filter(dragData));
   }
 
   onFilterClick(filter: Filter) {
