@@ -7,7 +7,14 @@ export class JdbcConnection {
   endpoint: string;
   constructor(endpoint: string, database: string, public user: string,
               public password: string, public vendor: string) {
-    this.endpoint = `jdbc:${vendor}://${endpoint}/${database}`;
+    switch (vendor) {
+      case 'sqlserver': {
+        this.endpoint = `jdbc:${vendor}://${endpoint};DatabaseName=${database}`;
+        break;
+      }
+      default:
+        this.endpoint = `jdbc:${vendor}://${endpoint}/${database}`;
+    }
   }
 }
 
