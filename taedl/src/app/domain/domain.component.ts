@@ -131,6 +131,7 @@ export class DomainComponent implements OnInit, OnChanges {
     this.joinChain = [];
     this.selectedTables = [];
     this.resultTableHeaders = [];
+    this.dropContainer = [];
     this.option = {...empty};
 
     this.notifySelected.emit(this.selectedTables);

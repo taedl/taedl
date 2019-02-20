@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -36,7 +37,7 @@ public class RdConnectionService implements ConnectionService {
                 flag = true;
             }
         } catch (Exception ignored) {
-
+            log.info("Failed to connect to an instance of ", connectionDetails.getVendor());
         }
         return flag;
     }
@@ -59,6 +60,7 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException {
         mySQLTimeZoneSetUTC(connectionDetails);
+//        sqlServerHack(connectionDetails);
 
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             DatabaseMetaData metaData = conn.getMetaData();
@@ -88,7 +90,7 @@ public class RdConnectionService implements ConnectionService {
         mySQLTimeZoneSetUTC(connectionDetails);
 
         String query = queryBuildingService.generatePreviewQuery(tables, joins, connectionDetails.getVendor());
-        log.debug("Generated preview query: {}", query);
+        log.info("Generated preview query: {}", query);
         return createTable(connectionDetails, tables, query);
     }
 
@@ -99,7 +101,7 @@ public class RdConnectionService implements ConnectionService {
         mySQLTimeZoneSetUTC(connectionDetails);
 
         String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins, filters, connectionDetails.getVendor());
-        log.debug("Generated table query: {}", query);
+        log.info("Generated table query: {}", query);
         List<TableMetaData> tablesToJoin = tables.stream().filter(t -> !Collections.disjoint(t.getColumns(), columns)).collect(Collectors.toList());
         return createTable(connectionDetails, tablesToJoin, query);
     }
@@ -188,4 +190,13 @@ public class RdConnectionService implements ConnectionService {
             connectionDetails.setEndpoint(ep.concat(MYSQL_UTC_TIMEZONE));
         }
     }
+
+//    private void sqlServerHack(ConnectionDetails connectionDetails) {
+//        if (connectionDetails.getVendor().equals("sqlserver") && !StringUtils.isEmpty(connectionDetails.getEndpoint())) {
+//            int dbIndex = connectionDetails.getEndpoint().indexOf(";DatabaseName=");
+//            if (dbIndex != -1) {
+//                connectionDetails.setEndpoint(connectionDetails.getEndpoint().substring(0, dbIndex));
+//            }
+//        }
+//    }
 }

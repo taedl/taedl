@@ -9,7 +9,8 @@ export class JdbcConnection {
               public password: string, public vendor: string) {
     switch (vendor) {
       case 'sqlserver': {
-        this.endpoint = `jdbc:${vendor}://${endpoint};DatabaseName=${database}`;
+        // this.endpoint = `jdbc:${vendor}://${endpoint};DatabaseName=${database}`;
+        this.endpoint = `jdbc:${vendor}://${endpoint}`;
         break;
       }
       default:
