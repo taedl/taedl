@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -19,6 +18,10 @@ public class RdConnectionService implements ConnectionService {
     private final String supportedDrivers;
     private final QueryBuildingService queryBuildingService;
     private final String MYSQL_UTC_TIMEZONE = "?useLegacyDatetimeCode=false&serverTimezone=UTC";
+
+    // setting select method cursor, otherwise ResultSetMetaData.getTableName returns blank
+    // https://github.com/Microsoft/mssql-jdbc/issues/753
+    private final String SQL_SERVER_SELECT_METHOD_CURSOR = ";selectMethod=cursor";
 
     @Autowired
     public RdConnectionService(@Value("${packaged.jdbc.driver.classes}") String supportedDrivers, QueryBuildingService queryBuildingService) {
@@ -60,12 +63,13 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException {
         mySQLTimeZoneSetUTC(connectionDetails);
-//        sqlServerHack(connectionDetails);
+        sqlServerSetCursor(connectionDetails);
 
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             DatabaseMetaData metaData = conn.getMetaData();
 
             // TODO: catalogue and schema are not always default
+            // TODO: currently for SQL Server this returns system tables too, which it should not
             String catalog = null;
             String schemaPattern = null;
             String tableNamePattern = connectionDetails.getVendor().equals("mysql") ? "%" : null;
@@ -88,6 +92,7 @@ public class RdConnectionService implements ConnectionService {
     @Override
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws SQLException {
         mySQLTimeZoneSetUTC(connectionDetails);
+        sqlServerSetCursor(connectionDetails);
 
         String query = queryBuildingService.generatePreviewQuery(tables, joins, connectionDetails.getVendor());
         log.info("Generated preview query: {}", query);
@@ -99,6 +104,7 @@ public class RdConnectionService implements ConnectionService {
                              List<AggregatedColumn> rows, List<Join> joins, List<Filter> filters) throws ClassNotFoundException, SQLException {
 
         mySQLTimeZoneSetUTC(connectionDetails);
+        sqlServerSetCursor(connectionDetails);
 
         String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins, filters, connectionDetails.getVendor());
         log.info("Generated table query: {}", query);
@@ -109,6 +115,7 @@ public class RdConnectionService implements ConnectionService {
     private Table createTable(ConnectionDetails connectionDetails, List<TableMetaData> tables, String query) throws SQLException {
 
         mySQLTimeZoneSetUTC(connectionDetails);
+        sqlServerSetCursor(connectionDetails);
 
         Table table;
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
@@ -191,12 +198,10 @@ public class RdConnectionService implements ConnectionService {
         }
     }
 
-//    private void sqlServerHack(ConnectionDetails connectionDetails) {
-//        if (connectionDetails.getVendor().equals("sqlserver") && !StringUtils.isEmpty(connectionDetails.getEndpoint())) {
-//            int dbIndex = connectionDetails.getEndpoint().indexOf(";DatabaseName=");
-//            if (dbIndex != -1) {
-//                connectionDetails.setEndpoint(connectionDetails.getEndpoint().substring(0, dbIndex));
-//            }
-//        }
-//    }
+    private void sqlServerSetCursor(ConnectionDetails connectionDetails) {
+        if (connectionDetails.getVendor().equals("sqlserver") && !connectionDetails.getEndpoint().contains(SQL_SERVER_SELECT_METHOD_CURSOR)) {
+            String ep = connectionDetails.getEndpoint();
+            connectionDetails.setEndpoint(ep.concat(SQL_SERVER_SELECT_METHOD_CURSOR));
+        }
+    }
 }

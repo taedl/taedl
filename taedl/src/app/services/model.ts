@@ -9,6 +9,8 @@ export class JdbcConnection {
               public password: string, public vendor: string) {
     switch (vendor) {
       case 'sqlserver': {
+        // TODO: there must be a better way but for now if databasename is specified, both metadata
+        // TODO: and queries (when qualifying column names with "tablename.") fail
         // this.endpoint = `jdbc:${vendor}://${endpoint};DatabaseName=${database}`;
         this.endpoint = `jdbc:${vendor}://${endpoint}`;
         break;
