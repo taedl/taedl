@@ -16,12 +16,6 @@ import { JoinManualDialogComponent } from '../join-manual-dialog/join-manual-dia
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 const empty = {
-  // tooltip: {
-  //   formatter: function(params) {
-  //     return !params.data.source ? null :
-  //       `<div>${params.data.source}<img src="../../assets/inner-join.png" alt="inner join" height="32" />${params.data.target}</div>`;
-  //   }
-  // },
   series : [
     {
       type: 'graph',
@@ -74,6 +68,7 @@ export class DomainComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   tables: ITable[];
+  allTables: ITable[];
   selectedTables: ITableMetaData[] = [];
   dropContainer: ITable[] = [];
   resultTable: IResultTable;
@@ -97,6 +92,13 @@ export class DomainComponent implements OnInit, OnChanges {
 
     this.selectedTables = this.dropContainer.map(item => ({...item.table}));
     this.notifySelected.emit(this.selectedTables);
+
+    this.tables.forEach(t => (
+      {
+        table: t.table,
+        selected: this.selectedTables.indexOf(t.table) !== -1
+      }
+    ));
     this.preview();
   }
 
@@ -112,6 +114,7 @@ export class DomainComponent implements OnInit, OnChanges {
       this.connectionApiSerice.tablesMetadata(changes.connection.currentValue)
         .subscribe(result => {
           this.tables = result.map(t => ({ table: t, selected: false }));
+          this.allTables = _.cloneDeep(this.tables);
           this.notifyAllTables.emit(result);
           this.initGraph();
           this.initJoins();
@@ -127,6 +130,7 @@ export class DomainComponent implements OnInit, OnChanges {
   reset() {
     this.resultTable = null;
     this.tables = [];
+    this.allTables = [];
     this.joins = [];
     this.joinChain = [];
     this.selectedTables = [];
@@ -137,25 +141,6 @@ export class DomainComponent implements OnInit, OnChanges {
     this.notifySelected.emit(this.selectedTables);
     this.notifyJoins.emit(this.joins);
     this.notifyAllTables.emit([]);
-  }
-
-  onTableDrop(event: any) {
-    const ind = this.tables.indexOf(event.dragData);
-    if (ind > -1) {
-      this.tables[ind].selected = true;
-      this.selectedTables.push(event.dragData.table);
-      this.notifySelected.emit(this.selectedTables);
-      this.preview();
-    }
-  }
-
-  cancelTable(t: ITableMetaData) {
-    const indSelected = this.selectedTables.indexOf(t);
-    this.selectedTables.splice(indSelected, 1);
-    const indAll = this.tables.map(table => table.table).indexOf(t);
-    this.tables[indAll].selected = false;
-    this.notifySelected.emit(this.selectedTables);
-    this.preview();
   }
 
   preview() {
@@ -179,10 +164,6 @@ export class DomainComponent implements OnInit, OnChanges {
         errorHandler(this.dialog, 'Could not generate preview: ' + error.error || error.message, 'OK')
           .subscribe(() => { /* nothing */ });
       });
-  }
-
-  isSelected(): boolean {
-    return this.selectedTables.length > 0;
   }
 
   private tableRows(tableReport: IResultTable): any[] {
