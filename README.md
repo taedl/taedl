@@ -43,4 +43,5 @@ You can help by suggesting features, reporting bugs, or just providing your feed
 3. Write tests and code that makes the tests pass.
 4. Submit a pull request. 
 
-## License: MIT
+## License:
+[MIT](https://github.com/taedl/taedl/blob/master/LICENSE)
