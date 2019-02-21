@@ -27,13 +27,13 @@
         <mat-form-field class="field breaking-field">
           <mat-select placeholder="vendor" formControlName="vendor" required>
             <mat-option *ngFor="let v of vendors" [value]="v">{{v}}</mat-option>
-            <mat-error *ngIf="isFieldInvalid('vendor')">Please DB vendor</mat-error>
+            <mat-error *ngIf="isFieldInvalid('vendor')">Please enter DB vendor</mat-error>
           </mat-select>
         </mat-form-field>
 
 
         <mat-checkbox formControlName="agreed" class="field">Agree to </mat-checkbox>
-        <span class="as-link field" (click)="openTermsTab()">Terms & Conditions</span>
+        <span class="as-link field" (click)="openTermsTab()">Terms&nbsp;&&nbsp;Conditions</span>
 
         <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
 

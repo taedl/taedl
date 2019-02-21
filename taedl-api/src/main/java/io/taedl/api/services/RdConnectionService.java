@@ -40,7 +40,7 @@ public class RdConnectionService implements ConnectionService {
                 flag = true;
             }
         } catch (Exception ignored) {
-            log.info("Failed to connect to an instance of ", connectionDetails.getVendor());
+            log.info("Failed to connect to an instance of {}", connectionDetails.getVendor());
         }
         return flag;
     }
