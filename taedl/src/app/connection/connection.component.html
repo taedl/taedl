@@ -24,7 +24,7 @@
           <mat-error *ngIf="isFieldInvalid('password')">Please enter password</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="field breaking-field">
+        <mat-form-field class="field c">
           <mat-select placeholder="vendor" formControlName="vendor" required>
             <mat-option *ngFor="let v of vendors" [value]="v">{{v}}</mat-option>
             <mat-error *ngIf="isFieldInvalid('vendor')">Please enter DB vendor</mat-error>
@@ -32,13 +32,19 @@
         </mat-form-field>
 
 
-        <mat-checkbox formControlName="agreed" class="field">Agree to </mat-checkbox>
-        <span class="as-link field" (click)="openTermsTab()">Terms&nbsp;&&nbsp;Conditions</span>
+        <mat-checkbox formControlName="agreed" class="term-field">Agree to</mat-checkbox>
+        <span class="as-link field" (click)="openTermsTab()"> Terms&nbsp;&&nbsp;Conditions</span>
 
         <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
 
         <button mat-button color="primary" type="submit"
                 *ngIf="isFieldsSet()">Connect</button>
+
+        <div class="field">
+          <mat-icon color="accent" class="info">info</mat-icon> You could try Taedl with our sample database
+          <button type="button" mat-raised-button color="primary" class="field" (click)="setExampleConnection()">Use sample database</button>
+        </div>
+
       </form>
     </div>
   </mat-card-content>

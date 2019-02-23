@@ -21,6 +21,13 @@ server:
     key-store-password: devonly
     key-store-type: PKCS12
 
+
+sample:
+  user: appuser
+  password: localpass
+  endpoint: jdbc:postgresql://localhost/sales_all
+  vendor: postgresql
+
 ---
 
 spring:

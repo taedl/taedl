@@ -90,4 +90,8 @@ export class ConnectionComponent implements OnInit {
     const fields: JdbcConnection = this.form.value;
     return this.form.value.agreed && fields.endpoint && fields.password && fields.user && fields.vendor;
   }
+
+  setExampleConnection = () =>
+    this.form.setValue({endpoint: 'sample', database: 'sample',
+      user: 'sample', vendor: 'postgresql', password: 'sample', agreed: false})
 }

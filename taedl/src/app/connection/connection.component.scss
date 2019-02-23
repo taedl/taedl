@@ -12,6 +12,11 @@
       margin: 1em;
       min-width: 10em;
     }
+
+    .terms-field {
+      margin: 1em 0 1em 1em;
+    }
+
     .breaking-field {
       display: inline-block;
     }
@@ -19,9 +24,14 @@
       text-decoration: underline;
       cursor: pointer;
       vertical-align: middle;
+      margin-left: 0;
     }
     .connection {
       min-width: 30em;
+    }
+
+    .info {
+      vertical-align: middle;
     }
   }
 }
@@ -44,6 +54,12 @@
         margin: 1em;
         min-width: 90%;
       }
+
+      .terms-field {
+        margin: 1em 0 1em 1em;
+        min-width: 90%;
+      }
+
       .breaking-field {
         display: block;
       }
@@ -51,6 +67,7 @@
         text-decoration: underline;
         cursor: pointer;
         vertical-align: middle;
+        margin-left: 0;
       }
       .connection {
         min-width: 90%;

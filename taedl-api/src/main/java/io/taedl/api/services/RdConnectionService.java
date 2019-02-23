@@ -23,10 +23,27 @@ public class RdConnectionService implements ConnectionService {
     // https://github.com/Microsoft/mssql-jdbc/issues/753
     private final String SQL_SERVER_SELECT_METHOD_CURSOR = ";selectMethod=cursor";
 
+    private final String sampleUser;
+    private final String sampleEndpoint;
+    private final String sampleVendor;
+    private final String samplePassword;
+
+    private final String sample = "sample";
+    private final String samplePostgresEndpoint = "jdbc:postgresql://sample/sample";
+
     @Autowired
-    public RdConnectionService(@Value("${packaged.jdbc.driver.classes}") String supportedDrivers, QueryBuildingService queryBuildingService) {
+    public RdConnectionService(@Value("${packaged.jdbc.driver.classes}") String supportedDrivers,
+                               QueryBuildingService queryBuildingService,
+                               @Value("${sample.user}") String sampleUser,
+                               @Value("${sample.endpoint}") String sampleEndpoint,
+                               @Value("${sample.vendor}") String sampleVendor,
+                               @Value("${sample.password}") String samplePassword) {
         this.supportedDrivers = supportedDrivers;
         this.queryBuildingService = queryBuildingService;
+        this.sampleUser = sampleUser;
+        this.sampleEndpoint = sampleEndpoint;
+        this.sampleVendor = sampleVendor;
+        this.samplePassword = samplePassword;
     }
 
 
@@ -34,6 +51,7 @@ public class RdConnectionService implements ConnectionService {
     public boolean testConnection(ConnectionDetails connectionDetails) throws ClassNotFoundException {
         boolean flag = false;
         mySQLTimeZoneSetUTC(connectionDetails);
+        setIfExample(connectionDetails);
 
         try (java.sql.Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             if (conn != null) {
@@ -64,6 +82,7 @@ public class RdConnectionService implements ConnectionService {
     public List<TableMetaData> tables(ConnectionDetails connectionDetails) throws SQLException {
         mySQLTimeZoneSetUTC(connectionDetails);
         sqlServerSetCursor(connectionDetails);
+        setIfExample(connectionDetails);
 
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
             DatabaseMetaData metaData = conn.getMetaData();
@@ -93,6 +112,7 @@ public class RdConnectionService implements ConnectionService {
     public Table preview(ConnectionDetails connectionDetails, List<TableMetaData> tables, List<Join> joins) throws SQLException {
         mySQLTimeZoneSetUTC(connectionDetails);
         sqlServerSetCursor(connectionDetails);
+        setIfExample(connectionDetails);
 
         String query = queryBuildingService.generatePreviewQuery(tables, joins, connectionDetails.getVendor());
         log.info("Generated preview query: {}", query);
@@ -105,6 +125,7 @@ public class RdConnectionService implements ConnectionService {
 
         mySQLTimeZoneSetUTC(connectionDetails);
         sqlServerSetCursor(connectionDetails);
+        setIfExample(connectionDetails);
 
         String query = queryBuildingService.generateTableQuery(tables, columns, rows, joins, filters, connectionDetails.getVendor());
         log.info("Generated table query: {}", query);
@@ -116,6 +137,7 @@ public class RdConnectionService implements ConnectionService {
 
         mySQLTimeZoneSetUTC(connectionDetails);
         sqlServerSetCursor(connectionDetails);
+        setIfExample(connectionDetails);
 
         Table table;
         try (Connection conn = DriverManager.getConnection(connectionDetails.getEndpoint(), connectionDetails.getUser(), connectionDetails.getPassword())) {
@@ -202,6 +224,19 @@ public class RdConnectionService implements ConnectionService {
         if (connectionDetails.getVendor().equals("sqlserver") && !connectionDetails.getEndpoint().contains(SQL_SERVER_SELECT_METHOD_CURSOR)) {
             String ep = connectionDetails.getEndpoint();
             connectionDetails.setEndpoint(ep.concat(SQL_SERVER_SELECT_METHOD_CURSOR));
+        }
+    }
+
+    private void setIfExample(ConnectionDetails connectionDetails) {
+        if (connectionDetails.getEndpoint().equals(samplePostgresEndpoint) &&
+                connectionDetails.getUser().equals(sample) &&
+                connectionDetails.getPassword().equals(sample)) {
+
+            log.info("Using the sample database");
+            connectionDetails.setEndpoint(sampleEndpoint);
+            connectionDetails.setPassword(samplePassword);
+            connectionDetails.setUser(sampleUser);
+            connectionDetails.setVendor(sampleVendor);
         }
     }
 }
