@@ -38,7 +38,7 @@ export class ConnectionComponent implements OnInit {
       user: ['', Validators.required],
       password: ['', Validators.required],
       vendor: ['', Validators.required],
-      agreed: false
+      agreed: [false, Validators.required]
     });
   }
 
@@ -93,5 +93,5 @@ export class ConnectionComponent implements OnInit {
 
   setExampleConnection = () =>
     this.form.setValue({endpoint: 'sample', database: 'sample',
-      user: 'sample', vendor: 'postgresql', password: 'sample', agreed: false})
+      user: 'sample', vendor: 'postgresql', password: 'sample', agreed: this.form.get('agreed').value})
 }
