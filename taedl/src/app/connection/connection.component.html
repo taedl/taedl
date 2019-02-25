@@ -32,16 +32,15 @@
         </mat-form-field>
 
 
-        <mat-checkbox formControlName="agreed" class="term-field">Agree to </mat-checkbox>
+        <mat-checkbox formControlName="agreed" class="term-field">Agree to&nbsp;</mat-checkbox>
         <span class="as-link field" (click)="openTermsTab()">Terms&nbsp;&&nbsp;Conditions</span>
 
-        <button mat-button disabled *ngIf="!isFieldsSet()">Connect</button>
+        <button mat-raised-button disabled *ngIf="!isFieldsSet()">Connect</button>
 
-        <button mat-button color="primary" type="submit"
-                *ngIf="isFieldsSet()">Connect</button>
+        <button color="accent" type="submit" mat-raised-button *ngIf="isFieldsSet()">Connect</button>
 
         <div class="field">
-          <mat-icon color="accent" class="info">info</mat-icon> You could try Taedl with our sample database
+          <mat-icon color="primary" class="info">info</mat-icon> You could try Taedl with our sample database
           <button type="button" mat-raised-button color="primary" class="field" (click)="setExampleConnection()">Use sample database</button>
         </div>
 
